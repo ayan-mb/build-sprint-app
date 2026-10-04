@@ -529,3 +529,17 @@ Salaried individuals need the latest 3 months' salary slips, Form 16 for the las
 Eligible applicants benefit from quick approval and fast disbursal.
 The loan amount offered ranges from ₹40,000 to ₹35,00,000, with a loan tenure of up to 6 years.
 ```
+
+Domain: tatacapital.com
+Questions: 5; completed: 5; failed: 0.
+Answers naming your brand: 3 of 5 completed answers.
+Other lenders named (answers per lender): Axis Bank: 3; Bajaj Finance: 3; HDFC Bank: 3; ICICI Bank: 3; State Bank of India: 2; Bajaj Finserv: 1; Canara Bank: 1; Fibe: 1; Indian Bank: 1; Kotak Mahindra Bank: 1; KreditBee: 1; Moneyview: 1; Union Bank of India: 1.
+Most-cited source domains (distinct cited links per answer): axis.bank.in: 3; bajajfinserv.in: 3; hdfc.bank.in: 3; tatacapital.com: 3; bank.sbi: 2; icici.bank.in: 2; canarabank.bank.in: 1; cibil.com: 1; fibe.in: 1; icicibank.com: 1; indianbank.bank.in: 1; kotak.bank.in: 1; moneyview.in: 1; rbi.org.in: 1; systemhealth.rbi.org.in: 1; unionbankofindia.bank.in: 1; www4.kreditbee.in: 1.
+
+| Question | Status | Your brand named | Other lenders named | Cited links | Source domains | Error |
+| --- | --- | --- | --- | --- | --- | --- |
+| best personal loans for CIBIL under 700 | complete | No | Moneyview, Fibe, KreditBee | 5 | cibil.com, moneyview.in, fibe.in, www4.kreditbee.in, rbi.org.in | — |
+| Which lenders offer personal loans for salaried employees in India? | complete | Yes | HDFC Bank, ICICI Bank, Axis Bank, State Bank of India, Bajaj Finance | 6 | hdfc.bank.in, icici.bank.in, axis.bank.in, bank.sbi, bajajfinserv.in, tatacapital.com | — |
+| Which lenders offer personal loans with low processing fees in India? | complete | No | Canara Bank, Union Bank of India, Indian Bank, State Bank of India | 5 | canarabank.bank.in, unionbankofindia.bank.in, indianbank.bank.in, bank.sbi, systemhealth.rbi.org.in | — |
+| Which lenders offer personal loans with flexible repayment tenure in India? | complete | Yes | Bajaj Finance, Axis Bank, ICICI Bank, HDFC Bank | 5 | bajajfinserv.in, axis.bank.in, icici.bank.in, hdfc.bank.in, tatacapital.com | — |
+| Which lenders offer personal loans with online applications in India? | complete | Yes | HDFC Bank, ICICI Bank, Axis Bank, Kotak Mahindra Bank, Bajaj Finance, Bajaj Finserv | 6 | hdfc.bank.in, icicibank.com, axis.bank.in, kotak.bank.in, bajajfinserv.in, tatacapital.com | — |

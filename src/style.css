@@ -467,3 +467,27 @@ footer {
 .draft-text { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; max-width: 75ch; padding: 20px; border: 1px solid var(--line); background: #f7fafb; }
 .draft-text mark { background: #fff0cc; color: #654911; padding: 2px 4px; }
 @media (max-width: 700px) { .draft-box { padding: 20px; } .draft-text { padding: 12px; } }
+
+.screen-nav { max-width: 1160px; margin: 20px auto 0; padding: 0 24px; display: flex; gap: 24px; flex-wrap: wrap; }
+.screen-nav a { padding: 8px 0; text-underline-offset: 4px; }
+.screen-nav a[aria-current="page"] { font-weight: 700; }
+.batch-screen { max-width: 1160px; }
+.batch-screen > p { max-width: 75ch; }
+.batch-form { display: grid; gap: 12px; margin: 32px 0 20px; max-width: 760px; }
+.batch-form label:not(:first-child) { margin-top: 16px; }
+.batch-form button { justify-self: start; }
+.batch-form textarea { resize: vertical; min-height: 180px; }
+.batch-results { margin-top: 40px; }
+.batch-results progress { width: min(100%, 760px); height: 12px; accent-color: var(--action, #146477); }
+.batch-summary-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 24px 0; }
+.batch-summary-columns li { margin: 8px 0; overflow-wrap: anywhere; }
+.batch-table-scroll { overflow-x: auto; margin: 28px 0; }
+.batch-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.batch-table caption { text-align: left; font-weight: 700; margin-bottom: 12px; }
+.batch-table th, .batch-table td { padding: 14px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; min-width: 110px; }
+.batch-table thead th { background: #e4edf2; }
+.batch-table tbody th { min-width: 250px; font-weight: 600; }
+.batch-table tbody tr:nth-child(even) { background: #f5f8fa; }
+.batch-answer { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.batch-answer summary { cursor: pointer; font-weight: 600; }
+@media (max-width: 640px) { .batch-summary-columns { grid-template-columns: 1fr; gap: 8px; } .screen-nav { padding: 0 16px; } }

@@ -8,6 +8,12 @@
  * @module
  */
 
+import type * as batchAnalysis from "../batchAnalysis.js";
+import type * as batchEvidence from "../batchEvidence.js";
+import type * as batchRunner from "../batchRunner.js";
+import type * as batchValidators from "../batchValidators.js";
+import type * as batchWorkflow from "../batchWorkflow.js";
+import type * as batches from "../batches.js";
 import type * as comparisonContext from "../comparisonContext.js";
 import type * as comparisonFailure from "../comparisonFailure.js";
 import type * as diagnosticWorkflow from "../diagnosticWorkflow.js";
@@ -29,6 +35,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  batchAnalysis: typeof batchAnalysis;
+  batchEvidence: typeof batchEvidence;
+  batchRunner: typeof batchRunner;
+  batchValidators: typeof batchValidators;
+  batchWorkflow: typeof batchWorkflow;
+  batches: typeof batches;
   comparisonContext: typeof comparisonContext;
   comparisonFailure: typeof comparisonFailure;
   diagnosticWorkflow: typeof diagnosticWorkflow;

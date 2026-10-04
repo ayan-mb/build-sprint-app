@@ -2,12 +2,15 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import App from "./App";
+import BatchScreen from "./BatchScreen";
+const batchPage = window.location.pathname === "/batch";
 import "./style.css";
 const url = import.meta.env.VITE_CONVEX_URL;
 createRoot(document.getElementById("root")!).render(
   url ? (
     <ConvexProvider client={new ConvexReactClient(url)}>
-      <App />
+      <nav className="screen-nav" aria-label="Milestones"><a href="/" aria-current={batchPage ? undefined : "page"}>Single-question diagnostic</a><a href="/batch" aria-current={batchPage ? "page" : undefined}>Batch baseline</a></nav>
+      {batchPage ? <BatchScreen /> : <App />}
     </ConvexProvider>
   ) : (
     <main>
