@@ -23,14 +23,15 @@ export const generate = action({
     if (args.factSheet.trim().length < 20 || args.factSheet.length > 50000) throw new Error("Paste a product fact sheet between 20 and 50,000 characters.");
     if (!/^[a-f0-9-]{36}$/.test(args.token)) throw new Error("Reload the page and use your completed report.");
     const { question, gapTopics } = await ctx.runMutation(internal.draftData.reserve, { id: args.id, token: args.token });
+    const save = async (result: DraftResult) => { await ctx.runMutation(internal.history.saveDraft, { question, result }); return result; };
     const unavailable = (message: string): DraftResult => ({ status: "unavailable", text: "", placeholders: [], numbers: [], model: "", message });
     const key = process.env.OPENAI_API_KEY;
-    if (!key) return unavailable("Draft not available. OPENAI_API_KEY is missing in this Convex deployment.");
+    if (!key) return await save(unavailable("Draft not available. OPENAI_API_KEY is missing in this Convex deployment."));
     let reportedModel: string | undefined;
     let candidateText = "";
     try {
       const facts = sheetFacts(args.factSheet);
-      if (!facts.length) return unavailable("Draft not available. Paste readable product facts in short lines or sentences.");
+      if (!facts.length) return await save(unavailable("Draft not available. Paste readable product facts in short lines or sentences."));
       const agent = new Agent(components.agent, {
         name: "Fact sheet draft",
         languageModel: createOpenAI({ apiKey: key })(OPENAI_MODEL),
@@ -43,7 +44,7 @@ export const generate = action({
       }, { storageOptions: { saveMessages: "none" } });
       const model = result.response.modelId;
       reportedModel = model;
-      if (!model) return unavailable("Draft not available. The API did not report its model. No fallback was used.");
+      if (!model) return await save(unavailable("Draft not available. The API did not report its model. No fallback was used."));
       candidateText = result.object.sentences.map(s => s.text).join("\n");
       const draft = assembleProse(args.factSheet, result.object.sentences, gapTopics, question);
       candidateText = draft.text;
@@ -59,13 +60,13 @@ export const generate = action({
       }, { storageOptions: { saveMessages: "none" } });
       validateProductTerms(args.factSheet, verification.object.productTerms);
       if (!verification.object.supported || verification.object.failureReason !== "none") {
-        return { ...unavailable(`Fact-sheet check failed: ${verification.object.failureReason}.`), text: candidateText, model };
+        return await save({ ...unavailable(`Fact-sheet check failed: ${verification.object.failureReason}.`), text: candidateText, model });
       }
-      return { status: "ready", ...draft, model, message: "Draft fact check passed. Fill the highlighted placeholders and review conditions before publishing." };
+      return await save({ status: "ready", ...draft, model, message: "Draft fact check passed. Fill the highlighted placeholders and review conditions before publishing." });
     } catch (error) {
       const safeReasons = ["Unknown draft topic", "Missing fact-sheet reference", "Unknown fact-sheet reference", "Unsupported draft evidence", "Invalid draft prose", "Unsupported product term", "Unsupported draft number"];
-      if (error instanceof Error && safeReasons.includes(error.message)) return { ...unavailable(`Draft not available: ${error.message}. No fallback was used.`), text: candidateText, model: reportedModel || "" };
-      return { ...unavailable(comparisonFailure(error, "draft").replace("AI page comparison", "Draft").replace("Evidence-backed topic checks remain available.", "No guessed draft was substituted.")), text: candidateText, model: reportedModel || "" };
+      if (error instanceof Error && safeReasons.includes(error.message)) return await save({ ...unavailable(`Draft not available: ${error.message}. No fallback was used.`), text: candidateText, model: reportedModel || "" });
+      return await save({ ...unavailable(comparisonFailure(error, "draft").replace("AI page comparison", "Draft").replace("Evidence-backed topic checks remain available.", "No guessed draft was substituted.")), text: candidateText, model: reportedModel || "" });
     }
   },
 });

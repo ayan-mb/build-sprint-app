@@ -1,4 +1,5 @@
 import { publicUrl, normalizeUrl } from "./evidence";
+import { lenderIdentity, siteIdentity } from "./identities";
 import type { BatchRow } from "./batchValidators";
 export function batchInput(domain: string, input: string[]) {
   const raw = domain.trim();
@@ -52,7 +53,8 @@ export function batchSummary(rows: BatchRow[]) {
   for (const row of rows) {
     if (row.status === "complete") {
       const seen = new Set<string>();
-      for (const name of row.lenders) {
+      for (const writtenName of row.lenders) {
+        const name = lenderIdentity(writtenName);
         const key = name.toLowerCase().replace(/[^a-z0-9]/g, "");
         if (seen.has(key)) continue;
         seen.add(key);
@@ -60,7 +62,10 @@ export function batchSummary(rows: BatchRow[]) {
         lenders.set(key, { name: old?.name || name, count: (old?.count || 0) + 1 });
       }
     }
-    for (const domain of citedDomains(row)) domains.set(domain, (domains.get(domain) || 0) + 1);
+    for (const raw of citedDomains(row)) {
+      const domain = siteIdentity(raw);
+      domains.set(domain, (domains.get(domain) || 0) + 1);
+    }
   }
   return {
     completed: rows.filter(r => r.status === "complete").length,

@@ -491,3 +491,9 @@ footer {
 .batch-answer { padding: 16px 0; border-bottom: 1px solid var(--line); }
 .batch-answer summary { cursor: pointer; font-weight: 600; }
 @media (max-width: 640px) { .batch-summary-columns { grid-template-columns: 1fr; gap: 8px; } .screen-nav { padding: 0 16px; } }
+
+.home-history { max-width: 1160px; margin: 0 auto; padding: 0 24px 48px; }
+.past-runs { margin-top: 32px; border-top: 1px solid var(--line); padding-top: 20px; }
+.past-runs li { padding: 12px 0; overflow-wrap: anywhere; }
+.draft-export-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+.draft-export-actions button { min-height: 44px; }

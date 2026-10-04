@@ -543,3 +543,13 @@ Most-cited source domains (distinct cited links per answer): axis.bank.in: 3; ba
 | Which lenders offer personal loans with low processing fees in India? | complete | No | Canara Bank, Union Bank of India, Indian Bank, State Bank of India | 5 | canarabank.bank.in, unionbankofindia.bank.in, indianbank.bank.in, bank.sbi, systemhealth.rbi.org.in | — |
 | Which lenders offer personal loans with flexible repayment tenure in India? | complete | Yes | Bajaj Finance, Axis Bank, ICICI Bank, HDFC Bank | 5 | bajajfinserv.in, axis.bank.in, icici.bank.in, hdfc.bank.in, tatacapital.com | — |
 | Which lenders offer personal loans with online applications in India? | complete | Yes | HDFC Bank, ICICI Bank, Axis Bank, Kotak Mahindra Bank, Bajaj Finance, Bajaj Finserv | 6 | hdfc.bank.in, icicibank.com, axis.bank.in, kotak.bank.in, bajajfinserv.in, tatacapital.com | — |
+
+Answers naming your brand: 1 of 5 completed answers.
+Merged lender counts (answers per lender): Axis Bank: 3; Bajaj Finance / Bajaj Finserv: 3; HDFC Bank: 3; ICICI Bank: 3; State Bank of India: 3; Bank of India: 1; Bank of Maharashtra: 1; Central Bank of India: 1; Indian Bank: 1.
+
+Past runs list read back from the database:
+- 2026-10-04T14:57:50.972Z — Draft — best personal loans for CIBIL under 700 — ready
+- 2026-10-04T14:55:45.834Z — tatacapital.com — 5 questions — complete
+- 2026-10-04T14:53:33.602Z — Draft — best personal loans for CIBIL under 700 — unavailable
+- 2026-10-04T14:36:41.845Z — tatacapital.com — 5 questions — complete
+- 2026-10-04T14:11:31.190Z — tatacapital.com — 5 questions — complete

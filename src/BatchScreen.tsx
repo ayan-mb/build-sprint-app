@@ -11,14 +11,14 @@ function sessionToken() {
   } catch { return crypto.randomUUID(); }
 }
 export function BatchResults({ batch }: { batch: Batch }) {
-  const summary = batchSummary(batch.rows);
+  const summary = batch.summary || batchSummary(batch.rows);
   const finished = batch.rows.filter(r => r.status === "complete" || r.status === "error").length;
   return <section className="batch-results" aria-labelledby="batch-results-title">
     <h2 id="batch-results-title">{batch.status === "running" ? "Your batch is running" : "Your batch baseline"}</h2>
     <p role="status" aria-live="polite">{batch.stage} · {finished} of {batch.rows.length} finished</p>
     <progress max={batch.rows.length} value={finished} aria-label="Questions finished" />
     <p><strong>{summary.brand} of {summary.completed} completed answers</strong> name your brand at {batch.domain}. {summary.failed > 0 && `${summary.failed} questions failed; see each error below.`}</p>
-    <p className="subtle">Each lender counts once per answer, including negative mentions. Source totals count distinct cited links within each answer; search results without citations do not count. Answers without citations still count for brand mentions.</p>
+    <p className="subtle">Each lender counts once per answer, including negative mentions. Known lender and site aliases are merged in the summary. Source totals count distinct cited links within each answer; search results without citations do not count. Answers without citations still count for brand mentions.</p>
     <div className="batch-summary-columns">
       <section><h3>Other lenders named</h3>{summary.lenders.length ? <ul>{summary.lenders.map(l => <li key={l.name}>{l.name}: <strong>{l.count} answers</strong></li>)}</ul> : <p>No other lenders named in completed answers yet.</p>}</section>
       <section><h3>Most-cited source domains</h3>{summary.domains.length ? <ol>{summary.domains.map(d => <li key={d.domain}>{d.domain}: <strong>{d.count} cited links</strong></li>)}</ol> : <p>No cited sources yet.</p>}</section>

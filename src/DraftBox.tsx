@@ -3,12 +3,29 @@ import { useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 import type { DraftResult } from "../convex/draftValidators";
+import { copyDraft, downloadDraft, type DraftFormat } from "./draftExport";
 export function DraftOutput({ draft }: { draft: DraftResult }) {
+  const [exportStatus,setExportStatus]=useState("");
+  async function copy(format: DraftFormat) {
+    try { await copyDraft(draft.text,format); setExportStatus(format==="text" ? "Plain text copied." : "Markdown copied."); }
+    catch { setExportStatus("Copy could not access the clipboard. Use Download instead."); }
+  }
+  function download(format: DraftFormat) {
+    try { downloadDraft(draft.text,format); setExportStatus(format==="text" ? "Plain text download started." : "Markdown download started."); }
+    catch { setExportStatus("Download could not start. Try again or use Copy."); }
+  }
   return <div aria-live="polite">
     <p className={draft.status === "unavailable" ? "warning" : "subtle"}>{draft.message}</p>
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
       <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\])/g).map((part, index) => part.startsWith("[add:") ? <mark key={index}>{part}</mark> : part)}</pre>
+      <div className="draft-export-actions" aria-label="Export draft">
+        <button type="button" onClick={()=>copy("text")}>Copy plain text</button>
+        <button type="button" onClick={()=>copy("markdown")}>Copy Markdown</button>
+        <button type="button" onClick={()=>download("text")}>Download plain text</button>
+        <button type="button" onClick={()=>download("markdown")}>Download Markdown</button>
+      </div>
+      {exportStatus && <p role="status">{exportStatus}</p>}
       <details><summary>Check every number against the fact sheet</summary>
         {draft.numbers.length ? <ul>{draft.numbers.map((n, i) => <li key={i}><strong>{n.number}</strong> — fact-sheet line {n.sheetLine}<blockquote>{n.passage}</blockquote></li>)}</ul> : <p>No numbers were used in this draft.</p>}
       </details>

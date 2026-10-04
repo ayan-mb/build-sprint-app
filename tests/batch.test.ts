@@ -36,7 +36,7 @@ test("lender counts are per answer and citations exclude search-only and trackin
   const first=row(); const second=row(); second.status="error"; second.brandMention=null; second.lenders=[];
   const summary=batchSummary([first,second]);
   assert.equal(summary.brand,1); assert.equal(summary.completed,1); assert.equal(summary.failed,1);
-  assert.deepEqual(summary.lenders,[{name:"Bajaj Finance",count:1}]);
+  assert.deepEqual(summary.lenders,[{name:"Bajaj Finance / Bajaj Finserv",count:1}]);
   assert.equal(citedDomains(first).length,2);
   assert.deepEqual(summary.domains,[{domain:"example.com",count:4}]);
 });
@@ -59,4 +59,25 @@ test("alternate written names count as one evidenced institution across answers"
   assert.deepEqual(batchSummary([first,second]).lenders,[{name:"HDFC Bank",count:2}]);
   assert.equal(first.lenderMentions?.[0].name,"HDFC Bank Limited");
   assert.throws(() => resolveLenders("HDFC Bank",[{name:"Invented Bank",canonicalName:"Invented Bank"}]),/absent/);
+});
+
+test("merged lender aliases count once per answer and site aliases share a citation total", () => {
+  const first=row(); first.lenders=["Bajaj Finance","Bajaj Finserv","ICICI Bank"];
+  first.answer!.sources=["https://icici.bank.in/a","https://icicibank.com/b","https://lookalikeicicibank.com/c"].map(url=>({url,title:"source",cited:true,ownWebsite:false,reference:""}));
+  const second=row(); second.lenders=["Bajaj Finserv"];
+  const summary=batchSummary([first,second]);
+  assert.equal(summary.lenders.find(l=>l.name==="Bajaj Finance / Bajaj Finserv")?.count,2);
+  assert.equal(summary.lenders.find(l=>l.name==="ICICI Bank")?.count,1);
+  assert.equal(summary.domains.find(d=>d.domain==="icici.bank.in / icicibank.com")?.count,2);
+  assert.equal(summary.domains.find(d=>d.domain==="lookalikeicicibank.com")?.count,1);
+  assert.deepEqual(first.lenders,["Bajaj Finance","Bajaj Finserv","ICICI Bank"]);
+});
+
+import { siteIdentity } from "../convex/identities";
+test("all observed SBI site aliases and known site subdomains merge without matching lookalikes",()=>{
+  assert.equal(siteIdentity("sbi.bank.in"),siteIdentity("bank.sbi"));
+  assert.equal(siteIdentity("sbi.co.in"),siteIdentity("bank.sbi"));
+  assert.equal(siteIdentity("systemhealth.rbi.org.in"),siteIdentity("rbi.org.in"));
+  assert.equal(siteIdentity("www4.kreditbee.in"),siteIdentity("kreditbee.in"));
+  assert.notEqual(siteIdentity("notrbi.org.in"),siteIdentity("rbi.org.in"));
 });

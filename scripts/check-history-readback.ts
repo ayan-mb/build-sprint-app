@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
+import { batchSummary } from "../convex/batchEvidence";
+
+const test = JSON.parse(readFileSync("/tmp/build-sprint-history-test.json", "utf8"));
+const visitor = new ConvexHttpClient("https://frugal-moose-32.convex.cloud");
+const list = await visitor.query(api.history.list, { paginationOpts: { numItems: 50, cursor: null } });
+assert.equal(list.isDone, true);
+assert.ok(list.page.some(item => item._id === test.batchHistoryId));
+const saved = await visitor.query(api.history.read, { id: test.batchHistoryId });
+assert.ok(saved?.batch);
+const batch = saved.batch;
+assert.equal(batch.rows.length, 5);
+assert.deepEqual(batch.summary, batchSummary(batch.rows));
+const summary = batch.summary!;
+assert.equal(summary.brand, 1);
+assert.ok(summary.domains.some(item => item.domain.includes("sbi.bank.in")));
+const section = `\nAnswers naming your brand: ${summary.brand} of ${summary.completed} completed answers.\nMerged lender counts (answers per lender): ${summary.lenders.map(item => `${item.name}: ${item.count}`).join("; ")}.\n\nPast runs list read back from the database:\n${list.page.map(item => `- ${new Date(item.createdAt).toISOString()} — ${item.title} — ${item.status}`).join("\n")}\n`;
+assert.equal(section, test.section);
+assert.ok(readFileSync("BUILD_LOG.md", "utf8").endsWith(section));
+console.log(section);

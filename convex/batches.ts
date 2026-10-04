@@ -4,6 +4,8 @@ import { v } from "convex/values";
 import { start, vWorkflowId } from "@convex-dev/workflow";
 import { vResultValidator } from "@convex-dev/workpool";
 import { batchRow, publicBatch } from "./batchValidators";
+import { recordBatch } from "./history";
+import { batchSummary } from "./batchEvidence";
 import { batchInput } from "./batchEvidence";
 export const begin = mutation({
   args: { domain: v.string(), questions: v.array(v.string()), token: v.string() }, returns: v.id("batches"),
@@ -19,6 +21,7 @@ export const begin = mutation({
     if (limit) await ctx.db.patch(limit._id, { count: (fresh ? 0 : limit.count) + questions.length, windowStart: fresh ? now : limit.windowStart });
     else await ctx.db.insert("limits", { name: "batch-questions-hourly", count: questions.length, windowStart: now });
     const id = await ctx.db.insert("batches", { domain, questions, token: args.token, createdAt: now, status: "running", stage: `Starting ${questions.length} questions`, rows: questions.map(question => ({ question, status: "pending" as const, answer: null, brandMention: null, lenders: [], error: "" })) });
+    await recordBatch(ctx,id);
     await start(ctx, internal.batchWorkflow.run, { id, website, domain, questions }, { onComplete: internal.batches.onComplete, context: { id } });
     return id;
   },
@@ -43,15 +46,19 @@ export const saveRow = internalMutation({
 });
 export const finish = internalMutation({
   args: { id: v.id("batches") }, returns: v.null(),
-  handler: async (ctx, { id }) => { await ctx.db.patch(id, { status: "complete", stage: "Batch complete" }); return null; },
+  handler: async (ctx, { id }) => { const batch=await ctx.db.get(id); if (!batch) throw new Error("Batch not found"); await ctx.db.patch(id, { status: "complete", stage: "Batch complete", summary: batchSummary(batch.rows) }); await recordBatch(ctx,id); return null; },
 });
 export const onComplete = internalMutation({
   args: { workflowId: vWorkflowId, result: vResultValidator, context: v.object({ id: v.id("batches") }) }, returns: v.null(),
   handler: async (ctx, args) => {
     if (args.result.kind !== "success") {
       const batch = await ctx.db.get(args.context.id);
-      if (batch) await ctx.db.patch(batch._id, { status: "failed", stage: "Batch stopped", rows: batch.rows.map(row => row.status === "pending" || row.status === "running" ? { ...row, status: "error" as const, error: "The batch stopped before this question finished. No automatic paid retry was made." } : row) });
+      if (batch) {
+        const rows=batch.rows.map(row => row.status === "pending" || row.status === "running" ? { ...row, status: "error" as const, error: "The batch stopped before this question finished. No automatic paid retry was made." } : row);
+        await ctx.db.patch(batch._id, {status:"failed",stage:"Batch stopped",rows,summary:batchSummary(rows)});
+      }
     }
+    await recordBatch(ctx,args.context.id);
     return null;
   },
 });
