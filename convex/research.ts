@@ -1,5 +1,6 @@
 "use node";
 import { internalAction, action } from "./_generated/server";
+import { OPENAI_MODEL } from "./models";
 import { comparisonContext } from "./comparisonContext";
 import { comparisonFailure } from "./comparisonFailure";
 import { components, internal } from "./_generated/api";
@@ -201,7 +202,7 @@ export const ask = internalAction({
     const key = process.env[name];
     const base: Answer = {
       provider: args.provider,
-      model: "gpt-4.1",
+      model: OPENAI_MODEL,
       status: "key_missing",
       text: "",
       sources: [],
@@ -214,7 +215,7 @@ export const ask = internalAction({
     try {
       const endpoint = "https://api.openai.com/v1/responses";
       const body = {
-        model: "gpt-4.1",
+        model: OPENAI_MODEL,
         input: args.question,
         instructions,
         tools: [{ type: "web_search" }],

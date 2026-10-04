@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
+import DraftBox from "./DraftBox";
 import { api } from "../convex/_generated/api";
 import type { Answer, Gap, Page } from "../convex/validators";
 function makeToken() {
@@ -377,11 +378,11 @@ export default function App() {
                 </details>
               )}
             </section>
+            <DraftBox key={current._id} id={current._id} token={token} question={current.question} />
           </section>
         )}
         <footer>
-          Milestone 1 only: answers, citations, and page gaps. No content
-          generation.
+          Milestones 1 and 2: citations, page gaps, and a draft from your product facts.
         </footer>
       </main>
     </>

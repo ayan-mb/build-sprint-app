@@ -12,8 +12,13 @@ import type * as comparisonContext from "../comparisonContext.js";
 import type * as comparisonFailure from "../comparisonFailure.js";
 import type * as diagnosticWorkflow from "../diagnosticWorkflow.js";
 import type * as diagnostics from "../diagnostics.js";
+import type * as draftData from "../draftData.js";
+import type * as draftEvidence from "../draftEvidence.js";
+import type * as draftValidators from "../draftValidators.js";
+import type * as drafts from "../drafts.js";
 import type * as evidence from "../evidence.js";
 import type * as html from "../html.js";
+import type * as models from "../models.js";
 import type * as research from "../research.js";
 import type * as validators from "../validators.js";
 
@@ -28,8 +33,13 @@ declare const fullApi: ApiFromModules<{
   comparisonFailure: typeof comparisonFailure;
   diagnosticWorkflow: typeof diagnosticWorkflow;
   diagnostics: typeof diagnostics;
+  draftData: typeof draftData;
+  draftEvidence: typeof draftEvidence;
+  draftValidators: typeof draftValidators;
+  drafts: typeof drafts;
   evidence: typeof evidence;
   html: typeof html;
+  models: typeof models;
   research: typeof research;
   validators: typeof validators;
 }>;
