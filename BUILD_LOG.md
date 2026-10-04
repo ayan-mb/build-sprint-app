@@ -4,7 +4,7 @@ Date: 4 October 2026 (India time).
 
 ## Current milestone 1 setup
 
-Milestone 1 now uses ChatGPT only. You reported that `OPENAI_API_KEY` was already saved in production; the live test below returned `key_missing` from that deployment. Its value must never be printed, logged, copied, or written to any file. No command displaying environment variable values was run. The key is used only inside existing server-side Convex actions.
+Milestone 1 now uses ChatGPT only. `OPENAI_API_KEY` is now available to the production action. The first live test reported `key_missing`; after the configuration was corrected, the follow-up below returned a cited ChatGPT answer. Its value must never be printed, logged, copied, or written to any file. No command displaying environment variable values was run. The key is used only inside existing server-side Convex actions.
 
 The earlier entries below record the previous two-provider build and its checks; they are historical, not current setup instructions. The ChatGPT-only deployment and live result are recorded at the end. Milestone 2 remains untouched.
 
@@ -263,3 +263,58 @@ The live test did not verify a ChatGPT answer or citations: the production actio
 Deployment note: the first screen upload failed with a network error; rerunning `npm run deploy` succeeded.
 
 Next step: confirm that the variable is named OPENAI_API_KEY in Production / frugal-moose-32, without sharing its value.
+
+## ChatGPT-only milestone 1 — production live test
+
+Date: 04/10/2026, 13:58:27 (India time).
+
+Deployed with `npm run deploy` to https://frugal-moose-32.convex.site.
+Run ID: j57fwsrm2fnpgab0jt0j8s0wvh8fma3f
+Question: best personal loans for CIBIL under 700
+NBFC page: https://www.tatacapital.com/personal-loan.html
+ChatGPT status: ready
+Model: gpt-4.1-2025-04-14
+
+First 3 lines of the ChatGPT answer (blank lines preserved):
+
+```text
+Here’s a clear and concise answer for borrowers in India seeking personal loans with CIBIL scores under 700:
+
+---
+```
+
+Every cited URL exactly as returned (annotation order; repetitions preserved):
+
+```text
+https://loanbuddyonline.github.io/blog/low-cibil-personal-loan.html?utm_source=openai
+https://www.onepaisa.in/articles/personal-loan-low-cibil-score-india-2026?utm_source=openai
+https://www.onepaisa.in/articles/personal-loan-low-cibil-score-india-2026?utm_source=openai
+https://loansgoteasy.com/blog/personal-loan-low-cibil-score?utm_source=openai
+https://www.onepaisa.in/articles/personal-loan-low-cibil-score-india-2026?utm_source=openai
+https://www.onepaisa.in/articles/personal-loan-low-cibil-score-india-2026?utm_source=openai
+https://fundrupee.com/personal-loan?utm_source=openai
+https://fundrupee.com/personal-loan?utm_source=openai
+https://loanbuddyonline.github.io/blog/low-cibil-personal-loan.html?utm_source=openai
+https://bankcreds.com/personal-loan/low-cibil-score/below-700/?utm_source=openai
+https://loanbuddyonline.github.io/blog/low-cibil-personal-loan.html?utm_source=openai
+https://loanbuddyonline.github.io/blog/low-cibil-personal-loan.html?utm_source=openai
+https://loansgoteasy.com/blog/personal-loan-low-cibil-score?utm_source=openai
+https://bankcreds.com/personal-loan/low-cibil-score/below-700/?utm_source=openai
+```
+
+Counts shown by the report:
+- Provider citation links: 5
+- To your website: 0
+- Findings to review: 0
+- Cited page captures: 5
+
+Page reading: read; 18000 characters captured (shortened).
+AI comparison: Semantic comparison could not complete. The simpler evidence-backed topic checks remain available. Check OpenAI model access, billing, and request limits.
+Warnings:
+- Some page text was shortened. Findings apply only to the captured text.
+
+Checks: Type checking passed; all 15 tests passed; production build and deployment passed; hosted HTML and assets checked. Browser clicks and visual layout were not tested because no browser was available. Exactly one live diagnostic was started in this follow-up; no paid retry was made. Milestone 2 was not started.
+
+The cited answer was verified, but AI page comparison was not: it returned the failure message above. Zero findings does not prove there are no gaps, especially with shortened page text.
+
+Next step: investigate why AI page comparison could not complete.
