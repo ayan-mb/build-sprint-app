@@ -12,6 +12,15 @@ const row = (): BatchRow => ({ question: "Which lenders offer personal loans?", 
   { url: "https://www.example.com/a?utm_source=other", title: "A repeat", cited: true, ownWebsite: false, reference: "" },
   { url: "https://search-only.com", title: "Search only", cited: false, ownWebsite: false, reference: "" },
 ] } });
+test("only rows with an absent brand offer Write draft", () => {
+  const absent = { ...row(), brandMention: false };
+  const unknown = { ...row(), brandMention: null };
+  const html = renderToStaticMarkup(createElement(BatchResults, { batch: {
+    _id: "fixture" as never, _creationTime: 0, createdAt: 0, domain: "tatacapital.com",
+    status: "complete", stage: "Complete", questions: [], rows: [row(), absent, unknown],
+  } }));
+  assert.equal((html.match(/>Write draft<\/button>/g) || []).length, 1);
+});
 test("batch hard limit rejects 21 questions before any calls, with domain and question validation", async () => {
   assert.equal(batchInput("tatacapital.com", ["What is a personal loan?"]).domain, "tatacapital.com");
   assert.equal(batchInput("https://www.tatacapital.com/", Array(20).fill("What is a personal loan?")).questions.length, 20);

@@ -4,7 +4,18 @@ import { draftExport } from "../src/draftExport";
 import { numericTokens } from "../convex/draftEvidence";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { DraftOutput } from "../src/DraftBox";
+import DraftBox, { DraftOutput } from "../src/DraftBox";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+test("single-question results expose the fact sheet and Write draft control",()=>{
+  const client = new ConvexReactClient("https://example.convex.cloud");
+  const html = renderToStaticMarkup(createElement(ConvexProvider,{client},createElement(DraftBox,{
+    id:"fixture" as never, token:"fixture", question:"Which loan is available?",
+  })));
+  assert.match(html,/NBFC product fact sheet/);
+  assert.match(html,/>Write draft<\/button>/);
+  assert.match(html,/\[add: …\]/);
+  void client.close();
+});
 test("plain text remains exact and Markdown preserves approved terms and missing-fact placeholders",()=>{
   const text="Rates start at 10.99% p.a.*\n[add: APR]\nFees are up to 5%, plus taxes.";
   assert.equal(draftExport(text,"text"),text);

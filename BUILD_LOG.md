@@ -553,3 +553,12 @@ Past runs list read back from the database:
 - 2026-10-04T14:53:33.602Z — Draft — best personal loans for CIBIL under 700 — unavailable
 - 2026-10-04T14:36:41.845Z — tatacapital.com — 5 questions — complete
 - 2026-10-04T14:11:31.190Z — tatacapital.com — 5 questions — complete
+
+Write draft — single-question result form: calls api.drafts.generate.
+Write draft — batch results row: opens that question’s fact-sheet form; no server call.
+Write draft — batch fact-sheet form: calls api.diagnostics.begin and api.diagnostics.current to prepare a completed report, then api.drafts.generate.
+Writing draft… — disabled loading button; no additional call.
+Copy plain text — calls copyDraft(text, "text").
+Copy Markdown — calls copyDraft(text, "markdown").
+Download plain text — calls downloadDraft(text, "text").
+Download Markdown — calls downloadDraft(text, "markdown").

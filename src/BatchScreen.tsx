@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { batchSummary, citedDomains } from "../convex/batchEvidence";
 import type { Batch } from "../convex/batchValidators";
+import DraftBox from "./DraftBox";
 function sessionToken() {
   try {
     const saved = sessionStorage.getItem("batch-session");
@@ -11,6 +12,7 @@ function sessionToken() {
   } catch { return crypto.randomUUID(); }
 }
 export function BatchResults({ batch }: { batch: Batch }) {
+  const [draftRows,setDraftRows] = useState<Record<number,string>>({});
   const summary = batch.summary || batchSummary(batch.rows);
   const finished = batch.rows.filter(r => r.status === "complete" || r.status === "error").length;
   return <section className="batch-results" aria-labelledby="batch-results-title">
@@ -26,11 +28,12 @@ export function BatchResults({ batch }: { batch: Batch }) {
     <div className="batch-table-scroll" role="region" aria-label="Question results" tabIndex={0}>
       <table className="batch-table"><caption>One row per borrower question</caption><thead><tr><th scope="col">Question</th><th scope="col">Status</th><th scope="col">Your brand named</th><th scope="col">Other lenders</th><th scope="col">Cited links</th><th scope="col">Source domains</th><th scope="col">Error</th></tr></thead><tbody>
         {batch.rows.map((row,index) => <tr key={index}>
-          <th scope="row">{row.question}</th><td>{row.status === "complete" ? row.answer?.status === "no_citations" ? "Complete · Citation Not Available" : "Complete" : row.status === "error" ? "Failed" : row.status === "running" ? "Running" : "Waiting"}</td>
+          <th scope="row">{row.question}{row.brandMention === false && <div><button type="button" onClick={() => setDraftRows(previous => previous[index] ? previous : {...previous,[index]:crypto.randomUUID()})}>Write draft</button></div>}</th><td>{row.status === "complete" ? row.answer?.status === "no_citations" ? "Complete · Citation Not Available" : "Complete" : row.status === "error" ? "Failed" : row.status === "running" ? "Running" : "Waiting"}</td>
           <td>{row.brandMention === null ? "Not available" : row.brandMention ? "Yes" : "No"}</td><td>{row.lenders.join(", ") || "—"}</td><td>{citedDomains(row).length}</td><td>{[...new Set(citedDomains(row))].join(", ") || "—"}</td><td>{row.error || "—"}</td>
         </tr>)}
       </tbody></table>
     </div>
+    {batch.rows.map((row,index) => draftRows[index] && <DraftBox key={`${batch._id}-${index}`} token={draftRows[index]} question={row.question} website={`https://${batch.domain}`} />)}
     <h3>Answers and cited sources</h3>
     {batch.rows.map((row,index) => row.answer && <details key={index} className="batch-answer"><summary>{row.question}</summary><p className="subtle">Model reported: {row.answer.model}</p>{row.answer.message && <p>{row.answer.message}</p>}<p className="answer-text">{row.answer.text}</p>{row.lenderMentions?.length ? <p className="subtle">Lender names counted: {row.lenderMentions.map(m => `${m.canonicalName} (written as “${m.name}”)`).join("; ")}</p> : null}<ul>{row.answer.sources.filter(s => s.cited).map(s => <li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title || s.url}</a></li>)}</ul></details>)}
   </section>;
