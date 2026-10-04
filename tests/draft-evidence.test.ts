@@ -47,3 +47,24 @@ test("flattened page eligibility stays separate from navigation and application 
   assert.equal(facts[0].text, "Eligibility For Salaried Individuals Age: 21 to 58 years CIBIL score: 725+ preferred");
   assert.equal(facts.length, 1);
 });
+
+import { assembleProse } from "../convex/draftEvidence";
+import { OPENAI_MODEL } from "../convex/models";
+test("plain draft explains conflicting credit preference and keeps numbers sourced", () => {
+  const sheet = "CIBIL score: 725+ preferred Apply Now\nInterest rate starts at 10.99% p.a. View Rates & Charges";
+  const draft = assembleProse(sheet, [
+    { text: "The fact sheet states a preferred CIBIL score of 725+.", topic: "eligibility", factIds: [0] },
+    { text: "Interest rate starts at 10.99% p.a.", topic: "rates", factIds: [1] },
+  ], [], "best personal loans for CIBIL under 700");
+  assert.match(draft.text, /higher CIBIL score/);
+  assert.match(draft.text, /does not confirm eligibility/);
+  assert.doesNotMatch(draft.text, /700|Apply Now|View Rates|^[-#]/m);
+  assert.deepEqual(draft.numbers.map(n => [n.number, n.sheetLine]), [["725", 1], ["10.99%", 2]]);
+  assert.ok(draft.placeholders.includes("[add: processing fee]"));
+  assert.equal(OPENAI_MODEL, "gpt-6.1-sol");
+});
+test("prose rejects unsupported numbers, product terms and navigation", () => {
+  for (const text of ["Interest starts at 9%.", "Interest is FlexiSaver.", "Apply Now for 10.99%."]) {
+    assert.throws(() => assembleProse(sheet, [{ text, topic: "rates", factIds: [0] }], [], "question"));
+  }
+});

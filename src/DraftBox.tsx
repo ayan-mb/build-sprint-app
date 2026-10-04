@@ -30,7 +30,7 @@ export default function DraftBox({ id, token, question }: { id: Id<"diagnostics"
   return <section className="draft-box" aria-labelledby="draft-heading">
     <h3 id="draft-heading">Generate a page from your product facts</h3>
     <p>Answering: {question}</p>
-    <p className="subtle">Paste approved facts for this NBFC product. The draft uses exact passages from your fact sheet. Missing facts appear as [add: …] placeholders. Competitor terms are not used.</p>
+    <p className="subtle">Paste approved facts for this NBFC product. The draft answers your question using only your fact sheet. Missing facts appear as [add: …] placeholders. Competitor terms are not used.</p>
     <form onSubmit={submit}>
       <label htmlFor="fact-sheet">NBFC product fact sheet</label>
       <textarea id="fact-sheet" rows={8} minLength={20} maxLength={50000} required disabled={busy} value={factSheet} onChange={e => { setFactSheet(e.target.value); setDraft(null); setError(""); }} placeholder="Paste product eligibility, rates, fees, documents, and conditions. Use one fact per line where possible." />

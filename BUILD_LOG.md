@@ -464,3 +464,9 @@ Two live draft tests were run. The first exposed eligibility details bundled wit
 Validation: the production Convex action generated one draft. Every numeric occurrence matched its recorded fact-sheet passage and line; only exact supplied passages entered the draft. Visible placeholders include eligibility for this borrower question. Type checking and all 25 tests passed. npm run deploy and hosted-file checks passed. Actual draft component rendering with the live result passed; browser clicks and visual layout were not tested because no browser was available. No API key value was printed, logged, copied, or written. No login or milestone 3 was added.
 
 Next step: review the draft and fill its highlighted missing facts from approved product information.
+
+Model reported by API: not captured by the failed test.
+
+First 10 lines of the draft: unavailable; the generated draft failed the fact-sheet check.
+
+Each number with its fact-sheet line: unavailable; no draft passed validation.

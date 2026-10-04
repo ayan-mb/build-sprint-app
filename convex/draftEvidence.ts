@@ -11,11 +11,12 @@ export const draftTopics = [
 ] as const;
 export type Fact = { id: number; sheetLine: number; text: string };
 export const numericTokens = (text: string) => [...text.matchAll(/\d+(?:,\d{2,3})*(?:\.\d+)?%?|\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|lakh|lakhs|crore|crores)\b/gi)].map(m => m[0]);
+export const navigationText = /apply now|view rates\s*&?\s*charges|check your eligibility|how to apply|step \d/i;
 export function sheetFacts(sheet: string): Fact[] {
   const facts: Fact[] = [];
   sheet.split(/\r?\n/).forEach((line, index) => {
     // Split long paragraphs only at sentence boundaries, never inside decimal numbers.
-    for (const text of line.split(/(?<=[.!?])\s+(?=[A-Z])|\s+(?=Check Your Eligibility Documents Required|Documents Required for Personal Loan|How to Apply for Personal Loan|Factors That Affect Your Personal Loan Eligibility|Identity and Age Proof|Address Proof|Income and Financial Proof|For Salaried Individuals:|Employment ID card|Step \d)/).map(s => s.trim()).filter(Boolean)) {
+    for (const text of line.replace(/Apply Now|View Rates\s*&?\s*Charges/gi, "").split(/(?<=[.!?])\s+(?=[A-Z])|\s+(?=Check Your Eligibility Documents Required|Documents Required for Personal Loan|How to Apply for Personal Loan|Factors That Affect Your Personal Loan Eligibility|Identity and Age Proof|Address Proof|Income and Financial Proof|For Salaried Individuals:|Employment ID card|Step \d)/).map(s => s.trim()).filter(Boolean)) {
       // Long, unsplit blocks cannot become a whole draft; request more usable facts instead.
       if (text.length <= 1600 && !/\[add:|ignore (previous|all)|system prompt|guaranteed approval|100% approval|^Step \d|^How to Apply|^Check Your Eligibility/i.test(text))
         facts.push({ id: facts.length, sheetLine: index + 1, text });
@@ -49,6 +50,58 @@ export function assembleDraft(
         placeholders.push(placeholder);
         lines.push(placeholder);
       }
+    }
+  }
+  return { text: lines.join("\n"), numbers, placeholders };
+}
+
+
+export type DraftSentence = { text: string; topic: string; factIds: number[] };
+export const neutralWords = new Set("the a an and or but for of to in on at from with by is are was be been being has have it its this that these those your you can may must does do not no only also still if as than about asks requested question borrower sheet fact says states lists prefers higher lower score confirm confirms eligibility cannot determine whether applies apply applicable depends depend includes include requires require required starts start up per plus subject available information missing approval approved preferred according provide provided product loan personal interest rate rates fee fees income documents amount tenure repayment prepayment charges conditions disclosures salaried individuals minimum maximum monthly final charged reducing balance original owe pay taxes employment proof identity age years months resident nationality credit assessment processing CIBIL p a below above under without therefore however specifically suitable suitability preference threshold stated shown meet meets based specify specifies unspecified confirmed confirms basis support supported determine determined answer directly before after more less borrower question lender assess assessed case cases individual separately additional actual exact requirements requirement evidence confirms confirming does".toLowerCase().split(/\s+/));
+const words = (text: string) => text.toLowerCase().match(/[a-z]+/g) || [];
+export function assembleProse(sheet: string, sentences: DraftSentence[], gapTopics: string[], question: string) {
+  const facts = sheetFacts(sheet);
+  const lines: string[] = [];
+  const numbers: { number: string; draftLine: number; sheetLine: number; passage: string }[] = [];
+  const placeholders: string[] = [];
+  const covered = new Set<string>();
+  // Explain the mismatch without copying an unsupported number from the question.
+  const requested = question.match(/(?:under|below|less than)\s+(\d+)/i);
+  const preferred = facts.find(f => /cibil|credit score/i.test(f.text) && /preferred/i.test(f.text));
+  const threshold = preferred?.text.match(/(?:cibil(?: score)?|credit score)\s*:\s*(\d+)/i);
+  if (requested && threshold && Number(requested[1]) < Number(threshold[1])) {
+    lines.push("The fact sheet prefers a higher CIBIL score than the question asks about. It does not confirm eligibility for the requested lower score.");
+  }
+  for (const sentence of sentences) {
+    const text = sentence.text.trim();
+    const topic = draftTopics.find(t => t.key === sentence.topic);
+    const cited = [...new Set(sentence.factIds)].map(id => facts[id]);
+    if (!topic || !cited.length || cited.some(f => !f) || !cited.some(f => topic.pattern.test(f.text))) throw new Error("Unsupported draft evidence");
+    if (!text || /[\r\n]|^[-#*]|\[add:/.test(text) || navigationText.test(text)) throw new Error("Invalid draft prose");
+    // All product vocabulary must occur in the cited sheet passages; only neutral connective words are added.
+    const allowed = new Set(cited.flatMap(f => words(f.text)));
+    if (words(text).some(word => !allowed.has(word) && !neutralWords.has(word))) throw new Error("Unsupported product term");
+    const tokens = numericTokens(text);
+    const remaining = cited.flatMap(f => numericTokens(f.text).map(number => ({ number, fact: f })));
+    for (const number of tokens) {
+      const index = remaining.findIndex(n => n.number === number);
+      if (index < 0) throw new Error("Unsupported draft number");
+      const [{ fact }] = remaining.splice(index, 1);
+      numbers.push({ number, draftLine: lines.length + 1, sheetLine: fact.sheetLine, passage: fact.text });
+    }
+    lines.push(text);
+    covered.add(topic.key);
+  }
+  for (const topic of draftTopics) {
+    if (topic.key === "gaps") {
+      for (const gap of gapTopics) {
+        const label = gap.replace(/\d+(?:\.\d+)?%?/g, "").replace(/[^a-zA-Z ,/&-]/g, "").trim().slice(0, 100);
+        const placeholder = `[add: ${label || topic.missing}]`;
+        placeholders.push(placeholder); lines.push(placeholder);
+      }
+    } else if (!covered.has(topic.key) || topic.key === "eligibility") {
+      const placeholder = `[add: ${topic.missing}]`;
+      placeholders.push(placeholder); lines.push(placeholder);
     }
   }
   return { text: lines.join("\n"), numbers, placeholders };
