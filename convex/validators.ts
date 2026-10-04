@@ -1,4 +1,5 @@
 import { v, type Infer } from "convex/values";
+// Legacy provider label remains readable for previously saved reports. New runs use ChatGPT only.
 export const provider = v.union(v.literal("Perplexity"), v.literal("ChatGPT"));
 export const page = v.object({
   url: v.string(),
@@ -29,6 +30,7 @@ export const answer = v.object({
   text: v.string(),
   message: v.string(),
   sources: v.array(source),
+  citedUrls: v.optional(v.array(v.string())),
   fetchedAt: v.number(),
 });
 export const gap = v.object({

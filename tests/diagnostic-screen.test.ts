@@ -22,7 +22,7 @@ test("The actual provider screen renders a clear missing-key message without inv
 });
 test("The actual source screen shows clickable citations, own-site labels, and search-only labels", () => {
   const answer: Answer = {
-    provider: "Perplexity",
+    provider: "ChatGPT",
     model: "fixture",
     status: "ready",
     text: "Loan fees are stated [1].",

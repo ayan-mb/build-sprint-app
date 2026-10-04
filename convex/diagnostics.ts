@@ -58,7 +58,7 @@ export const begin = mutation({
       website,
       token: args.token,
       status: "running",
-      stage: "Reading your page and asking both providers",
+      stage: "Reading your page and asking ChatGPT",
       createdAt: now,
       result: null,
       error: "",

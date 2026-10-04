@@ -2,15 +2,11 @@
 
 Date: 4 October 2026 (India time).
 
-## Morning handoff
+## Current milestone 1 setup
 
-**First thing: add `PERPLEXITY_API_KEY` and `OPENAI_API_KEY` in the production Convex deployment's Settings → Environment Variables.** Open [the production deployment dashboard](https://dashboard.convex.dev/t/ayan-biswas/build-sprint-app/frugal-moose-32), select **Production / frugal-moose-32**, then Settings → Environment Variables. Add each name and its corresponding provider key there. Do not add keys to this repository, a `.env` file, browser code, or the diagnostic form.
+Milestone 1 now uses ChatGPT only. You reported that `OPENAI_API_KEY` was already saved in production; the live test below returned `key_missing` from that deployment. Its value must never be printed, logged, copied, or written to any file. No command displaying environment variable values was run. The key is used only inside existing server-side Convex actions.
 
-`PERPLEXITY_API_KEY` is the key from your Perplexity API account; it enables the Perplexity answer and cited sources. `OPENAI_API_KEY` is the key from your OpenAI API account; it enables the ChatGPT search answer and the semantic page comparison (comparison of concepts, rather than only matching topic words). Consumer ChatGPT and Perplexity subscriptions do not supply these API credentials. Provider API access and credits must be active. No key was requested, obtained, printed, or written to any file during this build.
-
-Then open [the diagnostic](https://frugal-moose-32.convex.site), refresh the page so its key-status checks run again, enter your NBFC's relevant product-page URL, and click **Compare answers and sources** with the example borrower question. Check that both answers have real clickable citations and review the quotations before accepting any gap. This first keyed run is still required to prove milestone 1 with live AI results.
-
-For local development, the existing deployment is **Development / animated-yak-855**. Add the same variable names in that deployment separately if you want `npm run dev` to make real provider calls. Keys set in development do not configure the live production app.
+The earlier entries below record the previous two-provider build and its checks; they are historical, not current setup instructions. The ChatGPT-only deployment and live result are recorded at the end. Milestone 2 remains untouched.
 
 ## What works
 
@@ -224,3 +220,46 @@ Exit code: 0. The full production no-key diagnostic above was rerun after this s
 The code was checked for provider key values before committing. Environment files, dependencies and build output are ignored by git. No GitHub push was made; this folder has no configured GitHub remote.
 
 Implementation references: [OpenAI search API and URL citations](https://developers.openai.com/api/docs/guides/tools-web-search), [Perplexity's current Agent API migration](https://docs.perplexity.ai/docs/agent-api/migrate-from-sonar/overview), and [Perplexity web-search output shape](https://docs.perplexity.ai/docs/agent-api/tools/web-search). Perplexity's documentation says Sonar Chat Completions support ended on 27 September 2026; the new implementation uses the Agent API rather than building on that retired path.
+
+## ChatGPT-only milestone 1 — production live test
+
+Date: 04/10/2026, 13:45:42 (India time).
+
+Deployed with `npm run deploy` to https://frugal-moose-32.convex.site.
+Run ID: j573b890d5bmnsjmtd3zgjp1g98fm0jn
+Question: best personal loans for CIBIL under 700
+NBFC page: https://www.tatacapital.com/personal-loan.html
+ChatGPT status: key_missing
+Model: gpt-4.1
+
+First 3 lines of the ChatGPT answer (blank lines preserved):
+
+```text
+Not available. Key missing: OPENAI_API_KEY. Add it in the Convex dashboard → Settings → Environment Variables for this deployment.
+```
+
+Every cited URL exactly as returned (annotation order; repetitions preserved):
+
+```text
+Citation Not Available. No cited URLs returned.
+```
+
+Counts shown by the report:
+- Provider citation links: 0
+- To your website: 0
+- Findings to review: 0
+- Cited page captures: 0
+
+Page reading: read; 18000 characters captured (shortened).
+AI comparison: Semantic comparison is waiting for a readable NBFC page and at least one readable cited source.
+Warnings:
+- Some page text was shortened. Findings apply only to the captured text.
+- No verified citations are available yet. No source-backed gaps can be shown.
+
+Checks: Type checking passed; all 15 tests passed; production build and deployment passed; hosted HTML and assets checked. Browser clicks and visual layout were not tested because no browser was available. Exactly one live diagnostic was started; no paid retry was made. Milestone 2 was not started.
+
+The live test did not verify a ChatGPT answer or citations: the production action reported the key missing. No answer lines or source URLs were invented.
+
+Deployment note: the first screen upload failed with a network error; rerunning `npm run deploy` succeeded.
+
+Next step: confirm that the variable is named OPENAI_API_KEY in Production / frugal-moose-32, without sharing its value.

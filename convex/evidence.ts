@@ -60,7 +60,7 @@ function safeSource(
   try {
     const validated = publicUrl(url);
     return {
-      url: validated,
+      url,
       title: typeof title === "string" ? title : validated,
       cited,
       reference,
@@ -70,7 +70,7 @@ function safeSource(
     return null;
   }
 }
-// Accept only provider metadata or numbered references mapped to returned result IDs.
+// Accept only Responses API citation metadata; preserve returned URLs exactly.
 // A URL written into the answer by the model is not proof of a citation.
 export function parseAnswer(
   provider: Answer["provider"],
@@ -79,6 +79,7 @@ export function parseAnswer(
   now = Date.now(),
 ): Answer {
   const sources: Source[] = [];
+  const citedUrls: string[] = [];
   const textParts: string[] = [];
   const add = (s: Source | null) => {
     if (!s) return;
@@ -90,45 +91,17 @@ export function parseAnswer(
       if (s.reference) old.reference = s.reference;
     } else sources.push(s);
   };
-  if (provider === "ChatGPT" && Array.isArray(data.choices)) {
-    const m = data.choices[0]?.message;
-    if (typeof m?.content === "string") textParts.push(m.content);
-    for (const a of m?.annotations ?? [])
-      if (a.type === "url_citation") {
-        const c = a.url_citation ?? a;
-        add(safeSource(c.url, c.title, true, "URL citation", website));
-      }
-  } else {
-    for (const item of data.output ?? [])
-      if (item.type === "message" && (!item.role || item.role === "assistant"))
-        for (const part of item.content ?? [])
-          if (part.type === "output_text") {
-            if (typeof part.text === "string") textParts.push(part.text);
-            for (const a of part.annotations ?? [])
-              if (a.type === "url_citation") {
-                const c = a.url_citation ?? a;
-                add(safeSource(c.url, c.title, true, "URL citation", website));
-              }
-          }
-    const text = textParts.join("\n\n");
-    const ids = new Set<string>();
-    for (const match of text.matchAll(/\[(\d+(?:\s*,\s*\d+)*)\]/g))
-      for (const id of match[1].split(/\s*,\s*/)) ids.add(id);
-    for (const item of data.output ?? [])
-      if (item.type === "search_results")
-        for (const r of item.results ?? []) {
-          const id = r.id === undefined ? "" : String(r.id);
-          add(
-            safeSource(
-              r.url,
-              r.title,
-              id !== "" && ids.has(id),
-              id ? `[${id}]` : "Search result only",
-              website,
-            ),
-          );
+  for (const item of data.output ?? [])
+    if (item.type === "message" && item.role === "assistant")
+      for (const part of item.content ?? [])
+        if (part.type === "output_text") {
+          if (typeof part.text === "string") textParts.push(part.text);
+          for (const annotation of part.annotations ?? [])
+            if (annotation.type === "url_citation") {
+              if (typeof annotation.url === "string") citedUrls.push(annotation.url);
+              add(safeSource(annotation.url, annotation.title, true, "URL citation", website));
+            }
         }
-  }
   const text = textParts.join("\n\n").slice(0, 24000);
   if (!text.trim()) throw new Error("The provider returned no answer text.");
   const cited = sources.some((s) => s.cited);
@@ -138,6 +111,7 @@ export function parseAnswer(
     status: cited ? "ready" : "no_citations",
     text,
     sources,
+    citedUrls,
     fetchedAt: now,
     message: cited
       ? ""

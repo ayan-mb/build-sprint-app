@@ -145,7 +145,6 @@ export default function App() {
   const begin = useMutation(api.diagnostics.begin);
   const configuration = useAction(api.research.configuration);
   const [config, setConfig] = useState<{
-    perplexity: boolean;
     openai: boolean;
   } | null>(null);
   const [configError, setConfigError] = useState("");
@@ -182,7 +181,7 @@ export default function App() {
   }
   const result = current?.result;
   const cited =
-    result?.answers.flatMap((a) => a.sources.filter((s) => s.cited)) ?? [];
+    result?.answers.filter((a) => a.provider === "ChatGPT").flatMap((a) => a.sources.filter((s) => s.cited)) ?? [];
   const own = cited.filter((s) => s.ownWebsite);
   const gaps =
     result?.gaps.filter((g) => showCovered || g.kind !== "covered") ?? [];
@@ -200,8 +199,8 @@ export default function App() {
             What your page is missing.
           </h1>
           <p>
-            Ask one borrower question. See answers from Perplexity and ChatGPT,
-            their cited links, and the content differences on your NBFC’s page.
+            Ask one borrower question. See the ChatGPT answer,
+            its cited links, and the content differences on your NBFC’s page.
           </p>
         </div>
         <section className="input-area" aria-labelledby="question-heading">
@@ -209,14 +208,6 @@ export default function App() {
           <div className="key-status" aria-live="polite">
             {config ? (
               <>
-                <span
-                  className={`badge ${config.perplexity ? "good" : "notice"}`}
-                >
-                  Perplexity:{" "}
-                  {config.perplexity
-                    ? "key configured"
-                    : "key missing — PERPLEXITY_API_KEY"}
-                </span>
                 <span className={`badge ${config.openai ? "good" : "notice"}`}>
                   ChatGPT:{" "}
                   {config.openai
@@ -228,7 +219,7 @@ export default function App() {
               <p>{configError || "Checking provider keys…"}</p>
             )}
           </div>
-          {config && (!config.perplexity || !config.openai) && (
+          {config && !config.openai && (
             <p className="setup-note">
               Add missing keys in your{" "}
               <a
@@ -270,10 +261,10 @@ export default function App() {
             </p>
             <div className="form-actions">
               <button disabled={busy || current === undefined} type="submit">
-                {busy ? "Checking sources…" : "Compare answers and sources"}
+                {busy ? "Checking sources…" : "Compare answer and sources"}
               </button>
               <span className="subtle">
-                One question · Two providers · Up to 8 cited pages
+                One question · ChatGPT only · Up to 8 cited pages
               </span>
             </div>
             {error && (
@@ -325,11 +316,11 @@ export default function App() {
             </div>
             <p className="subtle">
               Citation links are counted per provider, not as share of voice.
-              API answers may differ from the consumer Perplexity and ChatGPT
-              apps.
+              API answers may differ from the consumer ChatGPT
+              app.
             </p>
             <div className="answers-grid">
-              {result.answers.map((a) => (
+              {result.answers.filter((a) => a.provider === "ChatGPT").map((a) => (
                 <ProviderAnswer key={a.provider} answer={a} />
               ))}
             </div>

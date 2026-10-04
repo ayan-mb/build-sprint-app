@@ -14,20 +14,11 @@ export const run = workflow
     returns: v.null(),
   })
   .handler(async (step, args): Promise<null> => {
-    const [brandPage, perplexity, chatgpt]: [Page, Answer, Answer] =
+    const [brandPage, chatgpt]: [Page, Answer] =
       await Promise.all([
         step.runAction(
           internal.research.readPage,
           { url: args.website },
-          { retry: false },
-        ),
-        step.runAction(
-          internal.research.ask,
-          {
-            provider: "Perplexity",
-            question: args.question,
-            website: args.website,
-          },
           { retry: false },
         ),
         step.runAction(
@@ -40,7 +31,7 @@ export const run = workflow
           { retry: false },
         ),
       ]);
-    const answers = [perplexity, chatgpt];
+    const answers = [chatgpt];
     const cited = [
       ...new Map(
         answers

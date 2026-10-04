@@ -11,7 +11,7 @@ const config = await client.action(api.research.configuration, {});
 console.log("Provider configuration:", JSON.stringify(config));
 assert.deepEqual(
   config,
-  { openai: false, perplexity: false },
+  { openai: false },
   "This no-key smoke test must not spend API credits.",
 );
 const token = crypto.randomUUID();
@@ -30,7 +30,7 @@ while (run?.status === "running" && Date.now() < deadline) {
 }
 assert.equal(run?.status, "complete");
 const result = run!.result!;
-assert.equal(result.answers.length, 2);
+assert.equal(result.answers.length, 1);
 for (const answer of result.answers) {
   assert.equal(answer.status, "key_missing");
   assert.equal(answer.sources.length, 0);

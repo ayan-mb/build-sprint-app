@@ -78,7 +78,7 @@ If this is false, the product is pointless: [ actively publishing the content su
 Thirty-minute check, no code (run it while you build), and what happened: [Not run yet]
 
 ## 7. Milestones
-I can programmatically extract the exact source citations from a single Perplexity or ChatGPT query, compare them against my brand's URLs, and accurately identify the missing semantic terms or "extractable numbers" (like interest rates or processing fees). (The riskiest part, in its simplest form: Proving the gap analysis actually works before building the content generator).
+I can programmatically extract the exact source citations from a single ChatGPT query using the OpenAI Responses API with web_search, compare them against my brand's URLs, and accurately identify the missing semantic terms or "extractable numbers" (like interest rates or processing fees). (The riskiest part, in its simplest form: Proving the gap analysis actually works before building the content generator).
 I can ingest a single NBFC product PDF or web page and use it to strictly ground an LLM to write a structurally optimized (H2s, lists, schema ready) content draft that fills the identified gaps without hallucinating fake financial terms or violating basic RBI disclaimers.
 I can run a batch list of 20 targeted prompts and generate a "Share of Voice" baseline report that shows the marketing head exactly how many citations they are losing to Bajaj Finserv, Tata Capital, or BankBazaar.
 I can package the drafted content so the user can copy, paste, and deploy the asset immediately.

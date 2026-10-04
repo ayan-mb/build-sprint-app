@@ -27,29 +27,14 @@ test("ChatGPT uses actual citation metadata, deduplicates tracking URLs, and ign
     "ChatGPT",
     {
       model: "fixture",
-      choices: [
-        {
-          message: {
-            content: "A source is cited. https://invented.org",
-            annotations: [
-              {
-                type: "url_citation",
-                url_citation: {
-                  url: "https://www.example.com/rates?utm_source=openai",
-                  title: "Rates",
-                },
-              },
-              {
-                type: "url_citation",
-                url_citation: {
-                  url: "https://www.example.com/rates",
-                  title: "Rates again",
-                },
-              },
-            ],
-          },
-        },
-      ],
+      output: [{ type: "web_search_call", action: { sources: [{ url: "https://uncited.org" }] } }, {
+        type: "message", role: "assistant", content: [{ type: "output_text",
+          text: "A source is cited. https://invented.org", annotations: [
+            { type: "url_citation", url: "https://www.example.com/rates?utm_source=openai#fees", title: "Rates" },
+            { type: "url_citation", url: "https://www.example.com/rates", title: "Rates again" }
+          ]
+        }]
+      }],
     },
     website,
     1,
@@ -58,104 +43,18 @@ test("ChatGPT uses actual citation metadata, deduplicates tracking URLs, and ign
   assert.equal(answer.sources.length, 1);
   assert.equal(answer.sources[0].ownWebsite, true);
   assert.equal(answer.sources[0].cited, true);
-});
-test("Perplexity maps numbered answer references to result IDs, not array positions", () => {
-  const answer = parseAnswer(
-    "Perplexity",
-    {
-      model: "fixture",
-      output: [
-        {
-          type: "search_results",
-          results: [
-            { id: 8, url: "https://competitor.com/fees", title: "Fees" },
-            { id: 2, url: "https://example.com/loan", title: "Loan" },
-            { id: 3, url: "https://aggregator.com/loan", title: "Result only" },
-          ],
-        },
-        {
-          type: "message",
-          role: "assistant",
-          content: [
-            { type: "output_text", text: "See fees [8] and eligibility [2]." },
-          ],
-        },
-      ],
-    },
-    website,
-    1,
-  );
-  assert.equal(answer.sources.filter((s) => s.cited).length, 2);
-  assert.equal(answer.sources[0].reference, "[8]");
-  assert.equal(answer.sources[2].cited, false);
-});
-test("Perplexity grouped references and URL annotations both preserve cited sources", () => {
-  const answer = parseAnswer(
-    "Perplexity",
-    {
-      output: [
-        {
-          type: "search_results",
-          results: [
-            { id: 4, url: "https://competitor.com/fee" },
-            { id: 7, url: "https://competitor.com/rate" },
-          ],
-        },
-        {
-          type: "message",
-          role: "assistant",
-          content: [
-            {
-              type: "output_text",
-              text: "Terms [4, 7].",
-              annotations: [
-                {
-                  type: "url_citation",
-                  url: "https://example.com/terms",
-                  title: "Terms",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    website,
-    1,
-  );
-  assert.equal(answer.sources.filter((s) => s.cited).length, 3);
+  assert.equal(answer.sources[0].url, "https://www.example.com/rates?utm_source=openai#fees");
 });
 test("An uncited ChatGPT answer produces Citation Not Available without inventing links", () => {
   const a = parseAnswer(
     "ChatGPT",
-    { choices: [{ message: { content: "Read https://example.com." } }] },
+    { output: [{ type: "message", role: "assistant", content: [{ type: "output_text", text: "Read https://example.com." }] }] },
     website,
     1,
   );
   assert.equal(a.status, "no_citations");
   assert.equal(a.sources.length, 0);
   assert.match(a.message, /Citation Not Available/);
-});
-test("Unreferenced Perplexity results are not counted as citations", () => {
-  const a = parseAnswer(
-    "Perplexity",
-    {
-      output: [
-        {
-          type: "search_results",
-          results: [{ id: 1, url: "https://competitor.com" }],
-        },
-        {
-          type: "message",
-          content: [{ type: "output_text", text: "No citations here." }],
-        },
-      ],
-    },
-    website,
-    1,
-  );
-  assert.equal(a.status, "no_citations");
-  assert.equal(a.sources[0].cited, false);
 });
 test("Empty provider text fails instead of reporting a successful answer", () => {
   assert.throws(() => parseAnswer("ChatGPT", { choices: [] }, website));
