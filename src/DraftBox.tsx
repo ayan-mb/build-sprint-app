@@ -16,6 +16,7 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
   }
   return <div aria-live="polite">
     <p className={draft.status === "unavailable" ? "warning" : "subtle"}>{draft.message}</p>
+    {draft.flaggedWords && <p className={draft.flaggedWords.length ? "warning" : "subtle"}>Flagged words: {draft.flaggedWords.join(", ") || "None"}.</p>}
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
       <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\])/g).map((part, index) => part.startsWith("[add:") ? <mark key={index}>{part}</mark> : part)}</pre>

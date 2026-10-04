@@ -20,6 +20,7 @@ import type * as diagnosticWorkflow from "../diagnosticWorkflow.js";
 import type * as diagnostics from "../diagnostics.js";
 import type * as draftData from "../draftData.js";
 import type * as draftEvidence from "../draftEvidence.js";
+import type * as draftStyle from "../draftStyle.js";
 import type * as draftValidators from "../draftValidators.js";
 import type * as drafts from "../drafts.js";
 import type * as evidence from "../evidence.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   diagnostics: typeof diagnostics;
   draftData: typeof draftData;
   draftEvidence: typeof draftEvidence;
+  draftStyle: typeof draftStyle;
   draftValidators: typeof draftValidators;
   drafts: typeof drafts;
   evidence: typeof evidence;

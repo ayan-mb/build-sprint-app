@@ -30,3 +30,7 @@ test("a ready saved draft offers all four export controls; a failed draft offers
   for(const label of ["Copy plain text","Copy Markdown","Download plain text","Download Markdown"]) assert.ok(html.includes(label));
   assert.ok(!renderToStaticMarkup(createElement(DraftOutput,{draft:{...ready,status:"unavailable"}})).includes("Download"));
 });
+test("banned-word findings appear alongside the saved draft",()=>{
+  const html=renderToStaticMarkup(createElement(DraftOutput,{draft:{status:"ready",text:"Unlock a loan.",numbers:[],placeholders:[],model:"fixture",message:"Review",flaggedWords:["unlock"]}}));
+  assert.match(html,/Flagged words: unlock/);
+});

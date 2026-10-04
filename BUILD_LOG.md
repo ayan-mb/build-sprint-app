@@ -562,3 +562,15 @@ Copy plain text — calls copyDraft(text, "text").
 Copy Markdown — calls copyDraft(text, "markdown").
 Download plain text — calls downloadDraft(text, "text").
 Download Markdown — calls downloadDraft(text, "markdown").
+
+The fact sheet prefers a higher CIBIL score than the question asks about. It does not confirm eligibility for the requested lower score.
+A CIBIL score of 725+ is preferred, which is above the score range you asked about.
+The supplied facts do not specify eligibility for scores below this preference.
+Interest rates are starting from 10.99% p.a.*, charged on a reducing balance.
+Your final rate depends on eligibility and credit assessment.
+A processing fee of up to 5% applies on your loan amount, plus applicable taxes.
+[add: eligibility for this borrower question]
+[add: income requirements and documents]
+[add: approval and disbursal conditions]
+[add: loan amount and tenure]
+Flagged words: None.
