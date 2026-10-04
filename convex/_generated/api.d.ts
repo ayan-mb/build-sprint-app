@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as comparisonContext from "../comparisonContext.js";
+import type * as comparisonFailure from "../comparisonFailure.js";
 import type * as diagnosticWorkflow from "../diagnosticWorkflow.js";
 import type * as diagnostics from "../diagnostics.js";
 import type * as evidence from "../evidence.js";
@@ -22,6 +24,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  comparisonContext: typeof comparisonContext;
+  comparisonFailure: typeof comparisonFailure;
   diagnosticWorkflow: typeof diagnosticWorkflow;
   diagnostics: typeof diagnostics;
   evidence: typeof evidence;
