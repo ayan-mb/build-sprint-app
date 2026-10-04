@@ -318,3 +318,26 @@ Checks: Type checking passed; all 15 tests passed; production build and deployme
 The cited answer was verified, but AI page comparison was not: it returned the failure message above. Zero findings does not prove there are no gaps, especially with shortened page text.
 
 Next step: investigate why AI page comparison could not complete.
+
+## AI page comparison failure — cause and verified fix
+
+Date: 04/10/2026, 14:26:13 (India time).
+
+The Agent library requires a userId or threadId even for a one-off comparison. The original call supplied neither and threw “Specify userId or threadId” before any OpenAI request. A local test reproduced that exact failure in the actual installed Agent library. The safe production diagnostic identified stage=generate; it had no HTTP status because the call stopped before the provider request.
+
+Fixed by giving every comparison a fresh random identifier, with conversation storage disabled. No saved history is fetched or written. Exact-quotation checks, page limits, topic checks, and honest unavailable messages remain in place. Future failures expose only allow-listed categories and HTTP status, never raw errors, headers, response bodies, or credentials.
+
+Deployed with npm run deploy to https://frugal-moose-32.convex.site.
+Live verification reused the original captured pages from run j57fwsrm2fnpgab0jt0j8s0wvh8fma3f; no new search answer or citations were requested. An authenticated internal function reran only the comparison. The original report remains unchanged as a record of the earlier failure.
+
+Exact comparison result:
+
+```text
+Semantic comparison checked 0 findings against fetched quotations. Unsupported quotations were discarded. These are review suggestions, not proof of why an AI cited a page.
+```
+
+Comparison counts: 0 quotation-checked findings; 0 covered; 0 missing; 0 needs review. These are comparison-only counts, not a new full report. The AI returned suggestions, but all were discarded because they did not pass the existing quotation checks. This is not proof that the page has no gaps.
+
+Validation: type checking passed; all 18 tests passed, including actual Agent preparation and safe error reporting. Production deployment passed. Browser clicks and layout were not tested. No automatic paid retry was made. Milestone 2 was not started.
+
+Next step: refresh the live app and run a fresh diagnostic to see the fixed comparison in your report.

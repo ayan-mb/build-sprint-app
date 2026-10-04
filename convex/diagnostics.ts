@@ -1,9 +1,9 @@
-import { mutation, query, internalMutation } from "./_generated/server";
+import { mutation, query, internalQuery, internalMutation } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 import { start, vWorkflowId } from "@convex-dev/workflow";
 import { vResultValidator } from "@convex-dev/workpool";
-import { publicRun, report, type Report } from "./validators";
+import { publicRun, report, page, type Report } from "./validators";
 import { publicUrl } from "./evidence";
 import type { Id } from "./_generated/dataModel";
 export const begin = mutation({
@@ -122,5 +122,15 @@ export const onComplete = internalMutation({
           "The diagnostic could not finish. Please run it again. Completed provider calls are not retried automatically.",
       });
     return null;
+  },
+});
+
+export const comparisonInput = internalQuery({
+  args: { id: v.id("diagnostics") },
+  returns: v.union(v.object({ question: v.string(), brandPage: page, sourcePages: v.array(page) }), v.null()),
+  handler: async (ctx, { id }) => {
+    const run = await ctx.db.get(id);
+    if (!run?.result) return null;
+    return { question: run.question, brandPage: run.result.brandPage, sourcePages: run.result.sourcePages };
   },
 });
