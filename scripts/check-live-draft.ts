@@ -18,7 +18,9 @@ const normalize = (text: string) => text.replace(/\s+/g, " ").trim();
 assert.equal(normalize(sheet), normalize(capture.page.text));
 const client = new ConvexHttpClient("https://frugal-moose-32.convex.cloud");
 const result = await client.action(api.drafts.generate, { id, token: capture.token, factSheet: sheet });
-if (result.status !== "ready") { console.log(result.message); throw new Error("Live draft was not available."); }
+let failure = result.status === "ready" ? "" : result.message;
+try {
+if (failure) throw new Error(failure);
 assert.deepEqual(numericTokens(result.text), result.numbers.map(n => n.number));
 for (const n of result.numbers) {
   assert.ok(sheet.split("\n")[n.sheetLine - 1].includes(n.passage));
@@ -33,6 +35,11 @@ const firstTen = result.text.split("\n").slice(0, 10).join("\n");
 assert.doesNotMatch(result.text, /Apply Now|View Rates\s*&\s*Charges/i);
 assert.match(result.text, /higher CIBIL score/);
 assert.match(result.text, /725/);
-const section = `\nModel reported by API: ${result.model}\n\nFirst 10 lines of the draft:\n\n\`\`\`text\n${firstTen}\n\`\`\`\n\nEach number with its fact-sheet line:\n\n${result.numbers.map(n => `- ${n.number} — fact-sheet line ${n.sheetLine}`).join("\n") || "- None."}\n`;
+} catch (error) {
+  failure = error instanceof Error ? error.message : "Live test assertion failed.";
+}
+const firstLines = result.text.split("\n").slice(0, 10).join("\n");
+const section = `\nModel reported by API: ${result.model || "not reported"}\nPass or fail: ${failure ? "FAIL" : "PASS"}\n${failure ? `Exact failure reason: ${failure}\n` : ""}\nFirst 10 lines of the draft:\n\n\`\`\`text\n${firstLines || "Unavailable: no draft was returned."}\n\`\`\`\n`;
 appendFileSync("BUILD_LOG.md", section);
 console.log(section);
+if (failure) process.exitCode = 1;

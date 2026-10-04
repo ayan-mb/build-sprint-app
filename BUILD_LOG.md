@@ -470,3 +470,62 @@ Model reported by API: not captured by the failed test.
 First 10 lines of the draft: unavailable; the generated draft failed the fact-sheet check.
 
 Each number with its fact-sheet line: unavailable; no draft passed validation.
+
+Model reported by API: gpt-6.1-sol
+Pass or fail: FAIL
+Exact failure reason: The expression evaluated to a falsy value:
+
+  assert.ok(sheet.split("\n")[n.sheetLine - 1].includes(n.passage))
+
+
+First 10 lines of the draft:
+
+```text
+The fact sheet prefers a higher CIBIL score than the question asks about. It does not confirm eligibility for the requested lower score.
+For salaried individuals, Tata Capital prefers a CIBIL score of 725+, which is higher than the score range you asked about.
+This is a preferred score, and Personal Loan eligibility is assessed on your profile rather than confirmed by that preference alone.
+Personal Loan rates start at 10.99% p.a.*, charged on a reducing balance, and your final rate depends on eligibility and Tata Capital's credit assessment.
+A lower credit score may result in higher interest rates, a lower loan amount, or stricter terms.
+A processing fee of up to 5% applies on your loan amount, plus applicable taxes.
+For salaried individuals, the minimum monthly income is ₹20,000, with a minimum of 1 year at the current job and 2 years of total experience.
+A PAN card is mandatory, and income documents for salaried individuals include the latest 3 months' salary slips, Form 16 for the last 2 years, and salary account bank statements for the last 3-6 months.
+Eligible applicants benefit from quick approval and fast disbursal.
+The loan amount offered is ₹40,000 to ₹35,00,000, with a tenure of up to 6 years.
+```
+
+Model reported by API: gpt-6.1-sol
+Pass or fail: FAIL
+Exact failure reason: Draft not available: Unsupported draft evidence. No fallback was used.
+
+First 10 lines of the draft:
+
+```text
+For salaried individuals, Tata Capital prefers a CIBIL score of 725+, which is higher than the score range you asked about.
+Personal Loan eligibility depends on multiple financial and personal factors, including monthly income, repayment capacity, credit score and repayment history.
+Interest rates start at 10.99% p.a., charged on a reducing balance, and your final rate depends on eligibility and Tata Capital's credit assessment.
+A lower credit score may result in higher interest rates, a lower loan amount or stricter terms.
+A processing fee of up to 5% of your loan amount applies, plus applicable taxes.
+For salaried individuals, the minimum monthly income is ₹20,000.
+Documents include a mandatory PAN card, the latest 3 months' salary slips, Form 16 for the last 2 years and salary account bank statements for the last 3-6 months.
+Eligible applicants benefit from quick approval and fast disbursal.
+The loan amount offered ranges from ₹40,000 to ₹35,00,000, with a tenure of up to 6 years.
+You can part prepay up to 25% of your disbursed amount anytime after availing the loan, at no cost.
+```
+
+Model reported by API: gpt-6.1-sol
+Pass or fail: PASS
+
+First 10 lines of the draft:
+
+```text
+The fact sheet prefers a higher CIBIL score than the question asks about. It does not confirm eligibility for the requested lower score.
+For salaried individuals, Tata Capital prefers a CIBIL score of 725+, which is higher than the score range you asked about.
+This is a stated preference, and Personal Loan eligibility depends on multiple financial and personal factors.
+Personal Loan interest rates start at 10.99% p.a.*, charged on a reducing balance, and your final rate depends on eligibility and Tata Capital's credit assessment.
+A lower credit score may result in higher interest rates, a lower loan amount, or stricter terms.
+The processing fee is up to 5% of your loan amount, plus applicable taxes.
+For salaried individuals, the minimum monthly income is ₹20,000.
+Salaried individuals need the latest 3 months' salary slips, Form 16 for the last 2 years, and salary account bank statements for the last 3-6 months.
+Eligible applicants benefit from quick approval and fast disbursal.
+The loan amount offered ranges from ₹40,000 to ₹35,00,000, with a loan tenure of up to 6 years.
+```

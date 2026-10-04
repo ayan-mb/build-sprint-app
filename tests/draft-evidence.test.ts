@@ -48,7 +48,7 @@ test("flattened page eligibility stays separate from navigation and application 
   assert.equal(facts.length, 1);
 });
 
-import { assembleProse } from "../convex/draftEvidence";
+import { assembleProse, validateProductTerms } from "../convex/draftEvidence";
 import { OPENAI_MODEL } from "../convex/models";
 test("plain draft explains conflicting credit preference and keeps numbers sourced", () => {
   const sheet = "CIBIL score: 725+ preferred Apply Now\nInterest rate starts at 10.99% p.a. View Rates & Charges";
@@ -60,11 +60,26 @@ test("plain draft explains conflicting credit preference and keeps numbers sourc
   assert.match(draft.text, /does not confirm eligibility/);
   assert.doesNotMatch(draft.text, /700|Apply Now|View Rates|^[-#]/m);
   assert.deepEqual(draft.numbers.map(n => [n.number, n.sheetLine]), [["725", 1], ["10.99%", 2]]);
+  for (const n of draft.numbers) assert.ok(sheet.split("\n")[n.sheetLine - 1].includes(n.passage));
   assert.ok(draft.placeholders.includes("[add: processing fee]"));
   assert.equal(OPENAI_MODEL, "gpt-6.1-sol");
 });
 test("prose rejects unsupported numbers, product terms and navigation", () => {
-  for (const text of ["Interest starts at 9%.", "Interest is FlexiSaver.", "Apply Now for 10.99%."]) {
+  for (const text of ["Interest starts at 9%.", "Apply Now for 10.99%."]) {
     assert.throws(() => assembleProse(sheet, [{ text, topic: "rates", factIds: [0] }], [], "question"));
   }
+});
+
+test("fact checks accept rewritten prose and reject invented product names", () => {
+  const draft = assembleProse(sheet, [{ text: "Your interest rate begins at 10.99% p.a., depending on eligibility.", topic: "rates", factIds: [0] }], [], "question");
+  assert.match(draft.text, /begins/);
+  validateProductTerms(sheet, ["interest rates", "processing fee"]);
+  assert.throws(() => validateProductTerms(sheet, ["FlexiSaver"]), /Unsupported product term/);
+});
+
+test("a valid factual reference does not require the topic's exact wording", () => {
+  const source = "Personal Loan eligibility depends on multiple financial and personal factors.";
+  const draft = assembleProse(source, [{ text: "Eligibility depends on your financial and personal circumstances.", topic: "eligibility", factIds: [0] }], [], "question");
+  assert.match(draft.text, /circumstances/);
+  assert.throws(() => assembleProse(source, [{ text: "Eligibility varies.", topic: "eligibility", factIds: [99] }], [], "question"), /Unknown fact-sheet reference/);
 });

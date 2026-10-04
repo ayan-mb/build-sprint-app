@@ -57,8 +57,13 @@ export function assembleDraft(
 
 
 export type DraftSentence = { text: string; topic: string; factIds: number[] };
-export const neutralWords = new Set("the a an and or but for of to in on at from with by is are was be been being has have it its this that these those your you can may must does do not no only also still if as than about asks requested question borrower sheet fact says states lists prefers higher lower score confirm confirms eligibility cannot determine whether applies apply applicable depends depend includes include requires require required starts start up per plus subject available information missing approval approved preferred according provide provided product loan personal interest rate rates fee fees income documents amount tenure repayment prepayment charges conditions disclosures salaried individuals minimum maximum monthly final charged reducing balance original owe pay taxes employment proof identity age years months resident nationality credit assessment processing CIBIL p a below above under without therefore however specifically suitable suitability preference threshold stated shown meet meets based specify specifies unspecified confirmed confirms basis support supported determine determined answer directly before after more less borrower question lender assess assessed case cases individual separately additional actual exact requirements requirement evidence confirms confirming does".toLowerCase().split(/\s+/));
-const words = (text: string) => text.toLowerCase().match(/[a-z]+/g) || [];
+export function validateProductTerms(sheet: string, terms: string[]) {
+  const normalize = (text: string) => text.toLowerCase().replace(/[^a-z0-9%]+/g, " ").trim();
+  const source = ` ${normalize(sheet)} `;
+  for (const term of terms) {
+    if (!term.trim() || !source.includes(` ${normalize(term)} `)) throw new Error("Unsupported product term");
+  }
+}
 export function assembleProse(sheet: string, sentences: DraftSentence[], gapTopics: string[], question: string) {
   const facts = sheetFacts(sheet);
   const lines: string[] = [];
@@ -76,18 +81,17 @@ export function assembleProse(sheet: string, sentences: DraftSentence[], gapTopi
     const text = sentence.text.trim();
     const topic = draftTopics.find(t => t.key === sentence.topic);
     const cited = [...new Set(sentence.factIds)].map(id => facts[id]);
-    if (!topic || !cited.length || cited.some(f => !f) || !cited.some(f => topic.pattern.test(f.text))) throw new Error("Unsupported draft evidence");
+    if (!topic) throw new Error("Unknown draft topic");
+    if (!cited.length) throw new Error("Missing fact-sheet reference");
+    if (cited.some(f => !f)) throw new Error("Unknown fact-sheet reference");
     if (!text || /[\r\n]|^[-#*]|\[add:/.test(text) || navigationText.test(text)) throw new Error("Invalid draft prose");
-    // All product vocabulary must occur in the cited sheet passages; only neutral connective words are added.
-    const allowed = new Set(cited.flatMap(f => words(f.text)));
-    if (words(text).some(word => !allowed.has(word) && !neutralWords.has(word))) throw new Error("Unsupported product term");
     const tokens = numericTokens(text);
     const remaining = cited.flatMap(f => numericTokens(f.text).map(number => ({ number, fact: f })));
     for (const number of tokens) {
       const index = remaining.findIndex(n => n.number === number);
       if (index < 0) throw new Error("Unsupported draft number");
-      const [{ fact }] = remaining.splice(index, 1);
-      numbers.push({ number, draftLine: lines.length + 1, sheetLine: fact.sheetLine, passage: fact.text });
+      const { fact } = remaining[index];
+      numbers.push({ number, draftLine: lines.length + 1, sheetLine: fact.sheetLine, passage: sheet.split(/\r?\n/)[fact.sheetLine - 1] });
     }
     lines.push(text);
     covered.add(topic.key);
