@@ -18,7 +18,7 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
   return <div aria-live="polite">
     <p className={draft.status === "unavailable" ? "warning" : "subtle"}>{draft.message}</p>
     {draft.flaggedWords && <p className={draft.flaggedWords.length ? "warning" : "subtle"}>Flagged words: {draft.flaggedWords.join(", ") || "None"}.</p>}
-    {draft.verificationNotes && <aside aria-label="Verification notes" className="warning"><h4>Verification notes</h4><pre>{draft.verificationNotes.length ? draft.verificationNotes.join("\n") : "None."}</pre></aside>}
+    {draft.verificationNotes && <aside aria-label="Verification notes" className="warning verification-notes"><h4>Verification notes</h4>{draft.verificationNotes.length ? <ul>{draft.verificationNotes.map((note, index) => <li key={index}>{note}</li>)}</ul> : <p>None.</p>}</aside>}
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
       <MarkdownArticle text={draft.text} />

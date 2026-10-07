@@ -508,3 +508,7 @@ footer {
 .past-runs li { padding: 12px 0; overflow-wrap: anywhere; }
 .draft-export-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
 .draft-export-actions button { min-height: 44px; }
+
+.verification-notes { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.verification-notes ul { margin: 0; padding-inline-start: 1.5rem; }
+.verification-notes li { white-space: pre-wrap; overflow-wrap: anywhere; margin-block: 0.5rem; }

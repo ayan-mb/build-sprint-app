@@ -40,3 +40,11 @@ test("page-access notes remain visible when no article is available and generate
   assert.doesNotMatch(html,/>Copy<\/button>/);
   assert.throws(() => presentDraft("Rates start at 10%.",[{kind:"paragraph",text:"Rates start at 10%.",topic:"rates",factIds:[0]}],["Check https://guessed.com"],[]),/Invalid draft prose/);
 });
+
+ test("verification notes render as separate bullets without changing their text", () => {
+  const notes = ["[VERIFY: Confirm terms at https://brand.com/" + "longpath".repeat(40) + "]", "[VERIFY: Keep this note\nwith its original line break.]" ];
+  const html = renderToStaticMarkup(createElement(DraftOutput,{draft:{status:"unavailable",text:"",message:"Unavailable",model:"",numbers:[],placeholders:[],verificationNotes:notes}}));
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)?.[1] ?? "";
+  assert.deepEqual([...aside.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(match => match[1]), notes);
+  assert.doesNotMatch(aside, /<pre/);
+});
