@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { page } from "./validators";
 export const reserve = internalMutation({
   args: { id: v.id("diagnostics"), token: v.string() },
-  returns: v.object({ question: v.string(), gapTopics: v.array(v.string()) }),
+  returns: v.object({ question: v.string(), gapTopics: v.array(v.string()), website: v.string(), citedUrls: v.array(v.string()) }),
   handler: async (ctx, { id, token }) => {
     const run = await ctx.db.get(id);
     if (!run || run.token !== token || run.status !== "complete" || !run.result) throw new Error("A completed report from your session is required.");
@@ -17,7 +17,7 @@ export const reserve = internalMutation({
     else await ctx.db.insert("limits", { name: `draft:${token}`, windowStart: now, count: 1 });
     if (global) await ctx.db.patch(global._id, { windowStart: fresh ? now : global.windowStart, count: fresh ? 1 : global.count + 1 });
     else await ctx.db.insert("limits", { name: "drafts-hourly", windowStart: now, count: 1 });
-    return { question: run.question, gapTopics: [...new Set(run.result.gaps.filter(g => g.kind !== "covered").map(g => g.topic))].slice(0, 12) };
+    return { question: run.question, website: run.website, citedUrls: [...new Set(run.result.answers.flatMap(a => a.sources.filter(s => s.cited).map(s => s.url)))], gapTopics: [...new Set(run.result.gaps.filter(g => g.kind !== "covered").map(g => g.topic))].slice(0, 12) };
   },
 });
 // Authenticated CLI only: public page captures are used for the requested live test.

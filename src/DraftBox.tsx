@@ -19,7 +19,7 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
     {draft.flaggedWords && <p className={draft.flaggedWords.length ? "warning" : "subtle"}>Flagged words: {draft.flaggedWords.join(", ") || "None"}.</p>}
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
-      <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\])/g).map((part, index) => part.startsWith("[add:") ? <mark key={index}>{part}</mark> : part)}</pre>
+      <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\]|\[VERIFY\][^\n]*)/g).map((part, index) => (part.startsWith("[add:") || part.startsWith("[VERIFY]")) ? <mark key={index}>{part}</mark> : part)}</pre>
       <div className="draft-export-actions" aria-label="Export draft">
         <button type="button" onClick={()=>copy("text")}>Copy plain text</button>
         <button type="button" onClick={()=>copy("markdown")}>Copy Markdown</button>
@@ -73,7 +73,7 @@ export default function DraftBox({ id, token, question, website }: { id?: Id<"di
   return <section className="draft-box" aria-labelledby={`${formId}-heading`}>
     <h3 id={`${formId}-heading`}>Write a draft from your product facts</h3>
     <p>Answering: {question}</p>
-    <p className="subtle">Paste approved facts for this NBFC product. The draft answers your question using only your fact sheet. Missing facts appear as [add: …] placeholders. Competitor terms are not used.</p>
+    <p className="subtle">Paste approved facts for this NBFC product. Cited pages guide the topics. Only your brand’s pages and fact sheet supply facts. Missing facts appear as [VERIFY]. Competitor terms are not used.</p>
     <form onSubmit={submit}>
       <label htmlFor={`${formId}-facts`}>NBFC product fact sheet</label>
       <textarea id={`${formId}-facts`} rows={8} minLength={20} maxLength={50000} required disabled={busy} value={factSheet} onChange={e => { setFactSheet(e.target.value); setDraft(null); setError(""); }} placeholder="Paste product eligibility, rates, fees, documents, and conditions. Use one fact per line where possible." />

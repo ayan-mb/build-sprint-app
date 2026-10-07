@@ -13,7 +13,7 @@ test("single-question results expose the fact sheet and Write draft control",()=
   })));
   assert.match(html,/NBFC product fact sheet/);
   assert.match(html,/>Write draft<\/button>/);
-  assert.match(html,/\[add: …\]/);
+  assert.match(html,/\[VERIFY\]/);
   void client.close();
 });
 test("plain text remains exact and Markdown preserves approved terms and missing-fact placeholders",()=>{

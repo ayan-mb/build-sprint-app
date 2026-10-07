@@ -83,3 +83,11 @@ test("a valid factual reference does not require the topic's exact wording", () 
   assert.match(draft.text, /circumstances/);
   assert.throws(() => assembleProse(source, [{ text: "Eligibility varies.", topic: "eligibility", factIds: [99] }], [], "question"), /Unknown fact-sheet reference/);
 });
+
+test("draft inputs take topic-guide URLs only from this question's cited milestone 1 sources", async () => {
+  const run = { token: "owner", status: "complete", question: "CIBIL under 700", website: "https://brand.example", result: { gaps: [], answers: [{ sources: [{ url: "https://guide.example", cited: true }, { url: "https://uncited.example", cited: false }, { url: "https://guide.example", cited: true }] }] } };
+  const ctx = { db: { get: async () => run, query: () => ({ withIndex: () => ({ unique: async () => null }) }), insert: async () => "fixture" } };
+  const input = await (reserve as any)._handler(ctx, { id: "fixture", token: "owner" });
+  assert.deepEqual(input.citedUrls, ["https://guide.example"]);
+  assert.equal(input.website, "https://brand.example");
+});
