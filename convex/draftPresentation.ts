@@ -8,8 +8,10 @@ export function fillDraftInputs(style: string, inputs: { brand: string; website:
     .replace(/^- Fact sheet:.*$/m, () => `- Fact sheet: ${inputs.factSheet || "Not pasted; use supplied brand pages."}`);
 }
 export function presentDraft(sheet: string, blocks: DraftBlock[], notes: string[], citations: string[]) {
+  const generatedUrl = /https?:\/\/|www\.|\b[a-z0-9-]+\.(?:com|in|org|net|io|co)\b/i;
+  if (notes.some(note => generatedUrl.test(note))) throw new Error("Invalid draft prose");
   for (const block of blocks) {
-    if (/https?:\/\/|www\.|\b[a-z0-9-]+\.(?:com|in|org|net|io|co)\b|\[VERIFY|\[add:/i.test(block.text)) throw new Error("Invalid draft prose");
+    if (generatedUrl.test(block.text) || /\[VERIFY|\[add:/i.test(block.text)) throw new Error("Invalid draft prose");
   }
   // Reuse the existing evidence and number checks without changing their rules.
   const checked = assembleProse(sheet, blocks, [], "");

@@ -26,6 +26,7 @@ Before drafting,
 5. Do not give personalised financial, tax, or legal advice. Keep guidance general and educational.
 6. Avoid guarantees and superlatives ("best", "guaranteed returns", "risk-free") unless the brand's official materials make that exact claim and it is compliant.
 8. Pages provided as "topic guide" show what to cover. Never take facts, numbers or wording from them, and never name them.
+9. Avoid using the statement "The <Brand name>'s website says...".
 
 ## STEP 3: STRUCTURE
 Follow this standard blog format:

@@ -17,8 +17,8 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
   return <div aria-live="polite">
     <p className={draft.status === "unavailable" ? "warning" : "subtle"}>{draft.message}</p>
     {draft.flaggedWords && <p className={draft.flaggedWords.length ? "warning" : "subtle"}>Flagged words: {draft.flaggedWords.join(", ") || "None"}.</p>}
+    {draft.verificationNotes && <aside aria-label="Verification notes" className="warning"><h4>Verification notes</h4><pre>{draft.verificationNotes.length ? draft.verificationNotes.join("\n") : "None."}</pre></aside>}
     {draft.status === "ready" && <>
-      {draft.verificationNotes && <aside aria-label="Verification notes" className="warning"><h4>Verification notes</h4><pre>{draft.verificationNotes.length ? draft.verificationNotes.join("\n") : "None."}</pre></aside>}
       <h4>Your draft page</h4>
       <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\]|\[VERIFY\][^\n]*)/g).map((part, index) => (part.startsWith("[add:") || part.startsWith("[VERIFY]")) ? <mark key={index}>{part}</mark> : part)}</pre>
       <div className="draft-export-actions" aria-label="Export draft">
