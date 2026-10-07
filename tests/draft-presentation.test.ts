@@ -28,7 +28,7 @@ test("verification notes stay outside article exports and existing number eviden
   for (const format of ["text","markdown"] as const) assert.doesNotMatch(draftExport(draft.text,format),/VERIFY|Confirm lower-score/);
   const html = renderToStaticMarkup(createElement(DraftOutput,{draft:{...draft,status:"ready",message:"Checked",model:"fixture"}}));
   assert.match(html,/aria-label="Verification notes"/);
-  assert.match(html,/>Copy plain text<\/button>/);
+  assert.match(html,/>Copy<\/button>/);
   assert.throws(()=>presentDraft(sheet,[{kind:"paragraph",text:"Interest is 9%.",topic:"rates",factIds:[0]}],[],[]),/Unsupported draft number/);
   assert.throws(()=>presentDraft(sheet,[{kind:"paragraph",text:"See https:\/\/brand.com",topic:"rates",factIds:[0]}],[],[]),/Invalid draft prose/);
 });
@@ -37,6 +37,6 @@ test("page-access notes remain visible when no article is available and generate
   const html = renderToStaticMarkup(createElement(DraftOutput,{draft:{status:"unavailable",text:"",message:"Pages unavailable",model:"",numbers:[],placeholders:[],verificationNotes:["[VERIFY: No brand pages could be read.]"]}}));
   assert.match(html,/aria-label="Verification notes"/);
   assert.match(html,/No brand pages could be read/);
-  assert.doesNotMatch(html,/>Copy plain text<\/button>/);
+  assert.doesNotMatch(html,/>Copy<\/button>/);
   assert.throws(() => presentDraft("Rates start at 10%.",[{kind:"paragraph",text:"Rates start at 10%.",topic:"rates",factIds:[0]}],["Check https://guessed.com"],[]),/Invalid draft prose/);
 });

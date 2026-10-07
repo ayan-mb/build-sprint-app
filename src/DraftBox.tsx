@@ -3,15 +3,16 @@ import { useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 import type { DraftResult } from "../convex/draftValidators";
-import { copyDraft, downloadDraft, type DraftFormat } from "./draftExport";
+import { copyDraft, downloadDraft } from "./draftExport";
+import { MarkdownArticle } from "./MarkdownArticle";
 export function DraftOutput({ draft }: { draft: DraftResult }) {
   const [exportStatus,setExportStatus]=useState("");
-  async function copy(format: DraftFormat) {
-    try { await copyDraft(draft.text,format); setExportStatus(format==="text" ? "Plain text copied." : "Markdown copied."); }
+  async function copy() {
+    try { const format = await copyDraft(draft.text); setExportStatus(format === "rich" ? "Formatted article copied." : "Plain text copied."); }
     catch { setExportStatus("Copy could not access the clipboard. Use Download instead."); }
   }
-  function download(format: DraftFormat) {
-    try { downloadDraft(draft.text,format); setExportStatus(format==="text" ? "Plain text download started." : "Markdown download started."); }
+  function download() {
+    try { downloadDraft(draft.text); setExportStatus("Markdown download started."); }
     catch { setExportStatus("Download could not start. Try again or use Copy."); }
   }
   return <div aria-live="polite">
@@ -20,12 +21,10 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
     {draft.verificationNotes && <aside aria-label="Verification notes" className="warning"><h4>Verification notes</h4><pre>{draft.verificationNotes.length ? draft.verificationNotes.join("\n") : "None."}</pre></aside>}
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
-      <pre className="draft-text">{draft.text.split(/(\[add:[^\]]+\]|\[VERIFY\][^\n]*)/g).map((part, index) => (part.startsWith("[add:") || part.startsWith("[VERIFY]")) ? <mark key={index}>{part}</mark> : part)}</pre>
+      <MarkdownArticle text={draft.text} />
       <div className="draft-export-actions" aria-label="Export draft">
-        <button type="button" onClick={()=>copy("text")}>Copy plain text</button>
-        <button type="button" onClick={()=>copy("markdown")}>Copy Markdown</button>
-        <button type="button" onClick={()=>download("text")}>Download plain text</button>
-        <button type="button" onClick={()=>download("markdown")}>Download Markdown</button>
+        <button type="button" onClick={copy}>Copy</button>
+        <button type="button" onClick={download}>Download Markdown</button>
       </div>
       {exportStatus && <p role="status">{exportStatus}</p>}
       <details><summary>Check every number against the fact sheet</summary>

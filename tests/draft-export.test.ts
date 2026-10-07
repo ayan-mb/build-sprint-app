@@ -20,14 +20,14 @@ test("plain text remains exact and Markdown preserves approved terms and missing
   const text="Rates start at 10.99% p.a.*\n[add: APR]\nFees are up to 5%, plus taxes.";
   assert.equal(draftExport(text,"text"),text);
   const md=draftExport(text,"markdown");
-  assert.match(md,/^# Draft\n\n/); assert.match(md,/\[add: APR\]/);
+  assert.equal(md,text); assert.match(md,/\[add: APR\]/);
   assert.deepEqual(numericTokens(md),numericTokens(text));
-  assert.match(md,/p\.a\.\\\*/);
+  assert.match(md,/p\.a\.\*/);
 });
-test("a ready saved draft offers all four export controls; a failed draft offers none",()=>{
+test("a ready saved draft offers Copy and Markdown Download; a failed draft offers none",()=>{
   const ready={status:"ready" as const,text:"[add: eligibility]",numbers:[],placeholders:["[add: eligibility]"],model:"fixture",message:"Review"};
   const html=renderToStaticMarkup(createElement(DraftOutput,{draft:ready}));
-  for(const label of ["Copy plain text","Copy Markdown","Download plain text","Download Markdown"]) assert.ok(html.includes(label));
+  for(const label of [">Copy</button>","Download Markdown"]) assert.ok(html.includes(label));
   assert.ok(!renderToStaticMarkup(createElement(DraftOutput,{draft:{...ready,status:"unavailable"}})).includes("Download"));
 });
 test("banned-word findings appear alongside the saved draft",()=>{
