@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as admin from "../admin.js";
 import type * as batchAnalysis from "../batchAnalysis.js";
 import type * as batchEvidence from "../batchEvidence.js";
 import type * as batchRunner from "../batchRunner.js";
@@ -31,6 +32,7 @@ import type * as historyValidators from "../historyValidators.js";
 import type * as html from "../html.js";
 import type * as identities from "../identities.js";
 import type * as models from "../models.js";
+import type * as prospect from "../prospect.js";
 import type * as research from "../research.js";
 import type * as validators from "../validators.js";
 
@@ -41,6 +43,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
   batchAnalysis: typeof batchAnalysis;
   batchEvidence: typeof batchEvidence;
   batchRunner: typeof batchRunner;
@@ -64,6 +67,7 @@ declare const fullApi: ApiFromModules<{
   html: typeof html;
   identities: typeof identities;
   models: typeof models;
+  prospect: typeof prospect;
   research: typeof research;
   validators: typeof validators;
 }>;

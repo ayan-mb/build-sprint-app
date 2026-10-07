@@ -2,9 +2,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { list,read,saveDraft } from "../convex/history";
 test("history pagination accepts the extra fields returned by Convex",async()=>{
+  const previous=process.env.ADMIN_PASSCODE; process.env.ADMIN_PASSCODE="history-test-fixture";
+  const {digest}=await import("../convex/admin");
+  const session={expiresAt:Date.now()+10000,passcodeHash:await digest(process.env.ADMIN_PASSCODE)};
   const result={page:[],isDone:true,continueCursor:"cursor",splitCursor:null,pageStatus:null};
-  const ctx={db:{query:()=>({withIndex:()=>({order:()=>({paginate:async()=>result})})})}};
-  const returned=await (list as any)._handler(ctx,{paginationOpts:{numItems:20,cursor:null}});
+  const ctx={db:{query:()=>({withIndex:()=>({unique:async()=>session,order:()=>({paginate:async()=>result})})})}};
+  const returned=await (list as any)._handler(ctx,{adminToken:"history-test-session",paginationOpts:{numItems:20,cursor:null}});
+  if(previous===undefined)delete process.env.ADMIN_PASSCODE;else process.env.ADMIN_PASSCODE=previous;
   const contract=JSON.parse((list as any).exportReturns());
   for(const key of Object.keys(returned)) assert.ok(contract.value[key],`Convex pagination field ${key} must be allowed by the query return check`);
 });

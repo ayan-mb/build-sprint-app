@@ -1,3 +1,4 @@
+import { requireAdmin } from "./admin";
 import { query, internalMutation, type MutationCtx } from "./_generated/server";
 import { paginationOptsValidator, paginationResultValidator } from "convex/server";
 import { v } from "convex/values";
@@ -24,9 +25,10 @@ export const saveDraft = internalMutation({
   },
 });
 export const list = query({
-  args: { paginationOpts: paginationOptsValidator },
+  args: { paginationOpts: paginationOptsValidator, adminToken: v.string() },
   returns: paginationResultValidator(historyItem),
   handler: async (ctx,args) => {
+    await requireAdmin(ctx,args.adminToken);
     const count=args.paginationOpts.numItems;
     if (count<1 || count>50) throw new Error("Use a history page size between 1 and 50.");
     return await ctx.db.query("history").withIndex("by_date").order("desc").paginate(args.paginationOpts);

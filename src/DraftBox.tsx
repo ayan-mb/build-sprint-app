@@ -4,6 +4,7 @@ import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 import type { DraftResult } from "../convex/draftValidators";
 import { copyDraft, downloadDraft } from "./draftExport";
+import { RunLink } from "./RunLink";
 import { MarkdownArticle } from "./MarkdownArticle";
 export function DraftOutput({ draft }: { draft: DraftResult }) {
   const [exportStatus,setExportStatus]=useState("");
@@ -19,6 +20,7 @@ export function DraftOutput({ draft }: { draft: DraftResult }) {
     <p className={draft.status === "unavailable" ? "warning" : "subtle"}>{draft.message}</p>
     {draft.flaggedWords && <p className={draft.flaggedWords.length ? "warning" : "subtle"}>Flagged words: {draft.flaggedWords.join(", ") || "None"}.</p>}
     {draft.verificationNotes && <aside aria-label="Verification notes" className="warning verification-notes"><h4>Verification notes</h4>{draft.verificationNotes.length ? <ul>{draft.verificationNotes.map((note, index) => <li key={index}>{note}</li>)}</ul> : <p>None.</p>}</aside>}
+    {draft.savedId && <RunLink id={draft.savedId} />}
     {draft.status === "ready" && <>
       <h4>Your draft page</h4>
       <MarkdownArticle text={draft.text} />

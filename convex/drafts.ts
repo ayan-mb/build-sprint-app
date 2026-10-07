@@ -32,7 +32,7 @@ export const generate = action({
     let style = "";
     let topicGuideUrls: string[] = [];
     let citationUrls: string[] = [];
-    const save = async (result: DraftResult) => { result = { ...result, topicGuideUrls, citationUrls, flaggedWords: flaggedWords(style, result.text) }; await ctx.runMutation(internal.history.saveDraft, { question, result }); return result; };
+    const save = async (result: DraftResult) => { result = { ...result, topicGuideUrls, citationUrls, flaggedWords: flaggedWords(style, result.text) }; const savedId = await ctx.runMutation(internal.history.saveDraft, { question, result }); return { ...result, savedId }; };
     const unavailable = (message: string): DraftResult => ({ status: "unavailable", text: "", placeholders: [], numbers: [], model: "", message });
     const key = process.env.OPENAI_API_KEY;
     if (!key) return await save(unavailable("Draft not available. OPENAI_API_KEY is missing in this Convex deployment."));

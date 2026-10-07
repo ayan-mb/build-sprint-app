@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
+import { RunLink } from "./RunLink";
 import DraftBox from "./DraftBox";
 import { api } from "../convex/_generated/api";
 import type { Answer, Gap, Page } from "../convex/validators";
@@ -289,6 +290,7 @@ export default function App() {
             {current.error}
           </p>
         )}
+        {current && current.status !== "running" && <RunLink id={current._id} />}
         {result && (
           <section className="results" aria-labelledby="results-heading">
             <h2 id="results-heading">Diagnostic results</h2>

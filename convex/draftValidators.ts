@@ -1,5 +1,6 @@
 import { v, type Infer } from "convex/values";
 export const draftResult = v.object({
+  savedId: v.optional(v.id("savedDrafts")),
   status: v.union(v.literal("ready"), v.literal("unavailable")),
   text: v.string(), message: v.string(), model: v.string(),
   topicGuideUrls: v.optional(v.array(v.string())),

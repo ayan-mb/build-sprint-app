@@ -4,6 +4,7 @@ import { runFields } from "./validators";
 import { batchFields } from "./batchValidators";
 import { historyFields, draftFields } from "./historyValidators";
 export default defineSchema({
+  adminSessions: defineTable({ hash: v.string(), passcodeHash: v.string(), expiresAt: v.number() }).index("by_hash", ["hash"]),
   history: defineTable(historyFields).index("by_date",["createdAt"]).index("by_batch",["batchId"]),
   savedDrafts: defineTable(draftFields).index("by_date",["createdAt"]),
   batches: defineTable({ ...batchFields, token: v.string() }).index("by_token", ["token"]).index("by_date",["createdAt"]),
