@@ -8,8 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "test": "tsx --test tests/*.test.ts",
     "check": "tsc --noEmit && tsc --noEmit -p convex",
-    "deploy": "npx @convex-dev/static-hosting deploy",
-    "prebuild": "node scripts/publish-draft-style.mjs"
+    "deploy": "npx @convex-dev/static-hosting deploy"
   },
   "keywords": [],
   "author": "",

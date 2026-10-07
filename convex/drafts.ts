@@ -10,6 +10,7 @@ import { comparisonContext } from "./comparisonContext";
 import { comparisonFailure } from "./comparisonFailure";
 import { draftTopics, sheetFacts, validateProductTerms, numericTokens } from "./draftEvidence";
 import { flaggedWords } from "./draftStyle";
+import { draftStyleRules } from "./draftStyleRules";
 import { draftResult, type DraftResult } from "./draftValidators";
 const verificationSchema = z.object({
   supported: z.boolean(),
@@ -39,12 +40,7 @@ export const generate = action({
     let reportedModel: string | undefined;
     let candidateText = "";
     try {
-      const site = process.env.CONVEX_SITE_URL;
-      if (!site) throw new Error("Draft style site is unavailable.");
-      // Deployment publishes the project's DRAFT_STYLE.md. Fetch its full current text on EVERY call.
-      const response = await fetch(`${site}/DRAFT_STYLE.md?call=${Date.now()}`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
-      if (!response.ok) throw new Error("Draft style file is unavailable.");
-      style = await response.text();
+      style = draftStyleRules;
       if (!style.trim()) throw new Error("Draft style file is invalid.");
       const [brandUrls, guidePages] = await Promise.all([
         discoverBrandUrls(website, question),
