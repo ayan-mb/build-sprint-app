@@ -33,6 +33,8 @@ import type * as html from "../html.js";
 import type * as identities from "../identities.js";
 import type * as models from "../models.js";
 import type * as prospect from "../prospect.js";
+import type * as prospectBatches from "../prospectBatches.js";
+import type * as prospectLimits from "../prospectLimits.js";
 import type * as research from "../research.js";
 import type * as validators from "../validators.js";
 
@@ -68,6 +70,8 @@ declare const fullApi: ApiFromModules<{
   identities: typeof identities;
   models: typeof models;
   prospect: typeof prospect;
+  prospectBatches: typeof prospectBatches;
+  prospectLimits: typeof prospectLimits;
   research: typeof research;
   validators: typeof validators;
 }>;

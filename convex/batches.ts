@@ -1,4 +1,4 @@
-import { mutation, query, internalMutation } from "./_generated/server";
+import { mutation, query, internalMutation, type MutationCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 import { start, vWorkflowId } from "@convex-dev/workflow";
@@ -7,24 +7,29 @@ import { batchRow, publicBatch } from "./batchValidators";
 import { recordBatch } from "./history";
 import { batchSummary } from "./batchEvidence";
 import { batchInput } from "./batchEvidence";
-export const begin = mutation({
-  args: { domain: v.string(), questions: v.array(v.string()), token: v.string() }, returns: v.id("batches"),
-  handler: async (ctx, args) => {
+import { requireAdmin } from "./admin";
+import { reserveProspectSearches } from "./prospectLimits";
+export async function startBatch(ctx: MutationCtx, args: { domain: string; questions: string[]; token: string }, prospect = false) {
     if (!/^[a-f0-9-]{36}$/.test(args.token)) throw new Error("Reload the page to start a new session.");
     const { domain, questions, website } = batchInput(args.domain, args.questions);
     const last = await ctx.db.query("batches").withIndex("by_token", q => q.eq("token", args.token)).order("desc").first();
     if (last?.status === "running") throw new Error("Wait for your current batch to finish.");
     const now = Date.now();
+    if (prospect) await reserveProspectSearches(ctx,questions.length,now);
     const limit = await ctx.db.query("limits").withIndex("by_name", q => q.eq("name", "batch-questions-hourly")).unique();
     const fresh = !limit || now-limit.windowStart >= 3600000;
     if (limit && !fresh && limit.count + questions.length > 100) throw new Error("The hourly batch limit has been reached. Try later.");
     if (limit) await ctx.db.patch(limit._id, { count: (fresh ? 0 : limit.count) + questions.length, windowStart: fresh ? now : limit.windowStart });
     else await ctx.db.insert("limits", { name: "batch-questions-hourly", count: questions.length, windowStart: now });
     const id = await ctx.db.insert("batches", { domain, questions, token: args.token, createdAt: now, status: "running", stage: `Starting ${questions.length} questions`, rows: questions.map(question => ({ question, status: "pending" as const, answer: null, brandMention: null, lenders: [], error: "" })) });
+    if (prospect) await ctx.db.insert("limits", { name: `prospect-batch:${id}`, windowStart: now, count: questions.length });
     await recordBatch(ctx,id);
     await start(ctx, internal.batchWorkflow.run, { id, website, domain, questions }, { onComplete: internal.batches.onComplete, context: { id } });
     return id;
-  },
+}
+export const begin = mutation({
+  args: { domain: v.string(), questions: v.array(v.string()), token: v.string(), adminToken: v.optional(v.string()) }, returns: v.id("batches"),
+  handler: async (ctx,args) => { await requireAdmin(ctx,args.adminToken || ""); return await startBatch(ctx,args); },
 });
 export const current = query({
   args: { token: v.string() }, returns: v.union(publicBatch, v.null()),

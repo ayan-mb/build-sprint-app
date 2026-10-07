@@ -7,6 +7,6 @@ export function AdminNavigation({ batch = false }: { batch?: boolean }) {
 }
 export function Routes({ path }: { path: string }) {
   if (path === "/saved") return <SavedRun />;
-  if (path === "/admin" || path === "/batch") return <AdminGate>{token => <><AdminNavigation batch={path === "/batch"} />{path === "/batch" ? <BatchScreen /> : <><App /><div className="home-history"><PastRuns adminToken={token} /></div></>}</>}</AdminGate>;
-  return <App />;
+  if (path === "/admin" || path === "/batch") return <AdminGate>{token => <><AdminNavigation batch={path === "/batch"} />{path === "/batch" ? <BatchScreen adminToken={token} /> : <><App /><div className="home-history"><PastRuns adminToken={token} /></div></>}</>}</AdminGate>;
+  return <BatchScreen prospect />;
 }

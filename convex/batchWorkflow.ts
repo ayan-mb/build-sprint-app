@@ -3,6 +3,7 @@ import { components, internal } from "./_generated/api";
 import { v } from "convex/values";
 import type { Answer } from "./validators";
 import type { BatchRow } from "./batchValidators";
+import { DAILY_CAP_MESSAGE } from "./prospectLimits";
 import { runSequential } from "./batchRunner";
 export const workflow = new WorkflowManager(components.workflow);
 export const run = workflow.define({
@@ -13,6 +14,8 @@ export const run = workflow.define({
     const row: BatchRow = { question, status: "running", answer: null, brandMention: null, lenders: [], error: "" };
     await step.runMutation(internal.batches.saveRow, { id: args.id, index, row, stage: `Question ${index+1} of ${args.questions.length}: asking ChatGPT` });
     try {
+      const allowed = await step.runMutation(internal.prospectBatches.claimSearch, { batchId: args.id, index });
+      if (!allowed) throw new Error(DAILY_CAP_MESSAGE);
       const answer: Answer = await step.runAction(internal.research.ask, { provider: "ChatGPT", question, website: args.website }, { retry: false });
       row.answer = answer;
       if (answer.status === "error" || answer.status === "key_missing") { row.status = "error"; row.error = answer.message; }
@@ -22,7 +25,7 @@ export const run = workflow.define({
         Object.assign(row, mentions);
         row.status = mentions.error ? "error" : "complete";
       }
-    } catch { row.status = "error"; row.error = "This question could not finish. No automatic paid retry was made. The batch will continue."; }
+    } catch (error) { row.status = "error"; row.error = error instanceof Error && error.message === DAILY_CAP_MESSAGE ? DAILY_CAP_MESSAGE : "This question could not finish. No automatic paid retry was made. The batch will continue."; }
     await step.runMutation(internal.batches.saveRow, { id: args.id, index, row, stage: `${index+1} of ${args.questions.length} questions finished` });
   }, async (question,index) => {
     await step.runMutation(internal.batches.saveRow, { id: args.id, index, row: { question, status: "error", answer: null, brandMention: null, lenders: [], error: "This question could not finish. The batch will continue." }, stage: `${index+1} of ${args.questions.length} questions finished` });
