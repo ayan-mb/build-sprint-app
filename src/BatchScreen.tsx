@@ -33,7 +33,7 @@ export function BatchResults({ batch }: { batch: Batch }) {
         </tr>)}
       </tbody></table>
     </div>
-    {batch.rows.map((row,index) => draftRows[index] && <DraftBox key={`${batch._id}-${index}`} token={draftRows[index]} question={row.question} website={`https://${batch.domain}`} />)}
+    {batch.rows.map((row,index) => draftRows[index] && <DraftBox key={`${batch._id}-${index}`} batchId={batch._id} rowIndex={index} token={draftRows[index]} question={row.question} website={`https://${batch.domain}`} />)}
     <h3>Answers and cited sources</h3>
     {batch.rows.map((row,index) => row.answer && <details key={index} className="batch-answer"><summary>{row.question}</summary><p className="subtle">Model reported: {row.answer.model}</p>{row.answer.message && <p>{row.answer.message}</p>}<p className="answer-text">{row.answer.text}</p>{row.lenderMentions?.length ? <p className="subtle">Lender names counted: {row.lenderMentions.map(m => `${m.canonicalName} (written as “${m.name}”)`).join("; ")}</p> : null}<ul>{row.answer.sources.filter(s => s.cited).map(s => <li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title || s.url}</a></li>)}</ul></details>)}
   </section>;

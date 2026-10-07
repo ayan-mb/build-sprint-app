@@ -1,4 +1,6 @@
 export function bannedWords(style: string) {
+  const inline = style.match(/^- Words and phrases:\s*(.+)$/m)?.[1];
+  if (inline) return inline.replace(/[“”"]/g, "").replace(/\.$/, "").split(/,\s*/).map(w => w.trim()).filter(Boolean);
   const section = style.split("## Banned words and phrases")[1] || "";
   return section.split(/\r?\n/).filter(line => /^- /.test(line)).map(line => line.slice(2).trim()).filter(Boolean);
 }

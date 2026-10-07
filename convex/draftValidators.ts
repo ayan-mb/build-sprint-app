@@ -4,6 +4,7 @@ export const draftResult = v.object({
   text: v.string(), message: v.string(), model: v.string(),
   topicGuideUrls: v.optional(v.array(v.string())),
   citationUrls: v.optional(v.array(v.string())),
+  verificationNotes: v.optional(v.array(v.string())),
   placeholders: v.array(v.string()),
   flaggedWords: v.optional(v.array(v.string())),
   numbers: v.array(v.object({ number: v.string(), draftLine: v.number(), sheetLine: v.number(), passage: v.string() })),

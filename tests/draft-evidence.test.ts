@@ -91,3 +91,12 @@ test("draft inputs take topic-guide URLs only from this question's cited milesto
   assert.deepEqual(input.citedUrls, ["https://guide.example"]);
   assert.equal(input.website, "https://brand.example");
 });
+
+test("batch drafting uses only the selected saved row's citations without another milestone 1 lookup", async () => {
+  const batch = { domain: "brand.com", rows: [{ question: "CIBIL under 700", status: "complete", answer: { sources: [{url:"https://guide.com/credit",cited:true}] } }, {question:"Other topic",status:"complete",answer:{sources:[{url:"https://other.com",cited:true}]}}] };
+  const ctx = { db: { get: async () => batch, query: () => ({withIndex: () => ({unique: async () => null})}), insert: async () => "fixture" } };
+  const input = await (reserve as any)._handler(ctx,{batchId:"fixture",rowIndex:0,token:"owner"});
+  assert.equal(input.question,"CIBIL under 700");
+  assert.deepEqual(input.citedUrls,["https://guide.com/credit"]);
+  assert.equal(input.website,"https://brand.com");
+});

@@ -9,13 +9,15 @@ const capture=JSON.parse(execFileSync("npx",["convex","run","draftData:testCaptu
 const excerpts=["CIBIL score: 725+ preferred","Rates start at 10.99% p.a.*, charged on a reducing balance","Your final rate depends on eligibility and Tata Capital's credit assessment","A processing fee of up to 5% applies on your loan amount, plus applicable taxes."];
 for(const text of excerpts) assert.ok(capture.page.text.includes(text),"Approved excerpt must appear exactly in the saved source");
 const client=new ConvexHttpClient("https://frugal-moose-32.convex.cloud");
-const result=await client.action(api.drafts.generate,{id,token:capture.token,factSheet:excerpts.join("\n")});
+const result=await client.action(api.drafts.generate,{id,token:capture.token,factSheet:""});
 writeFileSync("/tmp/build-sprint-two-source-draft.json",JSON.stringify(result,null,2));
-console.log(JSON.stringify({status:result.status,message:result.message,model:result.model,topicGuideUrls:result.topicGuideUrls,citationUrls:result.citationUrls,first15Lines:result.text.split("\n").slice(0,15)},null,2));
+console.log(JSON.stringify({status:result.status,message:result.message,model:result.model,topicGuideUrls:result.topicGuideUrls,citationUrls:result.citationUrls,verificationNotes:result.verificationNotes,first15Lines:result.text.split("\n").slice(0,15)},null,2));
 assert.equal(result.status,"ready");
 assert.equal(result.model,"gpt-6.1-sol");
 assert.ok(result.topicGuideUrls?.length);
 assert.ok(result.citationUrls?.length);
 assert.ok(result.citationUrls.every(url => new URL(url).hostname.endsWith("tatacapital.com")));
-assert.ok(result.text.includes("[VERIFY]"));
+assert.ok(result.verificationNotes);
+assert.ok(!result.text.includes("[VERIFY"));
+assert.ok(result.citationUrls.length <= 3);
 assert.ok(!result.text.includes("[add:"));
