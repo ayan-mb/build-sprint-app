@@ -59,7 +59,7 @@ export default function DraftBox({ id, batchId, rowIndex, token, question }: { i
     <form onSubmit={submit}>
       <label htmlFor={`${formId}-facts`}>NBFC product fact sheet</label>
       <textarea id={`${formId}-facts`} rows={8} maxLength={50000} disabled={busy} value={factSheet} onChange={e => { setFactSheet(e.target.value); setDraft(null); setError(""); }} placeholder="Paste product eligibility, rates, fees, documents, and conditions. Use one fact per line where possible." />
-      <div className="form-actions"><button type="submit" disabled={busy}>{busy ? "Writing draft…" : "Write draft"}</button></div>
+      <div className="form-actions"><button type="submit" disabled={busy}>{busy ? "Writing draft…" : "Get Started"}</button></div>
     </form>
     {busy && <p role="status">{stage} This may take a few minutes.</p>}
     {error && <p className="error" role="alert">{error}</p>}

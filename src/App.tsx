@@ -190,7 +190,7 @@ export default function App() {
   return (
     <>
       <header>
-        <span className="wordmark">LLM AI</span>
+        <span className="wordmark">FUXI</span>
         <span>Milestone 1 · Citation diagnostic</span>
       </header>
       <main>
@@ -263,7 +263,7 @@ export default function App() {
             </p>
             <div className="form-actions">
               <button disabled={busy || current === undefined} type="submit">
-                {busy ? "Checking sources…" : "Compare answer and sources"}
+                {busy ? "Checking sources…" : "Get Started"}
               </button>
               <span className="subtle">
                 One question · ChatGPT only · Up to 8 cited pages
@@ -384,7 +384,7 @@ export default function App() {
           </section>
         )}
         <footer>
-          Milestones 1 and 2: citations, page gaps, and a draft from your product facts.
+          FUXI · Milestones 1 and 2: citations, page gaps, and a draft from your product facts.
         </footer>
       </main>
     </>

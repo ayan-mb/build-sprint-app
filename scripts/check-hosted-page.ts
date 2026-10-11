@@ -3,7 +3,7 @@ const base = "https://frugal-moose-32.convex.site";
 const response = await fetch(base, { signal: AbortSignal.timeout(20000) });
 assert.equal(response.status, 200);
 const html = await response.text();
-assert.match(html, /LLM AI/);
+assert.match(html, /FUXI/);
 const js = html.match(/src="([^"]+\.js)"/)?.[1];
 const css = html.match(/href="([^"]+\.css)"/)?.[1];
 assert.ok(js && css);

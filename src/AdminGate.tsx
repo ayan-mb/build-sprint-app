@@ -22,6 +22,6 @@ export default function AdminGate({ children }: { children: (token: string) => R
   if (access.authorized) return <>{children(token)}</>;
   return <main><section className="input-area"><h1>Admin sign-in</h1><p>Enter your admin passcode to open the single-question check, Past runs and batch tools.</p>
     {!access.configured && <p className="warning">Admin access is unavailable until ADMIN_PASSCODE is set in Convex.</p>}
-    <form onSubmit={submit}><label htmlFor="admin-passcode">Admin passcode</label><input id="admin-passcode" type="password" autoComplete="current-password" value={passcode} onChange={event => setPasscode(event.target.value)} maxLength={512} required disabled={busy || !access.configured} /><button type="submit" disabled={busy || !access.configured}>{busy ? "Checking…" : "Open admin"}</button>{error && <p className="error" role="alert">{error}</p>}</form>
+    <form onSubmit={submit}><label htmlFor="admin-passcode">Admin passcode</label><input id="admin-passcode" type="password" autoComplete="current-password" value={passcode} onChange={event => setPasscode(event.target.value)} maxLength={512} required disabled={busy || !access.configured} /><button type="submit" disabled={busy || !access.configured}>{busy ? "Checking…" : "Get Started"}</button>{error && <p className="error" role="alert">{error}</p>}</form>
   </section></main>;
 }

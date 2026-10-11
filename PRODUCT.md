@@ -1,4 +1,4 @@
-# PRODUCT.md - LLM AI
+# PRODUCT.md - FUXI
 
 ## 1. The job
 When [I am finalising my content strategy], I want to [know how many times LLMs are mentioning my brand. And for which prompts], so I can [draft the content which is driving LLM mentions and leading to traffic to my website].

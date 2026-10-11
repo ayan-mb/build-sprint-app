@@ -6,13 +6,13 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import DraftBox, { DraftOutput } from "../src/DraftBox";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-test("single-question results expose the fact sheet and Write draft control",()=>{
+test("single-question results expose the fact sheet and Get Started control",()=>{
   const client = new ConvexReactClient("https://example.convex.cloud");
   const html = renderToStaticMarkup(createElement(ConvexProvider,{client},createElement(DraftBox,{
     id:"fixture" as never, token:"fixture", question:"Which loan is available?",
   })));
   assert.match(html,/NBFC product fact sheet/);
-  assert.match(html,/>Write draft<\/button>/);
+  assert.match(html,/>Get Started<\/button>/);
   assert.match(html,/Verification notes/);
   void client.close();
 });

@@ -34,7 +34,7 @@ export function BatchResults({ batch }: { batch: Batch }) {
     <div className="batch-table-scroll" role="region" aria-label="Question results" tabIndex={0}>
       <table className="batch-table"><caption>One row per borrower question</caption><thead><tr><th scope="col">Question</th><th scope="col">Status</th><th scope="col">Your brand named</th><th scope="col">Other lenders</th><th scope="col">Cited links</th><th scope="col">Source domains</th><th scope="col">Error</th></tr></thead><tbody>
         {batch.rows.map((row,index) => <tr key={index}>
-          <th scope="row">{row.question}{row.brandMention === false && <div><button type="button" onClick={() => setDraftRows(previous => previous[index] ? previous : {...previous,[index]:crypto.randomUUID()})}>Write draft</button></div>}</th><td>{row.status === "complete" ? row.answer?.status === "no_citations" ? "Complete · Citation Not Available" : "Complete" : row.status === "error" ? "Failed" : row.status === "running" ? "Running" : "Waiting"}</td>
+          <th scope="row">{row.question}{row.brandMention === false && <div><button type="button" onClick={() => setDraftRows(previous => previous[index] ? previous : {...previous,[index]:crypto.randomUUID()})}>Get Started</button></div>}</th><td>{row.status === "complete" ? row.answer?.status === "no_citations" ? "Complete · Citation Not Available" : "Complete" : row.status === "error" ? "Failed" : row.status === "running" ? "Running" : "Waiting"}</td>
           <td>{row.brandMention === null ? "Not available" : row.brandMention ? "Yes" : "No"}</td><td>{row.lenders.join(", ") || "—"}</td><td>{citedDomains(row).length}</td><td>{[...new Set(citedDomains(row))].join(", ") || "—"}</td><td>{row.error || "—"}</td>
         </tr>)}
       </tbody></table>
@@ -93,6 +93,7 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
     } finally { setStarting(false); }
   }
   return <main className="batch-screen">
+    <header><span className="wordmark">FUXI</span></header>
     <h1>Batch brand baseline</h1>
     <p>See which borrower questions name your NBFC, which other lenders appear, and which websites ChatGPT cites.</p>
     {prospect && allowance?.remaining === 0 && <p className="warning" role="alert">{DAILY_CAP_MESSAGE}</p>}
@@ -109,10 +110,11 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
         <p id="batch-count" className={questions.length > 20 ? "warning" : "subtle"}>{single ? "One question, 10 to 600 characters. This check reads your domain’s home page." : `${questions.length} of 20 questions. Each question needs 10 to 600 characters.`}</p>
       </>}
       {error && <p className="warning" role="alert">{error}</p>}
-      <button type="submit" disabled={running || questions.length < 1 || questions.length > 20 || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Batch running…" : single ? "Run single-question check" : "Run batch"}</button>
+      <button type="submit" disabled={running || questions.length < 1 || questions.length > 20 || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Batch running…" : single ? "Get Started" : "Get Started"}</button>
     </form>
     <p className="subtle">Questions run one at a time on gpt-6.1-sol. A failed question does not stop the rest. This is a baseline from API answers; mentions are not endorsements.</p>
     {batch && (prospect && runMode === "single" ? <SingleResults token={token} batch={batch} /> : <BatchResults batch={batch} />)}
     {prospect && savedId && <RunLink id={savedId} />}
+    <footer>FUXI · Citation diagnostic</footer>
   </main>;
 }
