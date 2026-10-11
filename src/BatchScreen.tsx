@@ -6,7 +6,9 @@ import { batchSummary, citedDomains } from "../convex/batchEvidence";
 import type { Batch } from "../convex/batchValidators";
 import { RunLink } from "./RunLink";
 import { DAILY_CAP_MESSAGE, indiaDayStart } from "../convex/prospectLimits";
+import { tryAnalytics } from "./tryAnalytics";
 import DraftBox from "./DraftBox";
+import SingleResults from "./SingleResults";
 function sessionToken(prospect = false) {
   const storageKey = prospect ? "prospect-batch-session" : "batch-session";
   try {
@@ -52,20 +54,38 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
   }, [prospect,day]);
   const [domain,setDomain] = useState("");
   const [questionText,setQuestionText] = useState("");
+  const [singleQuestion,setSingleQuestion] = useState("");
+  const [mode,setMode] = useState<"single" | "multiple">("multiple");
+  const [runMode,setRunMode] = useState<"single" | "multiple">(() => {
+    try { return sessionStorage.getItem("prospect-run-mode") === "single" ? "single" : "multiple"; } catch { return "multiple"; }
+  });
+  const single = prospect && mode === "single";
   const [error,setError] = useState("");
   const [starting,setStarting] = useState(false);
   const beginAdmin = useMutation(api.batches.begin);
   const beginProspect = useMutation(api.prospectBatches.begin);
+  const beginSingle = useMutation(api.prospectSingle.begin);
   const allowance = useQuery(api.prospectBatches.allowance, prospect ? {day} : "skip");
   const batch = useQuery(api.batches.current, { token });
   const savedId = useQuery(api.prospectBatches.savedLink, prospect && batch && batch.status !== "running" ? {batchId:batch._id,token} : "skip");
-  const questions = questionText.split(/\r?\n/).map(q => q.trim()).filter(Boolean);
+  useEffect(() => {
+    if (!prospect || !batch) return;
+    if (batch.status !== "running") tryAnalytics.batchFinished(batch._id,batch.questions.length,batch.rows.filter(row => row.answer?.status === "ready" || row.answer?.status === "no_citations").length);
+  }, [prospect,batch,starting]);
+  const questions = single ? (singleQuestion.trim() ? [singleQuestion.trim()] : []) : questionText.split(/\r?\n/).map(q => q.trim()).filter(Boolean);
   const running = starting || batch?.status === "running";
   async function submit(event: FormEvent) {
     event.preventDefault(); setError("");
     if (!questions.length || questions.length > 20) { setError("Enter 1 to 20 questions, one per line. The hard limit is 20."); return; }
     setStarting(true);
-    try { if (prospect) await beginProspect({ token,domain,questions }); else await beginAdmin({ token,domain,questions,adminToken }); }
+    try {
+      if (prospect) {
+        const id = single ? (await beginSingle({ token,domain,question:questions[0] })).batchId : await beginProspect({ token,domain,questions });
+        setRunMode(mode);
+        try { sessionStorage.setItem("prospect-run-mode",mode); } catch {}
+        tryAnalytics.batchStarted(id,questions.length,domain,mode);
+      } else await beginAdmin({ token,domain,questions,adminToken });
+    }
     catch (cause) {
       const message = cause instanceof ConvexError && typeof cause.data === "string" ? cause.data : cause instanceof Error ? cause.message : "";
       const safe = message.match(/(?:Enter a website domain|Use between 1 and 20|Each question must|Wait for your current batch|The hourly batch limit|Use a public website URL|Enter a full public website URL|Today's shared limit|Only \d+ ChatGPT searches remain)[^\n]*/)?.[0];
@@ -78,13 +98,21 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
     {prospect && allowance?.remaining === 0 && <p className="warning" role="alert">{DAILY_CAP_MESSAGE}</p>}
     <form onSubmit={submit} className="batch-form">
       <label htmlFor="batch-domain">Your NBFC website domain</label><input id="batch-domain" value={domain} onChange={e => setDomain(e.target.value)} placeholder="tatacapital.com" required disabled={running} autoCapitalize="none" autoCorrect="off" />
-      <label htmlFor="batch-questions">Borrower questions, one per line</label><textarea id="batch-questions" value={questionText} onChange={e => setQuestionText(e.target.value)} rows={8} required disabled={running} aria-describedby="batch-count" placeholder={"Best personal loans for CIBIL under 700?\nWhat documents are needed for a personal loan?"} />
-      <p id="batch-count" className={questions.length > 20 ? "warning" : "subtle"}>{questions.length} of 20 questions. Each question needs 10 to 600 characters.</p>
+      {prospect && domain.trim() && <fieldset disabled={running}>
+        <legend>Choose how many questions to check</legend>
+        <label className="checkbox"><input type="radio" name="question-mode" value="single" checked={single} onChange={() => setMode("single")} />Single question</label>
+        <label className="checkbox"><input type="radio" name="question-mode" value="multiple" checked={!single} onChange={() => setMode("multiple")} />Multiple questions</label>
+      </fieldset>}
+      {(!prospect || domain.trim()) && <>
+        <label htmlFor="batch-questions">{single ? "Borrower question" : "Borrower questions, one per line"}</label>
+        <textarea id="batch-questions" value={single ? singleQuestion : questionText} onChange={e => single ? setSingleQuestion(e.target.value) : setQuestionText(e.target.value)} rows={single ? 3 : 8} minLength={single ? 10 : undefined} maxLength={single ? 600 : undefined} required disabled={running} aria-describedby="batch-count" placeholder={single ? "Best personal loans for CIBIL under 700?" : "Best personal loans for CIBIL under 700?\nWhat documents are needed for a personal loan?"} />
+        <p id="batch-count" className={questions.length > 20 ? "warning" : "subtle"}>{single ? "One question, 10 to 600 characters. This check reads your domain’s home page." : `${questions.length} of 20 questions. Each question needs 10 to 600 characters.`}</p>
+      </>}
       {error && <p className="warning" role="alert">{error}</p>}
-      <button type="submit" disabled={running || questions.length < 1 || questions.length > 20 || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Batch running…" : "Run batch"}</button>
+      <button type="submit" disabled={running || questions.length < 1 || questions.length > 20 || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Batch running…" : single ? "Run single-question check" : "Run batch"}</button>
     </form>
     <p className="subtle">Questions run one at a time on gpt-6.1-sol. A failed question does not stop the rest. This is a baseline from API answers; mentions are not endorsements.</p>
+    {batch && (prospect && runMode === "single" ? <SingleResults token={token} batch={batch} /> : <BatchResults batch={batch} />)}
     {prospect && savedId && <RunLink id={savedId} />}
-    {batch && <BatchResults batch={batch} />}
   </main>;
 }

@@ -35,6 +35,7 @@ import type * as models from "../models.js";
 import type * as prospect from "../prospect.js";
 import type * as prospectBatches from "../prospectBatches.js";
 import type * as prospectLimits from "../prospectLimits.js";
+import type * as prospectSingle from "../prospectSingle.js";
 import type * as research from "../research.js";
 import type * as validators from "../validators.js";
 
@@ -72,6 +73,7 @@ declare const fullApi: ApiFromModules<{
   prospect: typeof prospect;
   prospectBatches: typeof prospectBatches;
   prospectLimits: typeof prospectLimits;
+  prospectSingle: typeof prospectSingle;
   research: typeof research;
   validators: typeof validators;
 }>;
