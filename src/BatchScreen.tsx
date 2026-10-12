@@ -156,8 +156,8 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       </form>
     </section>}
     {prospect && allowance?.remaining === 0 && <p className="warning" role="alert">{DAILY_CAP_MESSAGE}</p>}
-    <p className="scope-note">This baseline uses sampled AI answers. It does not reveal private user queries or an AI system’s hidden retrieval sources. Brand mentions are not endorsements.</p>
     {batch && showResults && <><BatchResults batch={batch} />{prospect && runMode === "single" && <SingleResults token={token} batch={batch} />}</>}
     {prospect && savedId && showResults && <RunLink id={savedId} />}
+    <p className="scope-note" aria-label="Sampling note">This baseline uses sampled AI answers. It does not reveal private user queries or an AI system’s hidden retrieval sources. Brand mentions are not endorsements.</p>
   </main></>;
 }

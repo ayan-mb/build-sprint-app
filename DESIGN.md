@@ -301,6 +301,8 @@ What happens: Starts a sampled test using the confirmed settings and opens resul
 
 Scope note: “This baseline uses sampled AI answers. It does not reveal private user queries or an AI system’s hidden retrieval sources. Brand mentions are not endorsements.”
 
+Placement: put the scope note at the bottom of the screen, after the main content. On desktop and laptop screens (1024px and wider), keep it on one line using 10–12px text with 18px line height. On phones and smaller screens, use 12px text and allow natural wrapping. This is the approved exception to the general caveat type scale. Never add horizontal scrolling or clip the wording. On short screens or long results, let it follow the content through normal scrolling; never cover inputs, buttons or results.
+
 Keep the form visible at first arrival. Do not add invented customer logos, testimonials, performance claims or a separate marketing hero.
 
 6. Principles

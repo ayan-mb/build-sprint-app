@@ -711,3 +711,20 @@ button:disabled { background: #293651; color: #bdc8df; }
   .navigation-logo { width: 96px; height: 64px; }
   .fuxi-navigation { padding-block: 8px; }
 }
+.batch-screen { display: flex; flex-direction: column; min-height: calc(100svh - 105px); }
+.batch-screen > .home-hero { margin: 0 auto; }
+.batch-screen > .scope-note { margin: auto auto 0; padding-top: 32px; flex-shrink: 0; }
+@media (max-width: 700px) {
+  .batch-screen { min-height: calc(100svh - 81px); }
+}
+.batch-screen > .scope-note {
+  max-width: none; width: 100%; font-size: 12px; line-height: 18px;
+  white-space: normal; overflow: visible; padding-bottom: 4px;
+}
+.batch-screen { width: 100%; min-width: 0; }
+.batch-screen > * { min-width: 0; }
+.batch-screen > .home-hero { width: 100%; }
+
+@media (min-width: 1024px) {
+  .batch-screen > .scope-note { white-space: nowrap; font-size: clamp(10px, 1vw, 12px); }
+}
