@@ -13,7 +13,7 @@ import ParticleRing from "./ParticleRing";
 import { siteIdentity } from "../convex/identities";
 import { batchInput } from "../convex/batchEvidence";
 export function FuxiNavigation({ onHome }: { onHome?: () => void }) {
-  return <nav className="fuxi-navigation" aria-label="Main"><a className="wordmark" href="/try" onClick={onHome ? e => {e.preventDefault(); onHome();} : undefined}>FUXI</a><span className="contact-us">Contact us</span></nav>;
+  return <nav className="fuxi-navigation" aria-label="Main"><a className="wordmark" href="/try" onClick={onHome ? e => {e.preventDefault(); onHome();} : undefined}>FUXI</a><a className="contact-us" href="mailto:getfuxi@fuxi.in">Contact us</a></nav>;
 }
 function sessionToken(prospect = false) {
   const storageKey = prospect ? "prospect-batch-session" : "batch-session";
