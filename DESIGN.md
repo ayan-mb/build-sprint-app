@@ -263,7 +263,7 @@ Flow: Get Started” → Fill Domain name → Select Single Question or multiple
 For: [This is the first screen the user sees when clicking on the domain]
 Top to bottom: [Navigation panel, Animated Hero Banner with key message and CTA “Get Started” with domain name integrated]
 Main action: [Get Started] → [Gives an option to select the prompt approach and then to the results page on clicking the next CTA “Check Results”
-- Empty: “Add your website domain.”
+- Empty: show only the placeholder “add your website URL”; no separate website-domain helper text.
 - Loading: “Starting…”
 - Error: “We couldn’t start this. Your inputs are still here. Try again.” Field errors: “Enter a valid website domain.” 
 - Select “Single Question” or “Multiple Question”
