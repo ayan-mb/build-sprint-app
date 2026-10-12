@@ -705,3 +705,9 @@ button:disabled { background: #293651; color: #bdc8df; }
   .domain-entry input { padding: 12px 8px; }
   .domain-entry button { padding: 12px 10px; }
 }
+.navigation-logo { display: block; width: 120px; height: 80px; object-fit: contain; }
+.fuxi-navigation { padding-block: 12px; }
+@media (max-width: 700px) {
+  .navigation-logo { width: 96px; height: 64px; }
+  .fuxi-navigation { padding-block: 8px; }
+}

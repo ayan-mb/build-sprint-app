@@ -5,13 +5,13 @@ Read this before building or changing any screen. If a choice isn’t covered he
 The labels, type scale, added screens, metric definitions and UI copy.
 
 Common
-1. Navigation: Logo on the extreme left and contact us on the extreme right, no content in middle for expansion later
+1. Navigation: Use the supplied FUXI logo (network-infinity symbol above the FUXI wordmark, cyan-to-violet gradient and white lettering) on a transparent background at the extreme left and contact us on the extreme right, no content in middle for expansion later
 
 Landing page
-1. The load - A dynamic and animated particle system or a particle network animation which floats like a ring on the default background and expands and spreads out when the user scrolls. The particle system is fluid, dynamic movement of individual points or nodes, giving the impression of a swirling, data-driven cloud. The particle system is constant and available throughout the page.
+1. The load - A large, dense circular particle network on the dark background, with 900 particles on desktop and 480 on phone-width screens. Individual particles wander smoothly in random directions inside the outer circle, bouncing inward at its boundary rather than rotating as one ring. When a mouse pointer hovers inside the circle, nearby particles gently move away and then settle back into random motion; no particle escapes the boundary. Thin connections join nearby particles. The circle expands and spreads out on scroll and remains available throughout the page. Keep the headline and fields readable. Respect reduced-motion settings with a static particle field and no hover movement. The canvas must not block typing, buttons or links; touch scrolling remains normal. Limit drawing to 30 frames per second and pause drawing while the page is hidden.
 2. Headline - Key headline and sub text with a CTA “Get Started” below, this is clearly visible on the first view of the mobile screen
 3. CTA Button - The button is clear contrasting colour to ensure it is clearly visible with a clear action verb and is linked to a input field to enter the brand’s website domain
-4. Domain Name - One shared transparent glassy field containing the website-domain text input on the left and the “Get Started” button on the right, with a reference format as a watermark for e.g. www.abccompany.com. Keep the label outside the field. Keep the input and button together on phone-width screens.
+4. Domain Name - One shared transparent glassy field containing the website-domain text input on the left and the “Get Started” button on the right, with the placeholder “add your website URL”. Do not show a separate domain label; use the accessible field name “Website URL”. Keep the input and button together on phone-width screens.
     1. Prompt Entry - On clicking the CTA, a screen takeover to show option enter single prompt or a max of 20 prompts in one go with a CTA “Check Results”
 
 Results page
@@ -37,7 +37,7 @@ Ignore: the NBFC-only audience, lender-only language and existing colour/font ch
 
 Domain and prompt inputs: Baseline form
 
-Take: a labelled website-domain input followed by a labelled multiline prompt field, one question per line, with visible helper text. Keep labels outside fields.
+Take: a website-domain input with the accessible name “Website URL” and placeholder “add your website URL”, followed by a visibly labelled multiline prompt field, one question per line, with visible helper text. The domain has no visible label; keep the prompt label outside its field.
 
 Ignore: the specific example company, borrower examples and current input limits as product requirements. Confirm limits and relevant examples before implementation.
 
@@ -287,7 +287,7 @@ Proposed replacement copy for the reference’s diagnostic form:
 Headline: When Buyers Ask AI About Finance, Are You in the Answer?
 Subhead: Benchmark your financial brand on ChatGPT. See who gets recommended, map the sources shaping the response, and publish content built to be cited.
 
-Field label: “Your brand’s website domain”
+Domain field: no visible label. Accessible name: “Website URL”. Placeholder: “add your website URL”.
 
 Field label: “Buyer questions, one per line”
 
