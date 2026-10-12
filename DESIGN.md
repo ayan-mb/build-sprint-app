@@ -5,7 +5,7 @@ Read this before building or changing any screen. If a choice isn’t covered he
 The labels, type scale, added screens, metric definitions and UI copy.
 
 Common
-1. Navigation: Use the supplied FUXI logo (network-infinity symbol above the FUXI wordmark, cyan-to-violet gradient and white lettering) on a transparent background at the extreme left and contact us on the extreme right, no content in middle for expansion later
+1. Navigation: Use the supplied FUXI logo (network-infinity symbol above the FUXI wordmark, cyan-to-violet gradient and white lettering) on a transparent background at the extreme left and “Contact us” on the extreme right, with no content in the middle. Use `public/images/fuxi-logo.png`; display it at 120 × 80px on desktop and 96 × 64px on phones, preserving its proportions. The logo returns to Home. “Contact us” opens `mailto:getfuxi@fuxi.in`.
 
 Landing page
 1. The load - A large, dense circular particle network on the dark background, with 900 particles on desktop and 480 on phone-width screens. Individual particles wander smoothly in random directions inside the outer circle, bouncing inward at its boundary rather than rotating as one ring. When a mouse pointer hovers inside the circle, nearby particles gently move away and then settle back into random motion; no particle escapes the boundary. Thin connections join nearby particles. The circle expands and spreads out on scroll and remains available throughout the page. Keep the headline and fields readable. Respect reduced-motion settings with a static particle field and no hover movement. The canvas must not block typing, buttons or links; touch scrolling remains normal. Limit drawing to 30 frames per second and pause drawing while the page is hidden.
@@ -26,7 +26,7 @@ Reference scope: the live page’s rendered content and accessible form structur
 
 Diagnostic entry: Batch brand baseline
 
-Take: a direct heading and explanation followed immediately by a sequential form, with no navigation or promotional sections competing for attention.
+Take: a direct heading and explanation followed immediately by a sequential form. Keep only the approved FUXI/Contact us navigation; do not add promotional sections.
 
 For the first view design - refer to the following websites:
 
@@ -39,11 +39,11 @@ Domain and prompt inputs: Baseline form
 
 Take: a website-domain input with the accessible name “Website URL” and placeholder “add your website URL”, followed by a visibly labelled multiline prompt field, one question per line, with visible helper text. The domain has no visible label; keep the prompt label outside its field.
 
-Ignore: the specific example company, borrower examples and current input limits as product requirements. Confirm limits and relevant examples before implementation.
+Ignore: the specific example company, borrower examples and current input limits as product requirements. The approved limit is one question in Single Question mode or up to 20 in Multiple Question mode; keep existing 10–600-character question validation.
 
 Run action and scope note: Run batch component
 
-Take: one run action beneath the inputs; disable it until required inputs are valid, explain why, and keep a brief sampling disclaimer nearby.
+Take: “Get Started” inside the domain field on Home, followed by “Check Results” beneath the question inputs in the takeover. Disable actions until their required inputs are valid. Place the sampling note at the bottom as specified in section 5.
 
 Ignore: the current disabled-button styling and hard-coded model name. Show the actual selected engine/model and supported runtime behaviour.
 
@@ -60,7 +60,7 @@ Sizes:
 - 32px / 40px line height: page heading and first-screen headline.
 - 24px / 32px: section headings and primary metric values.
 - 16px / 24px: body copy, form inputs and explanations.
-- 14px / 20px: labels, table content, helpers and evidence metadata. Do not shrink caveats below the readable interface scale.
+- 14px / 20px: labels, table content, helpers and evidence metadata. Keep caveats at this readable scale except for the explicitly approved smaller sampling note in section 5.
 
 # Visual Design System & Design Tokens
 
@@ -98,8 +98,8 @@ Gradients bridge foundational enterprise trust with high-tech momentum. They mus
 ## 4. Composition & Distribution Rules (60-30-10)
 
 1. **60% — Canvas & Readability:**
-   * Default light surfaces must use `--color-surface-ice` (`#F8FAFC`).
-   * Body text and high-priority labels must use `--color-slate-obsidian` (`#0B132B`) over light surfaces to ensure strict WCAG AAA compliance.
+   * Use `--color-slate-obsidian` (`#0B132B`) as the default dark canvas and `#131E3B` for raised surfaces.
+   * Use `--color-surface-ice` (`#F8FAFC`) for reading text and high-priority labels on dark surfaces; supporting text uses `#BDC8DF`.
    * Maintain generous negative space around dense layouts.
 
 2. **30% — Structure & Authority:**
@@ -174,16 +174,17 @@ The design system uses exclusively two open-source, commercially free fonts (SIL
   --font-body: 'Inter', sans-serif;
 
   /* Semantic UI Tokens */
-  --bg-app: var(--color-surface-ice);
-  --bg-surface: #ffffff;
-  --bg-surface-inverse: var(--color-slate-obsidian);
+  color-scheme: dark;
+  --bg-app: var(--color-slate-obsidian);
+  --bg-surface: #131e3b;
+  --bg-surface-inverse: #070d20;
 
-  --text-primary: var(--color-slate-obsidian);
-  --text-secondary: #475569;
+  --text-primary: var(--color-surface-ice);
+  --text-secondary: #bdc8df;
   --text-inverse: #ffffff;
   --text-cta: var(--color-slate-obsidian);
 
-  --border-subtle: #e2e8f0;
+  --border-subtle: #334263;
   --border-focus: var(--color-brand-indigo);
 
   --btn-primary-bg: var(--color-brand-indigo);
@@ -261,7 +262,7 @@ Flow: Get Started” → Fill Domain name → Select Single Question or multiple
 
 [Home Page]
 For: [This is the first screen the user sees when clicking on the domain]
-Top to bottom: [Navigation panel, Animated Hero Banner with key message and CTA “Get Started” with domain name integrated]
+Top to bottom: [FUXI/Contact us navigation, circular particle hero with the approved headline and subhead, combined website input and “Get Started”, sampling note at the bottom of the screen]
 Main action: [Get Started] → [Gives an option to select the prompt approach and then to the results page on clicking the next CTA “Check Results”
 - Empty: show only the placeholder “add your website URL”; no separate website-domain helper text.
 - Loading: “Starting…”
@@ -278,7 +279,9 @@ Main action: [Write Draft] → [Gives a detailed written draft with an option to
 - Loading: "Preserving your changes… almost there."
 - Error: "The save hit a temporary snag, but your work didn't go anywhere. Let’s try that one more time."
 - Done: “Draft plan saved.”
-- If the AI answer is wrong: [Highlight every [VERIFY] tag in the draft and let the user validate and make the change before download
+- Draft review: highlight every [VERIFY] and [VERIFY: …] tag in the article and verification notes. Let the user replace each tag in place, including tags inside headings and formatted text.
+- Download: keep the button disabled until all verification tags in both the article and notes are cleared. Download the reviewed article text.
+- Done status: show “Draft plan saved.” only after saved persistence is confirmed.
 
 5. The first screen’s words
 
@@ -312,5 +315,14 @@ Keep the form visible at first arrival. Do not add invented customer logos, test
 - Make evidence inspectable. Link summaries to prompts, returned answers and visible citation URLs. A citation does not prove influence, endorsement, training-data inclusion or access to hidden retrieval. Source frequency is descriptive of this sample.
 - Require human review. PR, SEO, content and publisher plans are hypotheses with evidence and assumptions. Do not promise inclusion, ranking, causal impact, revenue lift or ROI. Require human review of financial claims, suitability language and regulated content before publication.
 - Preserve work and explain recovery. Retain inputs, filters and completed answers through loading and failure. Use stable layouts, textual statuses and specific recovery actions. Only show “saved” after persistence is confirmed.
-- Keep interaction accessible. Use visible labels, keyboard access, visible focus and adequate targets. Never encode a result only by colour. Pair charts with readable values; announce validation and run-status changes without moving focus unexpectedly.
+- Keep interaction accessible. Use visible labels except for the approved Home domain field, which has the accessible name “Website URL”. Keep keyboard access, visible focus and adequate targets. Never encode a result only by colour. Pair charts with readable values; announce validation and run-status changes without moving focus unexpectedly.
 - Respect narrower screens. Preserve the domain → prompts → run sequence. Stack summaries; keep table labels and evidence links usable. Use horizontal scrolling for genuinely comparative tables rather than hiding important columns. 
+
+
+7. Boundaries for these visual changes
+
+- Preserve the existing draft-generation logic, DRAFT_STYLE.md, citation answers and links, Mixpanel events, daily cap, saved runs and gpt-6.1-sol model.
+- Keep the approved Home → question takeover → Results → draft flow. Do not introduce additional screens, actions or features.
+- Keep the combined website field usable on phones. Do not add a visible “Your brand’s website domain” label or an “Add your website domain.” helper beneath it. Preserve the invalid-domain error.
+- The sampling note must never create horizontal scrolling; comparative results tables retain their existing independent scrolling on narrow screens.
+- These changes are saved locally. Deployment remains the user’s action via `npm run deploy`.
