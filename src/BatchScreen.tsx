@@ -131,9 +131,11 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       <p>Benchmark your financial brand on ChatGPT. See who gets recommended, map the sources shaping the response, and publish content built to be cited.</p>
       <form onSubmit={start} className="domain-form" noValidate>
         <label htmlFor="batch-domain">Your brand’s website domain</label>
-        <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="www.abccompany.com" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby="domain-status" />
+        <div className="domain-entry">
+          <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="www.abccompany.com" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby="domain-status" />
+          <button className="conversion-button" type="submit" disabled={running || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
+        </div>
         <p id="domain-status" role={domainError ? "alert" : "status"}>{domainError || (!domain.trim() ? "Add your website domain." : "")}</p>
-        <button className="conversion-button" type="submit" disabled={running || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
       </form>
     </section>}
     {!showResults && takeover && <section className="question-takeover" aria-label="Buyer questions">

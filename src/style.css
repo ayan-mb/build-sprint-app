@@ -659,3 +659,49 @@ mark[contenteditable] { background: #f3e8ff; color: #6b21a8; border: 1px solid #
 .draft-article mark { background: #f3e8ff; color: #6b21a8; }
 .batch-table th, .draft-article th, .run-question, .finding-title { font-weight: 600; }
 .badge { font-weight: 500; border-radius: 9999px; padding: 3px 10px; font-size: 12px; line-height: 20px; letter-spacing: .02em; }
+
+/* Approved dark theme and combined domain field. */
+:root {
+  color-scheme: dark;
+  --bg-app: var(--color-slate-obsidian);
+  --bg-surface: #131e3b;
+  --bg-surface-inverse: #070d20;
+  --text-primary: var(--color-surface-ice);
+  --text-secondary: #bdc8df;
+  --border-subtle: #334263;
+  --accent: #a5b4fc;
+  background: var(--bg-app);
+}
+body { background: transparent; color: var(--text-primary); }
+header { background: var(--bg-surface); }
+a { color: #a5b4fc; }
+a:hover { color: var(--text-primary); }
+.wordmark { color: #a5b4fc; }
+input, textarea { background: var(--bg-surface); color: var(--text-primary); }
+input:disabled, textarea:disabled { background: #1b2948; }
+button:disabled { background: #293651; color: #bdc8df; }
+.domain-form { max-width: 560px; }
+.domain-entry {
+  display: flex; align-items: center; gap: 8px; padding: 6px;
+  border: 1px solid var(--border-subtle); border-radius: 12px;
+  background: rgba(19,30,59,.7); backdrop-filter: blur(8px);
+}
+.domain-entry:focus-within { border-color: var(--border-focus); }
+.domain-entry input { flex: 1; min-width: 0; width: auto; border: 0; background: transparent; backdrop-filter: none; padding: 12px; }
+.domain-entry button { width: auto; flex-shrink: 0; white-space: nowrap; }
+.domain-entry button:disabled { background: #293651; color: #bdc8df; }
+.brand-citation { background: var(--bg-surface); border-color: var(--border-subtle); }
+.own-brand { background: var(--bg-surface-inverse); }
+.batch-table thead th { background: #1b2948; }
+.batch-table tbody tr:nth-child(even) { background: #101a32; }
+.draft-article, .captured, .neutral { background: var(--bg-surface); }
+.warning, .error, .provider-message { background: #201831; color: var(--text-primary); }
+.draft-article mark, mark[contenteditable] { background: #120e21; color: #e9d5ff; border-color: #79549c; }
+.good { background: #081e20; color: #a7f3d0; }
+.notice { background: #201831; color: #e9d5ff; }
+.summary-strip { border-color: var(--border-subtle); }
+@media (max-width: 700px) {
+  .domain-entry { gap: 4px; padding: 4px; }
+  .domain-entry input { padding: 12px 8px; }
+  .domain-entry button { padding: 12px 10px; }
+}
