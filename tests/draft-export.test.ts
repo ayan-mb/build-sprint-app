@@ -6,14 +6,14 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import DraftBox, { DraftOutput } from "../src/DraftBox";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-test("single-question results expose the fact sheet and Get Started control",()=>{
+test("single-question results expose the fact sheet and Write Draft control",()=>{
   const client = new ConvexReactClient("https://example.convex.cloud");
   const html = renderToStaticMarkup(createElement(ConvexProvider,{client},createElement(DraftBox,{
     id:"fixture" as never, token:"fixture", question:"Which loan is available?",
   })));
   assert.match(html,/NBFC product fact sheet/);
-  assert.match(html,/>Get Started<\/button>/);
-  assert.match(html,/Verification notes/);
+  assert.match(html,/>Write Draft<\/button>/);
+  assert.match(html,/highlighted/);
   void client.close();
 });
 test("plain text remains exact and Markdown preserves approved terms and missing-fact placeholders",()=>{
@@ -24,10 +24,10 @@ test("plain text remains exact and Markdown preserves approved terms and missing
   assert.deepEqual(numericTokens(md),numericTokens(text));
   assert.match(md,/p\.a\.\*/);
 });
-test("a ready saved draft offers Copy and Markdown Download; a failed draft offers none",()=>{
+test("a ready saved draft offers Copy and Download; a failed draft offers none",()=>{
   const ready={status:"ready" as const,text:"[add: eligibility]",numbers:[],placeholders:["[add: eligibility]"],model:"fixture",message:"Review"};
   const html=renderToStaticMarkup(createElement(DraftOutput,{draft:ready}));
-  for(const label of [">Copy</button>","Download Markdown"]) assert.ok(html.includes(label));
+  for(const label of [">Copy</button>",">Download</button>"]) assert.ok(html.includes(label));
   assert.ok(!renderToStaticMarkup(createElement(DraftOutput,{draft:{...ready,status:"unavailable"}})).includes("Download"));
 });
 test("banned-word findings appear alongside the saved draft",()=>{

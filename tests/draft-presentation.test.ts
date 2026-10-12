@@ -1,3 +1,4 @@
+import { parseHTML } from "linkedom";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fillDraftInputs, presentDraft } from "../convex/draftPresentation";
@@ -45,6 +46,6 @@ test("page-access notes remain visible when no article is available and generate
   const notes = ["[VERIFY: Confirm terms at https://brand.com/" + "longpath".repeat(40) + "]", "[VERIFY: Keep this note\nwith its original line break.]" ];
   const html = renderToStaticMarkup(createElement(DraftOutput,{draft:{status:"unavailable",text:"",message:"Unavailable",model:"",numbers:[],placeholders:[],verificationNotes:notes}}));
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)?.[1] ?? "";
-  assert.deepEqual([...aside.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(match => match[1]), notes);
+  assert.deepEqual(Array.from(parseHTML(`<html><body>${aside}</body></html>`).document.querySelectorAll("li"), li => li.textContent), notes);
   assert.doesNotMatch(aside, /<pre/);
 });
