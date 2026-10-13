@@ -5,7 +5,7 @@ import {createRoot} from "react-dom/client";
 import {parseHTML} from "linkedom";
 import ParticleRing from "../src/ParticleRing";
 
-async function simulate(hover: boolean, reduced = false) {
+async function simulate(hover: boolean, reduced = false, touch = false, release?: "touchend" | "touchcancel") {
   const {window,document} = parseHTML('<html><body><div id="root"></div></body></html>');
   let points: {x:number;y:number}[] = [];
   let frameId = 0, seed = 42;
@@ -33,7 +33,15 @@ async function simulate(hover: boolean, reduced = false) {
     tick(0);
     assert.equal(points.length,480);
     const near = points.map((p,i)=>Math.hypot(p.x-195,p.y-844*.49)<55?i:-1).filter(i=>i>=0);
-    if(hover) window.dispatchEvent(Object.assign(new window.Event("pointermove"),{pointerType:"mouse",clientX:195,clientY:844*.49}));
+    if(hover) {
+      const event = Object.assign(new window.Event(touch ? "touchstart" : "pointermove", {cancelable:true}), touch
+        ? {touches:[{clientX:195,clientY:844*.49}]}
+        : {pointerType:"mouse",clientX:195,clientY:844*.49});
+      window.dispatchEvent(event);
+      assert.equal(event.defaultPrevented,false,"interaction blocked normal scrolling");
+      if(touch) window.dispatchEvent(Object.assign(new window.Event("touchmove"),{touches:[{clientX:195,clientY:844*.49}]}));
+      if(release) window.dispatchEvent(Object.assign(new window.Event(release),{touches:[]}));
+    }
     for(let frame=1;frame<=120;frame++) {
       tick(frame*40);
       for(const p of points) assert.ok(Math.hypot(p.x-195,p.y-844*.49)<=390*.48+.01,"particle escaped the circle");
@@ -56,4 +64,14 @@ test("reduced motion keeps the particle field static and does not schedule more 
   const staticField=await simulate(false,true),hovered=await simulate(true,true);
   assert.deepEqual(staticField.points,hovered.points);
   assert.equal(staticField.queued,0);
+});
+
+test("touch moves particles like the mouse and releases after lifting or cancelling",async()=>{
+  const baseline=await simulate(false),mouse=await simulate(true),touch=await simulate(true,false,true);
+  assert.deepEqual(touch.points,mouse.points);
+  assert.notDeepEqual(touch.points,baseline.points);
+  for(const release of ["touchend","touchcancel"] as const) {
+    assert.deepEqual((await simulate(true,false,true,release)).points,baseline.points);
+  }
+  assert.deepEqual((await simulate(true,true,true)).points,(await simulate(false,true)).points);
 });

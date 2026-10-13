@@ -111,17 +111,28 @@ export default function ParticleRing() {
     };
     const onResize = () => { resize(); refresh(); };
     const onPointerMove = (event: PointerEvent) => { if (event.pointerType !== "touch") pointer = {x:event.clientX,y:event.clientY}; };
+    // Passive touch listeners keep following a finger even during native scrolling.
+    const onTouch = (event: TouchEvent) => {
+      const touch = event.touches[0];
+      pointer = touch ? {x:touch.clientX,y:touch.clientY} : null;
+    };
     const clearPointer = () => { pointer = null; };
     const onPointerOut = (event: PointerEvent) => { if (!event.relatedTarget) clearPointer(); };
     resize(); refresh();
     addEventListener("resize", onResize);
     addEventListener("pointermove", onPointerMove, {passive:true});
     addEventListener("pointerout", onPointerOut);
+    addEventListener("touchstart", onTouch, {passive:true});
+    addEventListener("touchmove", onTouch, {passive:true});
+    addEventListener("touchend", onTouch, {passive:true});
+    addEventListener("touchcancel", clearPointer, {passive:true});
     addEventListener("blur", clearPointer);
     motion.addEventListener("change", refresh);
     return () => {
       cancelAnimationFrame(frame); removeEventListener("resize", onResize);
       removeEventListener("pointermove", onPointerMove); removeEventListener("pointerout", onPointerOut);
+      removeEventListener("touchstart", onTouch); removeEventListener("touchmove", onTouch);
+      removeEventListener("touchend", onTouch); removeEventListener("touchcancel", clearPointer);
       removeEventListener("blur", clearPointer); motion.removeEventListener("change", refresh);
     };
   }, []);
