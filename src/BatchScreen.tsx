@@ -142,11 +142,11 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
   const validQuestions = questions.length > 0 && questions.length <= 20 && questions.every(q => q.length >= 10 && q.length <= 600);
   return <><ParticleRing /><FuxiNavigation onHome={() => {setShowResults(false); setTakeover(false);}} /><main className="batch-screen">
     {!showResults && !takeover && <section className="home-hero">
-      <h1>When Buyers Ask AI About Finance, Are You in the Answer?</h1>
-      <p>Benchmark your financial brand on ChatGPT. See who gets recommended, map the sources shaping the response, and publish content built to be cited.</p>
+      <h1>Win BFSI Recommendations in ChatGPT with Ready-to-Publish Content.</h1>
+      <p>Benchmark brand visibility, map cited competitors, and instantly generate pre-written content engineered to earn citations.</p>
       <form onSubmit={start} className="domain-form" noValidate>
         <DomainEntry>
-          <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="add your website URL" aria-label="Website URL" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby={domainError ? "domain-status" : undefined} />
+          <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="Your Website URL" aria-label="Website URL" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby={domainError ? "domain-status" : undefined} />
           <button className="conversion-button" type="submit" disabled={running || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
         </DomainEntry>
         {domainError && <p id="domain-status" role="alert">{domainError}</p>}

@@ -11,7 +11,7 @@ Landing page
 1. The load - A large, dense circular particle network on the dark background, with 900 particles on desktop and 480 on phone-width screens. Individual particles wander smoothly in random directions inside the outer circle, bouncing inward at its boundary rather than rotating as one ring. When a mouse pointer hovers or a finger touches and moves inside the circle, nearby particles gently move away and then settle back into random motion; no particle escapes the boundary. Thin connections join nearby particles. The circle expands and spreads out on scroll and remains available throughout the page. Keep the headline and fields readable. Respect reduced-motion settings with a static particle field and no hover movement. The canvas must not block typing, buttons or links; touch scrolling remains normal. Limit drawing to 30 frames per second and pause drawing while the page is hidden.
 2. Headline - Key headline and sub text with a CTA “Get Started” below, this is clearly visible on the first view of the mobile screen
 3. CTA Button - “Get Started” uses the primary brand indigo (#3a57e8) with white text, including a muted indigo disabled state, and is linked to the website-domain input.
-4. Domain Name - One shared transparent glassy field containing the website-domain text input on the left and the “Get Started” button on the right, with the placeholder “add your website URL”. A subtle shine moves around the field border over eight seconds, pauses while typing or when hidden/offscreen, and stays static with reduced motion. Clicking the input must not add a bright outline or border; use a faint surface tint for its active state. Do not show a separate domain label; use the accessible field name “Website URL”. Keep the input and button together on phone-width screens.
+4. Domain Name - One shared transparent glassy field containing the website-domain text input on the left and the “Get Started” button on the right, with the placeholder “Your Website URL”. A subtle shine moves around the field border over eight seconds, pauses while typing or when hidden/offscreen, and stays static with reduced motion. Clicking the input must not add a bright outline or border; use a faint surface tint for its active state. Do not show a separate domain label; use the accessible field name “Website URL”. Keep the input and button together on phone-width screens.
     1. Prompt Entry - On clicking the CTA, a screen takeover to show option enter single prompt or a max of 20 prompts in one go with a CTA “Check Results”
 
 Results page
@@ -37,7 +37,7 @@ Ignore: the NBFC-only audience, lender-only language and existing colour/font ch
 
 Domain and prompt inputs: Baseline form
 
-Take: a website-domain input with the accessible name “Website URL” and placeholder “add your website URL”, followed by a visibly labelled multiline prompt field, one question per line, with visible helper text. The domain has no visible label; keep the prompt label outside its field.
+Take: a website-domain input with the accessible name “Website URL” and placeholder “Your Website URL”, followed by a visibly labelled multiline prompt field, one question per line, with visible helper text. The domain has no visible label; keep the prompt label outside its field.
 
 Ignore: the specific example company, borrower examples and current input limits as product requirements. The approved limit is one question in Single Question mode or up to 20 in Multiple Question mode; keep existing 10–600-character question validation.
 
@@ -264,7 +264,7 @@ Flow: Get Started” → Fill Domain name → Select Single Question or multiple
 For: [This is the first screen the user sees when clicking on the domain]
 Top to bottom: [FUXI/Contact us navigation, circular particle hero with the approved headline and subhead, combined website input and “Get Started”, sampling note at the bottom of the screen]
 Main action: [Get Started] → [Gives an option to select the prompt approach and then to the results page on clicking the next CTA “Check Results”
-- Empty: show only the placeholder “add your website URL”; no separate website-domain helper text.
+- Empty: show only the placeholder “Your Website URL”; no separate website-domain helper text.
 - Loading: “Starting…”
 - Error: “We couldn’t start this. Your inputs are still here. Try again.” Field errors: “Enter a valid website domain.” 
 - Select “Single Question” or “Multiple Question”
@@ -287,10 +287,10 @@ Main action: [Write Draft] → [Gives a detailed written draft with an option to
 
 Proposed replacement copy for the reference’s diagnostic form:
 
-Headline: When Buyers Ask AI About Finance, Are You in the Answer?
-Subhead: Benchmark your financial brand on ChatGPT. See who gets recommended, map the sources shaping the response, and publish content built to be cited.
+Headline: Win BFSI Recommendations in ChatGPT with Ready-to-Publish Content.
+Subhead: Benchmark brand visibility, map cited competitors, and instantly generate pre-written content engineered to earn citations.
 
-Domain field: no visible label. Accessible name: “Website URL”. Placeholder: “add your website URL”.
+Domain field: no visible label. Accessible name: “Website URL”. Placeholder: “Your Website URL”.
 
 Field label: “Buyer questions, one per line”
 
