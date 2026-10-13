@@ -1,5 +1,37 @@
 # PRODUCT.md - FUXI
 
+## Current published website — updated 14 October 2026
+
+This section records the shipped experience. The product vision and future capabilities below remain separate from what is available today.
+
+### Entry points and navigation
+
+The public homepage is https://frugal-moose-32.convex.site/. Old /try links switch to the main address before the app starts, and Home links return to /. The admin page remains at https://frugal-moose-32.convex.site/admin with its existing sign-in. Moving the public address does not change admin access.
+
+The FUXI logo returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
+
+### Approved homepage words
+
+Headline: Win BFSI Recommendations in ChatGPT with Ready-to-Publish Content.
+
+Subhead: Benchmark brand visibility, map cited competitors, and instantly generate pre-written content engineered to earn citations.
+
+Website placeholder: Your Website URL
+
+Primary button: Get Started
+
+### First interaction
+
+Visitors enter their website into the shared input-and-button box. “Get Started” uses the primary indigo colour with white text; it stays muted and disabled until a website is entered. Clicking it validates the website and opens the buyer-question screen, where visitors select Single Question or Multiple Question and use “Check Results” to start a check. The existing limit is 20 questions per batch.
+
+A slow, subtle shine travels around the website box to draw attention to the primary action. It pauses and disappears while the visitor types, pauses when offscreen or the tab is hidden, and stays static when reduced motion is requested. Clicking the input adds no bright border or outline; a faint background tint and the caret show it is active.
+
+The background particle network responds to both mouse movement and finger touches on phones and tablets. Nearby particles move away while staying inside the circle. Lifting or cancelling a touch ends that response. Scrolling, links, and typing remain usable. Reduced motion keeps the particle field static.
+
+### Measurement
+
+The existing public analytics follow the homepage at /, including its question and result screens. They stay off admin, batch-admin, and saved-result routes. Heatmap URLs use the main address; existing analytics event names are retained. Existing privacy filters and recording masks remain in place.
+
 ## 1. The job
 When [I am finalising my content strategy], I want to [know how many times LLMs are mentioning my brand. And for which prompts], so I can [draft the content which is driving LLM mentions and leading to traffic to my website].
 

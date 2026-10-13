@@ -1,16 +1,23 @@
 Read this before building or changing any screen. If a choice isn’t covered here, ask me instead of guessing.
 
+Published routes (updated 14 October 2026)
+
+- Public Home: https://frugal-moose-32.convex.site/.
+- Old /try links replace their browser address with / before the public app starts. All Home links use /.
+- Admin remains https://frugal-moose-32.convex.site/admin, with its existing sign-in gate. /batch and /saved retain their existing roles.
+- Public analytics run on /, including the question takeover and results shown there; they do not run on /admin, /batch or /saved. Heatmap URLs use /. Existing event names remain unchanged.
+
 1. The feeling, in labels
 
 The labels, type scale, added screens, metric definitions and UI copy.
 
 Common
-1. Navigation: Use the supplied FUXI logo (network-infinity symbol above the FUXI wordmark, cyan-to-violet gradient and white lettering) on a transparent background at the extreme left and “Contact us” on the extreme right, with no content in the middle. Use `public/images/fuxi-logo.png`; display it at 120 × 80px on desktop and 96 × 64px on phones, preserving its proportions. The logo returns to Home. “Contact us” is a transparent frosted-glass button with rounded edges, a subtle border, and a minimum 44px touch height; it opens `mailto:getfuxi@fuxi.in`.
+1. Navigation: Use the supplied FUXI logo (network-infinity symbol above the FUXI wordmark, cyan-to-violet gradient and white lettering) on a transparent background at the extreme left and “Contact us” on the extreme right, with no content in the middle. Use `public/images/fuxi-logo.png`; display it at 120 × 80px on desktop and 96 × 64px on phones, preserving its proportions. The logo returns to Home. “Contact us” is a transparent frosted-glass button with rounded edges, a subtle border, and a minimum 44px touch height, a 14px corner radius, and 12px background blur (including Safari support); hover and press gently strengthen its tint and border. It opens `mailto:getfuxi@fuxi.in`.
 
 Landing page
-1. The load - A large, dense circular particle network on the dark background, with 900 particles on desktop and 480 on phone-width screens. Individual particles wander smoothly in random directions inside the outer circle, bouncing inward at its boundary rather than rotating as one ring. When a mouse pointer hovers or a finger touches and moves inside the circle, nearby particles gently move away and then settle back into random motion; no particle escapes the boundary. Thin connections join nearby particles. The circle expands and spreads out on scroll and remains available throughout the page. Keep the headline and fields readable. Respect reduced-motion settings with a static particle field and no hover movement. The canvas must not block typing, buttons or links; touch scrolling remains normal. Limit drawing to 30 frames per second and pause drawing while the page is hidden.
+1. The load - A large, dense circular particle network on the dark background, with 900 particles on desktop and 480 on phone-width screens. Individual particles wander smoothly in random directions inside the outer circle, bouncing inward at its boundary rather than rotating as one ring. When a mouse pointer hovers or a finger touches and moves inside the circle, nearby particles gently move away and then settle back into random motion; no particle escapes the boundary. Thin connections join nearby particles. The circle expands and spreads out on scroll and remains available throughout the page. Keep the headline and fields readable. Respect reduced-motion settings with a static particle field and no hover movement. The canvas must not block typing, buttons or links; touch scrolling remains normal. Touch release, cancellation, or loss of window focus clears the repulsion; touch listeners must not prevent scrolling. Limit drawing to 30 frames per second and pause drawing while the page is hidden.
 2. Headline - Key headline and sub text with a CTA “Get Started” below, this is clearly visible on the first view of the mobile screen
-3. CTA Button - “Get Started” uses the primary brand indigo (#3a57e8) with white text, including a muted indigo disabled state, and is linked to the website-domain input.
+3. CTA Button - “Get Started” uses the primary brand indigo (#3a57e8) with white text, including a muted indigo disabled state at 70% opacity, and is linked to the website-domain input.
 4. Domain Name - One shared transparent glassy field containing the website-domain text input on the left and the “Get Started” button on the right, with the placeholder “Your Website URL”. A subtle shine moves around the field border over eight seconds, pauses while typing or when hidden/offscreen, and stays static with reduced motion. Clicking the input must not add a bright outline or border; use a faint surface tint for its active state. Do not show a separate domain label; use the accessible field name “Website URL”. Keep the input and button together on phone-width screens.
     1. Prompt Entry - On clicking the CTA, a screen takeover to show option enter single prompt or a max of 20 prompts in one go with a CTA “Check Results”
 
@@ -45,13 +52,13 @@ Run action and scope note: Run batch component
 
 Take: “Get Started” inside the domain field on Home, followed by “Check Results” beneath the question inputs in the takeover. Disable actions until their required inputs are valid. Place the sampling note at the bottom as specified in section 5.
 
-Ignore: the current disabled-button styling and hard-coded model name. Show the actual selected engine/model and supported runtime behaviour.
+Use the approved muted-indigo disabled state for Home’s “Get Started”. Show the actual selected engine/model and supported runtime behaviour.
 
 No separate visual reference has been approved for analytical screens. Their proposed structures appear in section 4; do not invent extra styling references or treat them as observed features of this page.
 
 3. Type and colour
 
-Theme: Dark throughout Home, the question takeover, Results, saved results and the draft view. Use slate obsidian (#0B132B) as the canvas, dark surfaces for fields, cards and tables, ice/white reading text, indigo for standard actions and mint with obsidian text for “Get Started”. The user’s brand box remains darker than other brand boxes. Keep verification highlights readable on dark surfaces. This dark-theme requirement supersedes the default light-surface examples below.
+Theme: Dark throughout Home, the question takeover, Results, saved results and the draft view. Use slate obsidian (#0B132B) as the canvas, dark surfaces for fields, cards and tables, ice/white reading text, indigo with white text for primary actions, including “Get Started”. The user’s brand box remains darker than other brand boxes. Keep verification highlights readable on dark surfaces. This dark-theme requirement supersedes the default light-surface examples below.
 
 Font: Inter & Plus Jakarta Sans, with system sans-serif fallback. Use regular 400 for reading, medium 500 for controls and semibold 600 for headings. Keep numeric columns right-aligned and use tabular numerals.
 
@@ -76,7 +83,7 @@ The visual design language balances **uncompromising trust and enterprise stabil
 | :--- | :--- | :--- | :--- | :--- |
 | **Foundation / Trust** | `--color-slate-obsidian` | `#0B132B` | `hsl(225, 59%, 11%)` | Primary headings, dark card surfaces, deep navigation, high-contrast borders. |
 | **Primary Brand** | `--color-brand-indigo` | `#3A57E8` | `hsl(230, 80%, 57%)` | Core brand identity, active tabs, standard buttons, links, primary UI structure. |
-| **Vibrant Accent (CTA)** | `--color-accent-mint` | `#00F5D4` | `hsl(172, 100%, 48%)` | High-conversion actions ("Start Trial", "Upgrade"), status highlights, key telemetry spikes. |
+| **Vibrant Accent (CTA)** | `--color-accent-mint` | `#00F5D4` | `hsl(172, 100%, 48%)` | Secondary visual accents and status highlights; Home’s primary action is indigo. |
 | **Secondary Support** | `--color-violet-neo` | `#7928CA` | `hsl(270, 67%, 47%)` | Secondary data points, gradient stops, badge indicators, feature cards. |
 | **Canvas / Surface** | `--color-surface-ice` | `#F8FAFC` | `hsl(210, 40%, 98%)` | Primary light canvas, card background fills, low-contrast neutral fills. |
 
@@ -91,7 +98,7 @@ Gradients bridge foundational enterprise trust with high-tech momentum. They mus
 | **Brand Linear** | `--gradient-brand` | `135deg`: `#3A57E8` (0%) → `#7928CA` (60%) → `#00F5D4` (100%) | Hero headline text masks, high-impact cards, decorative borders. |
 | **Ambient Mesh (Dark)** | `--gradient-mesh-dark` | Radial spots: `#00F5D4` (15%) & `#7928CA` (22%) over `#0B132B` | Dark mode hero sections, feature showcases, executive cards. |
 | **Subtle Horizon (Light)** | `--gradient-horizon-light` | `180deg`: `rgba(58, 87, 232, 0.05)` (0%) → `rgba(248, 250, 252, 0)` (100%) | Landing page headers on light backgrounds. |
-| **CTA Accent Glow** | `--glow-mint` | Radial: `rgba(0, 245, 212, 0.35)` → `transparent` | Hover glows beneath primary action buttons. |
+| **CTA Accent Glow** | `--glow-mint` | Radial: `rgba(0, 245, 212, 0.35)` → `transparent` | Optional mint accent effect; not used on Home’s “Get Started”. |
 
 ---
 
@@ -103,11 +110,11 @@ Gradients bridge foundational enterprise trust with high-tech momentum. They mus
    * Maintain generous negative space around dense layouts.
 
 2. **30% — Structure & Authority:**
-   * Use `--color-brand-indigo` (`#3A57E8`) for structural anchors: primary navbars, active states, key interactive outlines, and non-conversion buttons.
+   * Use `--color-brand-indigo` (`#3A57E8`) for structural anchors: primary actions (including “Get Started”), active states, and interactive outlines outside the Home domain input.
    * Keep indigo grounded against clean, neutral backgrounds to avoid visual fatigue.
 
 3. **10% — Conversion & Glow (Accent Discipline):**
-   * Reserve `--color-accent-mint` (`#00F5D4`) strictly for top-funnel conversion triggers, critical telemetry indicators, and subtle accent glows.
+   * Reserve `--color-accent-mint` (`#00F5D4`) for secondary visual accents and status highlights. Home’s “Get Started” uses indigo, not mint.
    * **Never** use `--color-accent-mint` as standard paragraph text or light-background borders.
 
 ---
@@ -189,6 +196,7 @@ The design system uses exclusively two open-source, commercially free fonts (SIL
 
   --btn-primary-bg: var(--color-brand-indigo);
   --btn-primary-text: #ffffff;
+  /* Legacy mint accent tokens; Home uses --btn-primary-bg/text. */
   --btn-cta-bg: var(--color-accent-mint);
   --btn-cta-text: var(--color-slate-obsidian);
 
@@ -255,10 +263,10 @@ module.exports = {
 
 * **CTA Button Legibility:** When using `--color-accent-mint` (`#00F5D4`) as a background fill on buttons or badges, the text label **MUST** be `--color-slate-obsidian` (`#0B132B`). Never render white text on mint backgrounds.
 * **Gradient Rules:** Mesh gradients and linear brand blends are strictly decorative backgrounds or limited to display heading text masks. Never position body text across multi-hue gradient shifts.
-* **Focus States:** High-visibility keyboard focus outlines must use `--color-brand-indigo` with a minimum `2px` offset.
+* **Focus States:** Keep visible keyboard focus on links and buttons. The Home website input is an explicit exception: no bright outline, focus shadow, or brighter container border on click or focus. Keep the ordinary subtle border, a faint surface tint, and the typing caret; pause and hide the moving shine while the field is active.
 
 4. Screens
-Flow: Get Started” → Fill Domain name → Select Single Question or multiple Question → Enter Prompt → Check Results
+Flow: Fill website domain → “Get Started” → Select Single Question or Multiple Question → Enter buyer question(s) → “Check Results”
 
 [Home Page]
 For: [This is the first screen the user sees when clicking on the domain]
@@ -285,7 +293,7 @@ Main action: [Write Draft] → [Gives a detailed written draft with an option to
 
 5. The first screen’s words
 
-Proposed replacement copy for the reference’s diagnostic form:
+Approved live homepage copy:
 
 Headline: Win BFSI Recommendations in ChatGPT with Ready-to-Publish Content.
 Subhead: Benchmark brand visibility, map cited competitors, and instantly generate pre-written content engineered to earn citations.
