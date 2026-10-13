@@ -709,12 +709,14 @@ button:disabled { background: #293651; color: #bdc8df; }
   animation: domain-shine 8s linear infinite; animation-play-state: paused;
 }
 .domain-entry[data-shine="active"]::before { animation-play-state: running; }
-.domain-entry:focus-within { border-color: #a5b4fc; }
+.domain-entry:focus-within { border-color: var(--border-subtle); }
 .domain-entry:focus-within::before { animation-play-state: paused; opacity: 0; }
 @keyframes domain-shine { to { --domain-shine-angle: 360deg; } }
 @media (prefers-reduced-motion: reduce) {
   .domain-entry::before { animation: none; }
 }
+.domain-entry input:focus { outline: none; box-shadow: none; }
+.domain-entry input:focus-visible { background: rgba(165,180,252,.035); }
 .domain-entry input { flex: 1; min-width: 0; width: auto; border: 0; background: transparent; backdrop-filter: none; padding: 12px; }
 .domain-entry button { width: auto; flex-shrink: 0; white-space: nowrap; }
 .domain-entry button:disabled { background: var(--btn-primary-bg); color: var(--btn-primary-text); opacity: .7; }
