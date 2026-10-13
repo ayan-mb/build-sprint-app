@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTryAnalytics, eventProperties, safeAnalyticsPayload } from '../src/tryAnalytics';
 
-test('tracking stays on try and sends only allowed batch details', async () => {
+test('tracking stays on home and sends only allowed batch details', async () => {
   let path='/admin'; let loads=0; const sent: unknown[]=[]; let config:any;
   const saved=new Map<string,string>();
   const analytics=createTryAnalytics({path:()=>path,origin:()=> 'https://example.com',storage:()=>({getItem:k=>saved.get(k)??null,setItem:(k,v)=>{saved.set(k,v);}}),load:async()=>{loads++;return {init:(_token,c)=>{config=c;},track:(event,properties)=>{sent.push({event,properties});}};}});
-  for (const route of ['/admin','/saved','/']) { path=route; await analytics.init(); analytics.track('Draft copied'); }
+  for (const route of ['/admin','/saved','/try']) { path=route; await analytics.init(); analytics.track('Draft copied'); }
   assert.equal(loads,0);
-  path='/try'; await analytics.init();
+  path='/'; await analytics.init();
   analytics.batchStarted('local-id',2,'https://www.example.com/private?email=secret');
   analytics.batchStarted('local-id',2,'example.com');
   analytics.batchFinished('local-id',2,1); analytics.batchFinished('local-id',2,1);
@@ -23,19 +23,19 @@ test('tracking stays on try and sends only allowed batch details', async () => {
   assert.deepEqual(eventProperties('Draft copied',{draft:'private'}),{});
 });
 
-test('outgoing heatmaps strip text and links; all events stop outside try',()=>{
-  const payload={event:'$mp_click',properties:{$current_url:'https://example.com/try?email=private',email:'private',$clientX:10,$clientY:20,$elements:[{$tag_name:'button',$nth_child:1,$text:'private',$attr__href:'private'}]}};
-  const result=safeAnalyticsPayload(payload,'/try','https://example.com')!;
+test('outgoing heatmaps strip text and links; all events stop outside home',()=>{
+  const payload={event:'$mp_click',properties:{$current_url:'https://example.com/?email=private',email:'private',$clientX:10,$clientY:20,$elements:[{$tag_name:'button',$nth_child:1,$text:'private',$attr__href:'private'}]}};
+  const result=safeAnalyticsPayload(payload,'/','https://example.com')!;
   assert.deepEqual(result.properties.$elements,[{$tag_name:'button',$nth_child:1}]);
-  assert.equal(result.properties.$current_url,'https://example.com/try'); assert.equal(result.properties.email,undefined);
+  assert.equal(result.properties.$current_url,'https://example.com/'); assert.equal(result.properties.email,undefined);
   assert.equal(result.properties.$clientX,10);
   assert.equal(safeAnalyticsPayload(payload,'/saved','https://example.com'),null);
-  assert.equal(safeAnalyticsPayload({event:'$mp_input_change',properties:{}},'/try','https://example.com'),null);
+  assert.equal(safeAnalyticsPayload({event:'$mp_input_change',properties:{}},'/','https://example.com'),null);
 });
 
  test('chosen mode survives the final analytics filter without sending question text', () => {
   for (const mode of ['single', 'multiple']) {
-    const payload = safeAnalyticsPayload({event:'Batch started',properties:{mode,question_count:1,question:'private'}},'/try','https://example.com');
+    const payload = safeAnalyticsPayload({event:'Batch started',properties:{mode,question_count:1,question:'private'}},'/','https://example.com');
     assert.equal(payload?.properties.mode,mode);
     assert.equal(payload?.properties.question,undefined);
   }

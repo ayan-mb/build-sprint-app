@@ -33,7 +33,7 @@ export function eventProperties(event: TryEvent, properties: Record<string, unkn
 // Last check before transmission: SDK defaults and DOM attributes cannot add content or identity.
 export function safeAnalyticsPayload(payload: { event: string; properties: Record<string, unknown> }, path: string, origin: string) {
   const heatmap = heatmapEvents.has(payload.event);
-  if (path !== "/try" || !heatmap && !events.includes(payload.event as TryEvent)) return null;
+  if (path !== "/" || !heatmap && !events.includes(payload.event as TryEvent)) return null;
   const safe: Record<string, unknown> = heatmap ? {} : eventProperties(payload.event as TryEvent,payload.properties);
   safe.token = PROJECT_TOKEN;
   for (const key of ["distinct_id", "$device_id", "$insert_id", "$mp_replay_id"]) {
@@ -42,7 +42,7 @@ export function safeAnalyticsPayload(payload: { event: string; properties: Recor
   }
   if (typeof payload.properties.time === "number") safe.time = payload.properties.time;
   if (heatmap) {
-    safe.$current_url = `${origin}/try`; safe.$pathname = "/try"; safe.$host = new URL(origin).host;
+    safe.$current_url = `${origin}/`; safe.$pathname = "/"; safe.$host = new URL(origin).host;
     for (const [key,value] of Object.entries(payload.properties)) {
       if (/^\$(?:clientX|clientY|offsetX|offsetY|pageX|pageY|screenX|screenY|x|y|viewportHeight|viewportWidth|pageHeight|pageWidth|max_scroll_percentage|fold_line_percentage|scroll_height|scroll_percentage|scroll_checkpoint|scroll_view_height)$/.test(key) && typeof value === "number" && Number.isFinite(value)) safe[key] = value;
     }
@@ -65,7 +65,7 @@ export function createTryAnalytics(options: { path: () => string; origin: () => 
   let sdk: Sdk | undefined;
   let initializing: Promise<void> | undefined;
   const seen = new Set<string>();
-  function active() { return options.path() === "/try"; }
+  function active() { return options.path() === "/"; }
   function known(key: string) { try { return seen.has(key) || !!options.storage()?.getItem(key); } catch { return seen.has(key); } }
   function remember(key: string) { seen.add(key); try { options.storage()?.setItem(key,"1"); } catch {} }
   function init() {
@@ -111,5 +111,5 @@ export const tryAnalytics = createTryAnalytics({
   origin: () => window.location.origin,
   storage: () => window.sessionStorage,
   load: async () => (await import("mixpanel-browser")).default,
-  cleanUrl: () => { if (window.location.search || window.location.hash) window.history.replaceState(window.history.state,"","/try"); },
+  cleanUrl: () => { if (window.location.search || window.location.hash) window.history.replaceState(window.history.state,"","/"); },
 });

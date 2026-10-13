@@ -33,6 +33,6 @@ export function SavedRun() {
       {saved.batch && <BatchResults batch={saved.batch} />}
       {saved.draft && <section><h2>Saved draft</h2><p>Answering: {saved.draft.question}</p><p className="subtle">Model reported: {saved.draft.result.model || "Not reported"}</p><DraftOutput draft={saved.draft.result} /></section>}
     </>}</>}
-    <p><a href="/try">Run a single-question check</a></p>
+    <p><a href="/">Run a single-question check</a></p>
   </main>;
 }
