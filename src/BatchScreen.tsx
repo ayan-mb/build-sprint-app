@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { ConvexError } from "convex/values";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -12,6 +12,21 @@ import SingleResults from "./SingleResults";
 import ParticleRing from "./ParticleRing";
 import { siteIdentity } from "../convex/identities";
 import { batchInput } from "../convex/batchEvidence";
+function DomainEntry({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    let visible = true;
+    const update = () => { element.dataset.shine = visible && !document.hidden ? "active" : "paused"; };
+    const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; update(); });
+    observer.observe(element);
+    document.addEventListener("visibilitychange", update);
+    update();
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange", update); };
+  }, []);
+  return <div ref={ref} className="domain-entry">{children}</div>;
+}
 export function FuxiNavigation({ onHome }: { onHome?: () => void }) {
   return <nav className="fuxi-navigation" aria-label="Main"><a className="wordmark" href="/" onClick={onHome ? e => {e.preventDefault(); onHome();} : undefined}><img className="navigation-logo" src="/images/fuxi-logo.png" alt="FUXI" /></a><a className="contact-us" href="mailto:getfuxi@fuxi.in">Contact us</a></nav>;
 }
@@ -130,10 +145,10 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       <h1>When Buyers Ask AI About Finance, Are You in the Answer?</h1>
       <p>Benchmark your financial brand on ChatGPT. See who gets recommended, map the sources shaping the response, and publish content built to be cited.</p>
       <form onSubmit={start} className="domain-form" noValidate>
-        <div className="domain-entry">
+        <DomainEntry>
           <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="add your website URL" aria-label="Website URL" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby={domainError ? "domain-status" : undefined} />
           <button className="conversion-button" type="submit" disabled={running || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
-        </div>
+        </DomainEntry>
         {domainError && <p id="domain-status" role="alert">{domainError}</p>}
       </form>
     </section>}
