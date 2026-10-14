@@ -36,7 +36,7 @@ The existing public analytics follow the homepage at /, including its question a
 
 ## Homepage story — updated 14 October 2026
 
-The existing homepage headline, subheadline, website input and background particle animation are preserved. Below the introduction, three original visual sections appear in this final order:
+The existing homepage headline, subheadline, website input and background particle animation are preserved. Below the introduction, three original visual sections use extremely subtle alternating lighter/darker/lighter shading to separate them while preserving the particle animation. They appear in this final order:
 
 1. **Discovery shift — “Your next customer may meet you in an AI answer.”** Mock search results face an illustrated AI answer connected to source nodes. “Search → Visit → Compare” and “Ask → Understand → Shortlist” share a baseline on desktop. The example is labelled as an illustrative journey, not live results. Supporting copy explains that FUXI shows brands and sources cited in sampled ChatGPT answers.
 2. **Traffic outlook — “AI discovery is growing. Start with your own baseline.”** A vertical chart shows the historical study figures, alongside a separate 2025-to-2028 forecast timeline. Source links and the scope of each claim remain visible.

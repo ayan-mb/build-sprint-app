@@ -375,3 +375,5 @@ Place a small “Alpha” pill close beside the FUXI navigation logo. Use no lay
 ### Verification and publication
 
 The final static foundation layout, contrasting support badges and tighter Alpha-tag placement were checked in the browser. Desktop journey captions share the same baseline; phone layouts preserve readable bands without horizontal overflow. The closing action and website-to-prompts flow were verified earlier today. The build passes; all 78 tests passed after restoring the static foundation layout. Subsequent badge and logo-spacing refinements also passed the build. Changes are locally checked and saved, not deployed; publication remains `npm run deploy`.
+
+Section separation: use extremely subtle translucent lighter/darker/lighter shades on discovery, traffic outlook and foundations. Lighter surfaces use rgba(165,180,252,.025); the darker surface uses rgba(0,0,0,.085). Extend the shading 40px vertically and 16px horizontally beyond content on desktop (24px and 8px on phones), with rounded edges and no border or added shadow. Keep the particle canvas visible and unchanged.
