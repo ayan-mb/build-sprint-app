@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { ConvexError } from "convex/values";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { batchSummary, citedDomains } from "../convex/batchEvidence";
 import type { Batch } from "../convex/batchValidators";
@@ -101,6 +101,20 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
   useEffect(() => { if (takeover) promptInput.current?.focus({preventScroll:true}); }, [takeover]);
   const [brandDomain,setBrandDomain] = useState("");
   const [brandLogoAttempt,setBrandLogoAttempt] = useState(0);
+  const [brandIcons,setBrandIcons] = useState<string[]>([]);
+  const [brandLogoLoading,setBrandLogoLoading] = useState(false);
+  const discoverIcons = useAction(api.research.brandIcons);
+  useEffect(() => {
+    if (!brandDomain) return;
+    let active = true;
+    setBrandLogoLoading(true); setBrandIcons([]); setBrandLogoAttempt(0);
+    void discoverIcons({domain:brandDomain}).then(icons => {
+      if (active) { setBrandIcons(icons); setBrandLogoAttempt(0); }
+    }).catch(() => {
+      if (active) setBrandIcons([`https://${brandDomain}/favicon.ico`]);
+    }).finally(() => { if (active) setBrandLogoLoading(false); });
+    return () => { active = false; };
+  }, [brandDomain,discoverIcons]);
   const [runMode,setRunMode] = useState<"single" | "multiple">(() => {
     try { return sessionStorage.getItem("prospect-run-mode") === "single" ? "single" : "multiple"; } catch { return "multiple"; }
   });
@@ -165,7 +179,7 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       </form>
     </section>}
     {!showResults && takeover && <section className="question-takeover" aria-label="Buyer questions">
-      <p className="prompt-domain"><span>Domain :</span><span className="prompt-brand-mark">{brandLogoAttempt < 3 ? <img src={`https://${brandDomain}/${["favicon.ico", "favicon.png", "apple-touch-icon.png"][brandLogoAttempt]}`} alt={`${brandDomain} logo`} onError={() => setBrandLogoAttempt(attempt => attempt + 1)} /> : <span aria-label="Brand logo unavailable">{brandDomain.charAt(0).toUpperCase()}</span>}</span><strong>{brandDomain}</strong></p>
+      <p className="prompt-domain"><span>Domain :</span><span className="prompt-brand-mark">{brandLogoLoading ? <span aria-label="Loading brand logo">…</span> : brandLogoAttempt < brandIcons.length ? <img src={brandIcons[brandLogoAttempt]} alt={`${brandDomain} logo`} onError={() => setBrandLogoAttempt(attempt => attempt + 1)} /> : <span aria-label="Brand logo unavailable">{brandDomain.charAt(0).toUpperCase()}</span>}</span><strong>{brandDomain}</strong></p>
       <form onSubmit={submit} className="batch-form prompt-form">
         <label htmlFor="batch-questions">Enter the prompts</label>
         <div className="prompt-glass">

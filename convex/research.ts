@@ -7,6 +7,8 @@ import { components, internal } from "./_generated/api";
 import { v } from "convex/values";
 import { lookup } from "node:dns/promises";
 import { extractPageText } from "./html";
+import { discoverBrandIcons } from "./brandIcons";
+import { batchInput } from "./batchEvidence";
 import {
   fetch as pageFetch,
   Agent as HttpAgent,
@@ -340,5 +342,26 @@ export const retryComparison = internalAction({
     const input = await ctx.runQuery(internal.diagnostics.comparisonInput, { id });
     if (!input) return { gaps: [], message: "Saved readable report not available." };
     return await ctx.runAction(internal.research.compare, input);
+  },
+});
+
+export const brandIcons = action({
+  args: { domain: v.string() },
+  returns: v.array(v.string()),
+  handler: async (_ctx, { domain }) => {
+    const { website, domain: host } = batchInput(domain, ["Website logo lookup"]);
+    const fallback = discoverBrandIcons("", website);
+    for (const url of [website, `https://www.${host}`]) {
+      try {
+        const fetched = await safeFetch(url);
+        try {
+          if (!fetched.response.ok) { await fetched.response.body?.cancel(); continue; }
+          const html = await limitedText(fetched.response);
+          const icons = discoverBrandIcons(html, fetched.finalUrl);
+          if (icons.some(icon => !fallback.includes(icon))) return icons;
+        } finally { await fetched.dispatcher.close(); }
+      } catch { /* A blocked website must not prevent entering prompts. */ }
+    }
+    return fallback;
   },
 });

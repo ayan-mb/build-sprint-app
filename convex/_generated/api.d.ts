@@ -15,6 +15,7 @@ import type * as batchRunner from "../batchRunner.js";
 import type * as batchValidators from "../batchValidators.js";
 import type * as batchWorkflow from "../batchWorkflow.js";
 import type * as batches from "../batches.js";
+import type * as brandIcons from "../brandIcons.js";
 import type * as comparisonContext from "../comparisonContext.js";
 import type * as comparisonFailure from "../comparisonFailure.js";
 import type * as diagnosticWorkflow from "../diagnosticWorkflow.js";
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   batchValidators: typeof batchValidators;
   batchWorkflow: typeof batchWorkflow;
   batches: typeof batches;
+  brandIcons: typeof brandIcons;
   comparisonContext: typeof comparisonContext;
   comparisonFailure: typeof comparisonFailure;
   diagnosticWorkflow: typeof diagnosticWorkflow;
