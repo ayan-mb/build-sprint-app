@@ -784,3 +784,86 @@ button:disabled { background: #293651; color: #bdc8df; }
 .prompt-form .check-results-button:disabled { background: rgba(41,54,81,.65); color: #bdc8df; box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
 @media (max-width: 700px) { .fuxi-navigation { margin: 12px 16px 0; padding: 8px 12px; min-height: 68px; border-radius: 16px; } .navigation-logo { width: 76.8px; height: 51.2px; } .question-takeover { padding-top: 32px; } .prompt-form textarea { padding: 18px; } }
 @media (prefers-reduced-motion: reduce) { .home-hero { transition: none; } .question-takeover, .prompt-glass::before { animation: none; } .prompt-form .check-results-button { transition: none; } }
+
+/* Homepage story: discovery, visibility foundations, then sourced outlook. */
+.landing-story { width: 100%; max-width: 1120px; margin: 112px auto 0; transition: opacity 220ms ease; }
+.landing-story-leaving { opacity: 0; pointer-events: none; }
+.landing-story section { min-width: 0; }
+.landing-story .story-intro { max-width: 820px; margin-bottom: 40px; }
+.landing-story h2 { margin: 0; font-size: clamp(32px,4vw,48px); line-height: 1.16; letter-spacing: -.03em; text-wrap: balance; }
+.landing-story h3 { margin: 0; font-size: 20px; line-height: 28px; letter-spacing: -.015em; }
+.landing-story p { max-width: 70ch; }
+.landing-story .story-intro > p { margin: 20px 0 0; color: var(--text-secondary); font-size: 18px; line-height: 28px; }
+.discovery-comparison { display: grid; grid-template-columns: 1fr 48px 1fr; align-items: stretch; }
+.search-journey, .answer-journey { padding: 32px; border-radius: 20px; }
+.search-journey { background: rgba(19,30,59,.65); box-shadow: inset 0 1px 0 rgba(165,180,252,.14); }
+.answer-journey { background: rgba(36,48,100,.75); box-shadow: 0 20px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(165,180,252,.24); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.journey-bridge { display: grid; place-items: center; color: #a5b4fc; }
+.landing-story .journey-query { padding: 14px 16px; margin: 24px 0 20px; background: rgba(165,180,252,.06); border-radius: 10px; color: var(--text-secondary); font-size: 14px; line-height: 22px; }
+.search-links { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+.search-links li { padding: 6px 0 10px 8px; font-size: 14px; line-height: 22px; }
+.search-link-line { display: block; height: 3px; width: 84%; margin-top: 9px; background: rgba(165,180,252,.18); border-radius: 2px; }
+.search-links li:nth-child(2) .search-link-line { width: 65%; }
+.search-links li:nth-child(3) .search-link-line { width: 46%; }
+.landing-story .journey-caption { margin: 28px 0 0; font-family: var(--font-display); font-size: 18px; line-height: 28px; font-weight: 600; }
+.illustrative-answer { margin-top: 24px; }
+.illustrative-answer > p { margin: 0; font-size: 17px; line-height: 26px; font-weight: 500; }
+.answer-thread { display: flex; align-items: flex-start; gap: 12px; margin-top: 22px; }
+.answer-thread-dot { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: #a5b4fc; flex-shrink: 0; }
+.answer-thread p { color: var(--text-secondary); margin: 0; font-size: 14px; line-height: 22px; }
+.answer-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.answer-topics span { padding: 5px 12px; font-size: 12px; line-height: 20px; border-radius: 20px; color: #dbe1ff; background: rgba(165,180,252,.12); }
+.landing-story .story-footnote { margin: 14px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 20px; }
+.landing-story .story-takeaway { max-width: 800px; margin: 32px 0 0; font-size: 20px; line-height: 30px; font-weight: 500; }
+.story-takeaway span { color: var(--text-secondary); font-size: 16px; font-weight: 400; }
+.foundation-story, .outlook-story { margin-top: 128px; }
+.visibility-foundation { display: grid; gap: 16px; }
+.foundation-layer { display: grid; grid-template-columns: 1fr 1.3fr; align-items: center; gap: 24px; padding: 30px 32px; border-radius: 20px; background: rgba(19,30,59,.65); box-shadow: 0 14px 32px rgba(0,0,0,.18), inset 0 1px 0 rgba(165,180,252,.24); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.foundation-relevance { margin-inline: 80px; background: rgba(58,87,232,.18); }
+.foundation-trust { margin-inline: 40px; }
+.foundation-access { background: rgba(36,48,100,.65); }
+.foundation-layer-title p { margin: 8px 0 0; color: var(--text-secondary); font-size: 14px; line-height: 22px; }
+.foundation-layer ul { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin: 0; }
+.foundation-layer li { padding: 8px 12px; border-radius: 10px; background: rgba(165,180,252,.09); font-size: 14px; line-height: 22px; }
+.foundation-close { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; margin-top: 32px; }
+.foundation-close p { margin: 0; font-size: 16px; line-height: 26px; color: var(--text-secondary); }
+.foundation-close p:first-child { font-family: var(--font-display); font-size: 24px; line-height: 32px; color: var(--text-primary); font-weight: 600; }
+.outlook-evidence { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; }
+.traffic-heading > strong { display: block; font-family: var(--font-display); font-size: clamp(64px,8vw,100px); line-height: 1.1; letter-spacing: -.04em; color: #a5b4fc; font-variant-numeric: tabular-nums; }
+.traffic-heading h3 { margin-top: 18px; }
+.traffic-bars { display: grid; gap: 16px; margin-top: 36px; }
+.traffic-bar-row { display: grid; grid-template-columns: 42px 1fr 68px; align-items: center; gap: 16px; font-size: 14px; line-height: 22px; font-variant-numeric: tabular-nums; }
+.traffic-bar-row > strong { text-align: right; font-weight: 500; }
+.traffic-bar-track { height: 28px; background: rgba(165,180,252,.06); border-radius: 4px; }
+.traffic-bar { height: 100%; border-radius: 4px; }
+.traffic-bar-earlier { width: 15.94%; background: #bdc8df; }
+.traffic-bar-later { width: 100%; background: #818cf8; }
+.landing-story .evidence-context { margin: 20px 0 12px; font-size: 13px; line-height: 22px; color: var(--text-secondary); }
+.story-source { font-size: 13px; line-height: 22px; text-underline-offset: 4px; }
+.forecast-evidence { border-left: 1px solid var(--border-subtle); padding-left: 48px; }
+.forecast-year { display: block; margin: 20px 0; font-family: var(--font-display); font-size: clamp(64px,7vw,88px); line-height: 1.1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.forecast-evidence > p { margin: 0; font-size: 16px; line-height: 26px; color: var(--text-secondary); }
+.story-final { display: flex; justify-content: space-between; align-items: center; gap: 48px; margin-top: 128px; padding: 48px 0 24px; border-top: 1px solid var(--border-subtle); }
+.landing-story .story-final h2 { font-size: clamp(28px,3vw,36px); }
+.story-final > div { max-width: 650px; }
+.story-final p { margin: 20px 0 0; color: var(--text-secondary); font-size: 16px; line-height: 26px; }
+.story-start { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; flex-shrink: 0; border-radius: 16px; padding: 14px 22px; font-size: 14px; line-height: 22px; }
+@media (max-width: 900px) { .foundation-relevance { margin-inline: 40px; } .foundation-trust { margin-inline: 20px; } .foundation-layer { grid-template-columns: 1fr; gap: 18px; } .outlook-evidence { gap: 32px; } .forecast-evidence { padding-left: 32px; } .story-final { align-items: flex-start; flex-direction: column; gap: 28px; } }
+@media (max-width: 700px) {
+  .landing-story { margin-top: 80px; }
+  .landing-story .story-intro { margin-bottom: 28px; }
+  .landing-story .story-intro > p { font-size: 16px; line-height: 26px; }
+  .discovery-comparison { grid-template-columns: 1fr; gap: 12px; }
+  .search-journey, .answer-journey { padding: 24px; border-radius: 16px; }
+  .journey-bridge { padding: 6px; transform: rotate(90deg); }
+  .foundation-story, .outlook-story { margin-top: 80px; }
+  .foundation-relevance { margin-inline: 16px; } .foundation-trust { margin-inline: 8px; }
+  .foundation-layer { padding: 24px 20px; gap: 16px; border-radius: 16px; }
+  .foundation-layer li { padding: 6px 10px; }
+  .foundation-close, .outlook-evidence { grid-template-columns: 1fr; gap: 24px; }
+  .forecast-evidence { border-left: 0; border-top: 1px solid var(--border-subtle); padding: 32px 0 0; }
+  .traffic-bar-row { gap: 10px; }
+  .story-final { margin-top: 80px; padding-top: 32px; }
+  .story-start { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .landing-story { transition: none; } }

@@ -10,6 +10,7 @@ import { tryAnalytics } from "./tryAnalytics";
 import DraftBox from "./DraftBox";
 import SingleResults from "./SingleResults";
 import ParticleRing from "./ParticleRing";
+import LandingStory from "./LandingStory";
 import { siteIdentity } from "../convex/identities";
 import { batchInput } from "../convex/batchEvidence";
 function DomainEntry({ children }: { children: ReactNode }) {
@@ -178,6 +179,11 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
         {domainError && <p id="domain-status" role="alert">{domainError}</p>}
       </form>
     </section>}
+    {!showResults && !takeover && prospect && <LandingStory leaving={leavingHome} onStart={() => {
+      const input = document.getElementById("batch-domain");
+      input?.focus({preventScroll:true});
+      input?.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",block:"center"});
+    }} />}
     {!showResults && takeover && <section className="question-takeover" aria-label="Buyer questions">
       <p className="prompt-domain"><span>Domain :</span><span className="prompt-brand-mark">{brandLogoLoading ? <span aria-label="Loading brand logo">…</span> : brandLogoAttempt < brandIcons.length ? <img src={brandIcons[brandLogoAttempt]} alt={`${brandDomain} logo`} onError={() => setBrandLogoAttempt(attempt => attempt + 1)} /> : <span aria-label="Brand logo unavailable">{brandDomain.charAt(0).toUpperCase()}</span>}</span><strong>{brandDomain}</strong></p>
       <form onSubmit={submit} className="batch-form prompt-form">

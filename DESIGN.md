@@ -346,3 +346,24 @@ Keep the form visible at first arrival. Do not add invented customer logos, test
 - Check Results: 24px rounded corners, translucent indigo glass, top highlight, downward shadow, visible hover and muted disabled states. Full width on mobile.
 - Keep the established Inter and Plus Jakarta Sans fonts; the mechanical detector's font warnings are intentional exceptions to preserve the existing identity.
 - Verified locally; deployment remains `npm run deploy`.
+
+
+## Homepage story extension — 14 October 2026
+
+This is a narrow addition below the unchanged existing hero, not a design-system rewrite or a repair of older documentation drift. It inherits the established obsidian canvas, indigo and lavender accents, ice reading text, Inter body type and Plus Jakarta Sans headings. Navigation, hero, website input and ParticleRing retain their existing appearance and behaviour. No new global tokens or `.impeccable/design.json` changes are needed.
+
+### Layout
+
+The story follows discovery shift → visibility foundations → sourced outlook → closing action. A centred container (maximum 1120px) begins below the hero (112px gap); major sections have generous separation (128px). Left-aligned introductions stay within 820px, with body lines limited to 70 characters. Story headings scale from 32px to 48px, with a compact line height (1.16). These are local story measurements, not replacements for the existing type and spacing rules.
+
+On desktop, two journey panels flank an arrow; three inset foundation layers create a stepped base; historical traffic bars sit beside the separately labelled forecast. At 900px and below, foundation content and the closing action stack. At 700px and below, journey and outlook panels also stack, section gaps reduce to 80px, panel padding reduces to 24px, and the closing button spans the available width. The forecast divider becomes horizontal. Numeric bar values remain readable alongside the bars.
+
+### Elevation & Depth
+
+Translucent navy panels allow the existing particle background to remain visible. Soft downward shadows and inset top highlights create the familiar glass depth. The answer panel uses background blur (14px), foundation layers use blur (16px), and desktop corners are gently rounded (20px), reducing to 16px on phones. Lavender highlights support the comparison and historical figures without replacing the established primary indigo action. These treatments belong to this extension rather than new global component rules.
+
+### Components
+
+The comparison and foundation diagrams are original code-built graphics. Keep the illustrative-journey note visible and distinguish historical traffic bars from the dated forecast. Source links and scope caveats stay attached to their evidence. The closing “Check my brand visibility” button scrolls to and focuses the existing website input. The story fades with the existing departure transition; reduced motion removes its fade.
+
+Finish review disposition: **ship**. The lead agent checked desktop and mobile and verified closing-button focus and the website-to-prompts flow in the browser. The build and 78 tests passed. This addition is locally checked, not deployed; publication remains `npm run deploy`.
