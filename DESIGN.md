@@ -354,7 +354,7 @@ This is a narrow addition below the unchanged existing hero, not a design-system
 
 ### Layout
 
-The story follows discovery shift → visibility foundations → sourced outlook → closing action. A centred container (maximum 1120px) begins below the hero (112px gap); major sections have generous separation (112px). Left-aligned introductions stay within 820px, with body lines limited to 70 characters. Story headings scale from 32px to 48px, with a compact line height (1.16). These are local story measurements, not replacements for the existing type and spacing rules.
+The story follows discovery shift → sourced outlook → visibility foundations → closing action. A centred container (maximum 1120px) begins below the hero (112px gap); major sections have generous separation (112px). Left-aligned introductions stay within 820px, with body lines limited to 70 characters. Story headings scale from 32px to 48px, with a compact line height (1.16). These are local story measurements, not replacements for the existing type and spacing rules.
 
 On desktop, mock search panels face a source-connected AI answer, with short captions. A tilted three-layer glass tower sits beside its selected detail checklist. Accurate vertical historical bars (17,076 and 107,100) use a 0/50k/100k grid; the separately labelled forecast uses a 2025-to-2028 timeline. At 900px and below, gaps narrow and the closing action stacks. At 700px and below, journey, foundation and outlook columns stack, section gaps reduce to 80px, journey-panel padding reduces to 22px, and the closing button spans the available width. The forecast divider becomes horizontal.
 

@@ -51,6 +51,29 @@ export default function LandingStory({ leaving, onStart }: { leaving: boolean; o
       <p className="story-takeaway">FUXI shows the brands and sources cited in sampled ChatGPT answers.</p>
     </section>
 
+    <section className="outlook-story" aria-labelledby="outlook-title">
+      <div className="story-intro"><h2 id="outlook-title">AI discovery is growing.<br />Start with your own baseline.</h2><p>The direction is changing. Find out where your brand stands today.</p></div>
+      <div className="outlook-evidence">
+        <div className="traffic-evidence">
+          <div className="traffic-heading"><strong>+527%</strong><h3>AI-referred session growth<br />in one published study</h3></div>
+          <div className="traffic-chart" role="img" aria-label="AI-referred sessions across 19 website analytics properties increased from 17,076 in January to May 2024 to 107,100 in the same period of 2025.">
+            <div className="chart-grid" aria-hidden="true"><span>100k</span><span>50k</span><span>0</span></div>
+            <div className="chart-columns"><div className="chart-column"><strong>17,076</strong><div className="chart-bar chart-bar-2024" /><span>2024</span></div><div className="chart-column"><strong>107,100</strong><div className="chart-bar chart-bar-2025" /><span>2025</span></div></div>
+          </div>
+          <p className="evidence-context">Jan–May, across 19 websites. A historical sample, not your expected growth.</p>
+          <a className="story-source" href="https://searchengineland.com/ai-traffic-up-seo-rewritten-459954" target="_blank" rel="noreferrer">Previsible research · August 2025</a>
+        </div>
+        <div className="forecast-evidence">
+          <h3>A possible turning point</h3>
+          <div className="forecast-timeline"><div className="timeline-track" aria-hidden="true" /><span className="timeline-start">2025<span>Study published</span></span><span className="timeline-end"><strong>2028</strong><span>Possible crossover</span></span></div>
+          <div className="forecast-channels"><span><StoryIcon name="spark" />AI search</span><span><StoryIcon name="search" />Traditional search</span></div>
+          <p>Semrush projected that AI search could overtake traditional search traffic for marketing and SEO topics by early 2028.</p>
+          <p className="evidence-context">A forecast including Google AI search; not a financial-services prediction.</p>
+          <a className="story-source" href="https://www.semrush.com/blog/ai-search-seo-traffic-study/" target="_blank" rel="noreferrer">Read the 2025 Semrush study</a>
+        </div>
+      </div>
+    </section>
+
     <section className="foundation-story" aria-labelledby="foundation-title">
       <div className="story-intro"><h2 id="foundation-title">Give AI a clearer picture<br />of your brand.</h2><p>Readable content. Credible facts. Answers that help a buyer decide.</p></div>
       <div className="foundation-explorer">
@@ -73,29 +96,6 @@ export default function LandingStory({ leaving, onStart }: { leaving: boolean; o
         </div>
       </div>
       <p className="story-takeaway">Turn cited evidence into a draft grounded in your product facts.</p>
-    </section>
-
-    <section className="outlook-story" aria-labelledby="outlook-title">
-      <div className="story-intro"><h2 id="outlook-title">AI discovery is growing.<br />Start with your own baseline.</h2><p>The direction is changing. Find out where your brand stands today.</p></div>
-      <div className="outlook-evidence">
-        <div className="traffic-evidence">
-          <div className="traffic-heading"><strong>+527%</strong><h3>AI-referred session growth<br />in one published study</h3></div>
-          <div className="traffic-chart" role="img" aria-label="AI-referred sessions across 19 website analytics properties increased from 17,076 in January to May 2024 to 107,100 in the same period of 2025.">
-            <div className="chart-grid" aria-hidden="true"><span>100k</span><span>50k</span><span>0</span></div>
-            <div className="chart-columns"><div className="chart-column"><strong>17,076</strong><div className="chart-bar chart-bar-2024" /><span>2024</span></div><div className="chart-column"><strong>107,100</strong><div className="chart-bar chart-bar-2025" /><span>2025</span></div></div>
-          </div>
-          <p className="evidence-context">Jan–May, across 19 websites. A historical sample, not your expected growth.</p>
-          <a className="story-source" href="https://searchengineland.com/ai-traffic-up-seo-rewritten-459954" target="_blank" rel="noreferrer">Previsible research · August 2025</a>
-        </div>
-        <div className="forecast-evidence">
-          <h3>A possible turning point</h3>
-          <div className="forecast-timeline"><div className="timeline-track" aria-hidden="true" /><span className="timeline-start">2025<span>Study published</span></span><span className="timeline-end"><strong>2028</strong><span>Possible crossover</span></span></div>
-          <div className="forecast-channels"><span><StoryIcon name="spark" />AI search</span><span><StoryIcon name="search" />Traditional search</span></div>
-          <p>Semrush projected that AI search could overtake traditional search traffic for marketing and SEO topics by early 2028.</p>
-          <p className="evidence-context">A forecast including Google AI search; not a financial-services prediction.</p>
-          <a className="story-source" href="https://www.semrush.com/blog/ai-search-seo-traffic-study/" target="_blank" rel="noreferrer">Read the 2025 Semrush study</a>
-        </div>
-      </div>
     </section>
 
     <section className="story-final" aria-labelledby="story-final-title"><div><h2 id="story-final-title">Where does your brand<br />stand in the answer?</h2><p>Enter your website. Add your buyer prompts. See your sampled ChatGPT visibility.</p></div><button type="button" className="story-start" onClick={onStart}>Check my brand visibility<StoryIcon name="arrow" /></button></section>

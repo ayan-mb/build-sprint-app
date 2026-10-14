@@ -6,7 +6,7 @@ related_targets: ["src/LandingStory.tsx"]
 ---
 
 # Homepage content extension
-Mode: Persuade. Audience: marketing and SEO teams at financial brands. Action: enter a domain and check brand visibility. Preserve current navigation, hero words, website entry and ParticleRing animation. Add three original sections below the hero in the reference order: discovery shift, visibility foundations, research outlook. No additional services, engine coverage or technical-audit claims.
+Mode: Persuade. Audience: marketing and SEO teams at financial brands. Action: enter a domain and check brand visibility. Preserve current navigation, hero words, website entry and ParticleRing animation. Add three original sections below the hero in the reference order: discovery shift, research outlook, visibility foundations. No additional services, engine coverage or technical-audit claims.
 
 ## Direction contract
 THESIS: Make the shift from search rankings to answer-level visibility concrete for a financial brand, then explain what makes useful content and why measurement matters now.
