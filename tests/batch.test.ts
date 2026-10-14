@@ -58,8 +58,8 @@ test("names must actually appear in answer prose; URLs and lookalike fragments d
 test("batch screen shows all rows, visible progress and a failed question's error", () => {
   const first=row(); const failed=row(); failed.status="error"; failed.brandMention=null; failed.lenders=[]; failed.error="Provider request failed";
   const html=renderToStaticMarkup(createElement(BatchResults,{batch:{_id:"fixture" as any,_creationTime:0,domain:"tatacapital.com",questions:[first.question,failed.question],rows:[first,failed],createdAt:0,status:"running",stage:"Question 2 of 2"}}));
-  assert.match(html,/progress/); assert.match(html,/Question 2 of 2/); assert.match(html,/Provider request failed/);
-  assert.equal((html.match(/<tr>/g)||[]).length,3); assert.match(html,/1 of 1 completed answers/);
+  assert.match(html,/progress/); assert.match(html,/2 of 2 prompts finished/); assert.match(html,/Provider request failed/);
+  assert.equal((html.match(/<tr>/g)||[]).length,3); assert.match(html,/Your brand/); assert.match(html,/Your Brand Cited/); assert.doesNotMatch(html,/<th scope="col">Error<\/th>/);
 });
 
 test("alternate written names count as one evidenced institution across answers", () => {

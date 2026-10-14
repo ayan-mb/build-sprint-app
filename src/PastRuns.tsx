@@ -1,4 +1,4 @@
-import { usePaginatedQuery, useQuery } from "convex/react";
+import { useAction, usePaginatedQuery, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 import { PageRead, ProviderAnswer, Finding } from "./App";
@@ -19,6 +19,7 @@ export default function PastRuns({ adminToken }: { adminToken: string }) {
   </section>;
 }
 export function SavedRun() {
+  const resolveIcons = useAction(api.research.brandIcons);
   const raw=new URLSearchParams(window.location.search).get("id");
   const id=raw && /^[a-z0-9]{20,40}$/.test(raw) ? raw as Id<"history"> : null;
   const resolved=useQuery(api.prospect.resolveSaved, id ? {id} : "skip");
@@ -30,7 +31,7 @@ export function SavedRun() {
       {diagnostic && <section><h2>{diagnostic.question}</h2><p>{diagnostic.stage}</p>{diagnostic.error && <p role="alert">{diagnostic.error}</p>}{diagnostic.result && <><PageRead page={diagnostic.result.brandPage} />{diagnostic.result.answers.map(answer => <ProviderAnswer key={answer.provider} answer={answer} />)}<p>{diagnostic.result.comparisonStatus}</p>{diagnostic.result.warnings.map((warning,index)=><p className="warning" key={index}>{warning}</p>)}{diagnostic.result.gaps.map((gap,index)=><Finding key={index} gap={gap} />)}</>}</section>}
       {directDraft && <section><h2>Saved draft</h2><p>Answering: {directDraft.question}</p><DraftOutput draft={directDraft.result} /></section>}
       {saved && <><p>{saved.entry.title}</p><p className="subtle"><time dateTime={savedDate(saved.entry.createdAt)}>{new Date(saved.entry.createdAt).toLocaleString()}</time> · {saved.entry.status}</p>
-      {saved.batch && <BatchResults batch={saved.batch} />}
+      {saved.batch && <BatchResults batch={saved.batch} resolveIcons={resolveIcons} />}
       {saved.draft && <section><h2>Saved draft</h2><p>Answering: {saved.draft.question}</p><p className="subtle">Model reported: {saved.draft.result.model || "Not reported"}</p><DraftOutput draft={saved.draft.result} /></section>}
     </>}</>}
     <p><a href="/">Run a single-question check</a></p>

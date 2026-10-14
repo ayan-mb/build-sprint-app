@@ -2,16 +2,14 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 import { ConvexError } from "convex/values";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { batchSummary, citedDomains } from "../convex/batchEvidence";
-import type { Batch } from "../convex/batchValidators";
 import { RunLink } from "./RunLink";
 import { DAILY_CAP_MESSAGE, indiaDayStart } from "../convex/prospectLimits";
 import { tryAnalytics } from "./tryAnalytics";
-import DraftBox from "./DraftBox";
 import SingleResults from "./SingleResults";
 import ParticleRing from "./ParticleRing";
 import LandingStory from "./LandingStory";
-import { siteIdentity } from "../convex/identities";
+import BatchResults, {BatchMethodology} from "./BatchResults";
+import PromptEditor from "./PromptEditor";
 import { batchInput } from "../convex/batchEvidence";
 function DomainEntry({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,49 +37,7 @@ function sessionToken(prospect = false) {
     const token = crypto.randomUUID(); sessionStorage.setItem(storageKey, token); return token;
   } catch { return crypto.randomUUID(); }
 }
-export function BatchResults({ batch }: { batch: Batch }) {
-  const [draftRows,setDraftRows] = useState<Record<number,string>>({});
-  const summary = batch.summary || batchSummary(batch.rows);
-  // The stored lender list explicitly excludes the user's brand.
-  const brands = summary.lenders.map(l => ({...l, own: false}));
-  if (summary.brand) brands.unshift({name: batch.domain, count: summary.brand, own: true});
-  const appearances = brands.reduce((total, brand) => total + brand.count, 0);
-  const finished = batch.rows.filter(r => r.status === "complete" || r.status === "error").length;
-  return <section className="batch-results" aria-labelledby="batch-results-title">
-    <h2 id="batch-results-title">{batch.status === "running" ? "Your batch is running" : "Your batch baseline"}</h2>
-    <p role="status" aria-live="polite">{batch.stage} · {finished} of {batch.rows.length} finished</p>
-    <progress max={batch.rows.length} value={finished} aria-label="Questions finished" />
-    <p><strong>{summary.brand} of {summary.completed} completed answers</strong> name your brand at {batch.domain}. {summary.failed > 0 && `${summary.failed} questions failed; see each error below.`}</p>
-    <p className="subtle">Each lender counts once per answer, including negative mentions. Known lender and site aliases are merged in the summary. Source totals count distinct cited links within each answer; search results without citations do not count. Answers without citations still count for brand mentions.</p>
-    <div className="brand-citations" aria-label="Competition benchmarking">
-      {brands.map(brand => {
-        const host = brand.own ? batch.domain : summary.domains.find(d => d.domain !== siteIdentity(batch.domain) && d.domain.split(".")[0].length > 3 && !["bank", "www", "finance", "loans"].includes(d.domain.split(".")[0]) && brand.name.toLowerCase().replace(/[^a-z0-9]/g, "").includes(d.domain.split(".")[0]))?.domain.split(" / ")[0];
-        const citations = host ? batch.rows.reduce((count, row) => count + citedDomains(row).filter(d => siteIdentity(d) === siteIdentity(host)).length, 0) : null;
-        return <section className={`brand-citation ${brand.own ? "own-brand" : ""}`} key={brand.name}>
-          {brand.own && <span className="you-tag">You</span>}
-          <div className="brand-logo">{host && <img src={`https://${host}/favicon.ico`} alt="" onError={e => {e.currentTarget.hidden = true;}} />}<strong>{brand.name}</strong></div>
-          <p><strong>{citations === null ? "Not available" : citations}</strong> citations</p>
-          <p><strong>{appearances ? (brand.count / appearances * 100).toFixed(1) : "0.0"}%</strong> share of voice</p>
-          <p className="subtle">{brand.count} / {appearances} tracked brand appearances</p>
-        </section>;
-      })}
-    </div>
-    <p className="subtle">Tracked brands: {brands.map(b => b.name).join(", ") || "None"}. Share of voice counts each tracked brand once per completed answer, divided by all tracked brand appearances. Appearance rate: {summary.brand} / {summary.completed} completed eligible answers. Citation counts are distinct cited links to the identified brand domain; unavailable means no domain could be identified.</p>
-    <section className="cited-domain-list"><h3>Most-cited domains</h3>{summary.domains.length ? <ol>{summary.domains.map(d => <li key={d.domain}><span>{d.domain}</span><strong>{d.count} cited links</strong></li>)}</ol> : <p>No cited sources yet.</p>}</section>
-    <p className="subtle">Sample: {batch.domain} · ChatGPT · {batch.rows.find(r => r.answer)?.answer?.model || "gpt-6.1-sol"} · {new Date(batch.createdAt).toLocaleString()} · {summary.completed} / {batch.questions.length} completed. Audience, market and language follow the entered prompts.</p>
-    <div className="batch-table-scroll" role="region" aria-label="Question results" tabIndex={0}>
-      <table className="batch-table"><caption>One row per buyer question</caption><thead><tr><th scope="col">Question</th><th scope="col">Status</th><th scope="col">Your brand named</th><th scope="col">Other lenders</th><th scope="col">Cited links</th><th scope="col">Source domains</th><th scope="col">Error</th><th scope="col">Write Draft</th></tr></thead><tbody>
-        {batch.rows.map((row,index) => <tr key={index}>
-          <th scope="row">{row.question}</th><td>{row.status === "complete" ? row.answer?.status === "no_citations" ? "Complete · Citation Not Available" : "Complete" : row.status === "error" ? "Failed" : row.status === "running" ? "Running" : "Waiting"}</td>
-          <td>{row.brandMention === null ? "Not available" : row.brandMention ? "Yes" : "No"}</td><td>{row.lenders.join(", ") || "—"}</td><td>{citedDomains(row).length}</td><td>{[...new Set(citedDomains(row))].join(", ") || "—"}</td><td>{row.error || "—"}</td><td>{row.status === "complete" && <button type="button" onClick={() => setDraftRows(previous => previous[index] ? previous : {...previous,[index]:crypto.randomUUID()})}>Write Draft</button>}</td>
-        </tr>)}
-      </tbody></table>
-    </div>
-    {batch.rows.map((row,index) => draftRows[index] && <DraftBox key={`${batch._id}-${index}`} batchId={batch._id} rowIndex={index} token={draftRows[index]} question={row.question} website={`https://${batch.domain}`} />)}
-    <h3>Answers and cited sources</h3>
-    {batch.rows.map((row,index) => row.answer && <details key={index} className="batch-answer"><summary>{row.question}</summary><p className="subtle">Model reported: {row.answer.model}</p>{row.answer.message && <p>{row.answer.message}</p>}<p className="answer-text">{row.answer.text}</p>{row.lenderMentions?.length ? <p className="subtle">Lender names counted: {row.lenderMentions.map(m => `${m.canonicalName} (written as “${m.name}”)`).join("; ")}</p> : null}<ul>{row.answer.sources.filter(s => s.cited).map(s => <li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title || s.url}</a></li>)}</ul></details>)}
-  </section>;
-}
+export { default as BatchResults } from "./BatchResults";
 export default function BatchScreen({ prospect = false, adminToken }: { prospect?: boolean; adminToken?: string }) {
   const [token] = useState(() => sessionToken(prospect));
   const [day,setDay] = useState(() => indiaDayStart(Date.now()));
@@ -188,9 +144,7 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       <p className="prompt-domain"><span>Domain :</span><span className="prompt-brand-mark">{brandLogoLoading ? <span aria-label="Loading brand logo">…</span> : brandLogoAttempt < brandIcons.length ? <img src={brandIcons[brandLogoAttempt]} alt={`${brandDomain} logo`} onError={() => setBrandLogoAttempt(attempt => attempt + 1)} /> : <span aria-label="Brand logo unavailable">{brandDomain.charAt(0).toUpperCase()}</span>}</span><strong>{brandDomain}</strong></p>
       <form onSubmit={submit} className="batch-form prompt-form">
         <label htmlFor="batch-questions">Enter the prompts</label>
-        <div className="prompt-glass">
-          <textarea ref={promptInput} id="batch-questions" value={questionText} onChange={e => setQuestionText(e.target.value)} rows={8} required disabled={running} aria-describedby="question-helper prompt-limits" />
-        </div>
+        <PromptEditor value={questionText} onChange={setQuestionText} disabled={!!running} inputRef={promptInput} />
         <p id="question-helper">Use questions relevant to your products, audience and market.</p>
         <p id="prompt-limits" className="subtle">Up to 20 prompts, one per line. 10 to 600 characters per prompt.</p>
         {error && <p className="warning" role="alert">{error}</p>}
@@ -198,8 +152,9 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
       </form>
     </section>}
     {prospect && allowance?.remaining === 0 && <p className="warning" role="alert">{DAILY_CAP_MESSAGE}</p>}
-    {batch && showResults && <><BatchResults batch={batch} />{prospect && runMode === "single" && <SingleResults token={token} batch={batch} />}</>}
+    {batch && showResults && <><BatchResults batch={batch} resolveIcons={discoverIcons} showMethodology={false} />{prospect && runMode === "single" && <SingleResults token={token} batch={batch} />}</>}
     {prospect && savedId && showResults && <RunLink id={savedId} />}
+    {batch && showResults && <BatchMethodology />}
     <p className="scope-note" aria-label="Sampling note">This baseline uses sampled AI answers. It does not reveal private user queries or an AI system’s hidden retrieval sources. Brand mentions are not endorsements.</p>
   </main></>;
 }

@@ -917,3 +917,49 @@ button:disabled { background: #293651; color: #bdc8df; }
   .story-start { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .landing-story { transition: none; } }
+
+/* Numbered prompts and citation-based live results. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.numbered-prompts { overflow: hidden; }
+.prompt-form .numbered-prompts textarea { padding: 22px 22px 22px 58px; font-family: var(--font-body); font-size: 16px; line-height: 26px; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
+.prompt-line-mirror { position: absolute; visibility: hidden; pointer-events: none; left: 58px; right: 22px; top: 22px; font-family: var(--font-body); font-size: 16px; line-height: 26px; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
+.prompt-line-mirror > div { min-height: 26px; }
+.prompt-line-numbers { position: absolute; z-index: 1; left: 0; top: 22px; bottom: 22px; width: 44px; overflow: hidden; pointer-events: none; font-size: 13px; line-height: 26px; color: #bdc8df; text-align: right; font-variant-numeric: tabular-nums; }
+.prompt-form .prompt-enter-hint { display: flex; align-items: center; gap: 7px; font-size: 12px; line-height: 20px; color: #bdc8df; }
+.results-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.batch-loading { display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 220px; }
+.results-heading .batch-loading { min-height: 48px; }
+.response-loader { display: flex; align-items: center; gap: 7px; height: 40px; }
+.response-loader span { width: 7px; height: 18px; border-radius: 8px; background: #a5b4fc; animation: response-wave 1.1s ease-in-out infinite; }
+.response-loader span:nth-child(2) { animation-delay: .14s; }.response-loader span:nth-child(3) { animation-delay: .28s; }
+@keyframes response-wave { 0%, 100% { transform: scaleY(.65); opacity: .55; } 50% { transform: scaleY(1.65); opacity: 1; } }
+.loading-progress { font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.result-brand-logo { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; background: rgba(165,180,252,.1); color: #c7d2fe; }
+.result-brand-logo img { width: 28px; height: 28px; object-fit: contain; }
+.brand-citation { padding-top: 30px; }
+.brand-citation.own-brand { padding-top: 20px; }
+.own-brand .you-tag { margin-bottom: 12px; }
+.citation-metrics { margin: 20px 0 0; display: grid; gap: 14px; }
+.citation-metrics > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.citation-metrics dt { font-size: 13px; line-height: 20px; color: var(--text-secondary); }
+.citation-metrics dd { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 32px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.results-definition { max-width: 90ch; color: var(--text-secondary); font-size: 13px; line-height: 22px; margin-bottom: 28px; }
+.row-error { max-width: 32ch; margin: 8px 0 0; font-size: 12px; line-height: 20px; color: #e9d5ff; }
+.prompt-row-number { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.rich-answer { line-height: 1.7; overflow-wrap: anywhere; }
+.rich-answer h1, .rich-answer h2 { font-size: 24px; line-height: 32px; margin: 28px 0 14px; }
+.rich-answer h3, .rich-answer h4 { font-size: 19px; line-height: 28px; margin: 24px 0 12px; }
+.rich-answer p, .rich-answer ul, .rich-answer ol { margin: 14px 0; }
+.rich-answer li { margin-block: 8px; }
+.rich-answer table { display: block; overflow-x: auto; border-collapse: collapse; }
+.rich-answer th, .rich-answer td { padding: 12px; border: 1px solid var(--border-subtle); vertical-align: top; }
+.rich-answer pre { overflow-x: auto; padding: 16px; background: var(--bg-surface-inverse); border-radius: 12px; }
+.answer-sources { margin-top: 24px; font-size: 14px; line-height: 22px; }
+.batch-methodology { margin: 40px 0 0; padding: 24px 0 0; border-top: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: 12px; line-height: 20px; }
+@media (max-width: 700px) { .results-heading { align-items: flex-start; } .results-heading h2 { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .response-loader span { animation: none; } }
+.numbered-prompts:focus-within { outline: 2px solid #a5b4fc; outline-offset: 4px; }
+.prompt-form .numbered-prompts textarea:focus-visible { outline: none; }
+.prompt-line-mirror { right: auto; }
+.brand-citation, .brand-citation.own-brand { padding-top: 56px; }
+.own-brand .you-tag { position: absolute; top: 16px; left: 20px; margin: 0; }

@@ -11,9 +11,9 @@ import { comparisonFailure } from "./comparisonFailure";
 import { verifiedNames, resolveLenders } from "./batchEvidence";
 const schema = z.object({ brandIdentityKnown: z.boolean(), brandNames: z.array(z.string()), otherLenders: z.array(z.object({ name: z.string(), canonicalName: z.string() })) });
 export const mentions = internalAction({
-  args: { domain: v.string(), text: v.string() }, returns: v.object({ brandMention: v.union(v.boolean(), v.null()), lenders: v.array(v.string()), lenderMentions: v.array(v.object({ name: v.string(), canonicalName: v.string() })), error: v.string() }),
+  args: { domain: v.string(), text: v.string() }, returns: v.object({ brandNames: v.array(v.string()), brandMention: v.union(v.boolean(), v.null()), lenders: v.array(v.string()), lenderMentions: v.array(v.object({ name: v.string(), canonicalName: v.string() })), error: v.string() }),
   handler: async (ctx, args) => {
-    const failed = (error: string) => ({ brandMention: null, lenders: [], lenderMentions: [], error });
+    const failed = (error: string) => ({ brandNames: [], brandMention: null, lenders: [], lenderMentions: [], error });
     const key = process.env.OPENAI_API_KEY;
     if (!key) return failed("Lender analysis unavailable: OPENAI_API_KEY is missing.");
     try {
@@ -25,7 +25,7 @@ export const mentions = internalAction({
       const brand = verifiedNames(args.text, result.object.brandNames);
       if (!result.object.brandIdentityKnown) return failed("Brand identity could not be determined from this domain. Citation links remain available.");
       const resolved = resolveLenders(args.text, result.object.otherLenders.filter(l => !brand.some(b => b.toLowerCase() === l.name.toLowerCase())));
-      return { brandMention: brand.length > 0, ...resolved, error: "" };
+      return { brandNames: brand, brandMention: brand.length > 0, ...resolved, error: "" };
     } catch (error) {
       if (error instanceof Error && /^Lender analysis returned /.test(error.message)) return failed(error.message);
       return failed(comparisonFailure(error, "lender_mentions").replace("AI page comparison", "Lender analysis").replace("Evidence-backed topic checks remain available.", "Citation links remain available."));

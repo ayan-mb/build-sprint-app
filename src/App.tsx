@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { RunLink } from "./RunLink";
+import RichAnswer from "./RichAnswer";
 import DraftBox from "./DraftBox";
 import { api } from "../convex/_generated/api";
 import type { Answer, Gap, Page } from "../convex/validators";
@@ -69,7 +70,7 @@ export function ProviderAnswer({ answer }: { answer: Answer }) {
           {answer.message}
         </p>
       )}
-      {answer.text && <div className="answer-text">{answer.text}</div>}
+      {answer.text && <RichAnswer text={answer.text} />}
       {answer.sources.length > 0 && (
         <>
           <h4>Sources returned</h4>
