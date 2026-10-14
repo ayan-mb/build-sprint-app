@@ -2,13 +2,13 @@
 
 ## Current website experience — updated 14 October 2026
 
-This section records the shipped experience. The product vision and future capabilities below remain separate from what is available today.
+This section records the current implemented experience, including changes checked locally on 14 October 2026. Today’s changes have not been published. The product vision and future capabilities below remain separate from the implemented features.
 
 ### Entry points and navigation
 
 The public homepage is https://frugal-moose-32.convex.site/. Old /try links switch to the main address before the app starts, and Home links return to /. The admin page remains at https://frugal-moose-32.convex.site/admin with its existing sign-in. Moving the public address does not change admin access.
 
-Navigation sits inside a rounded rectangular glass box. The FUXI logo is 20% smaller, carries a visible “Alpha” tag beside it, and returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
+Navigation sits inside a rounded rectangular glass box. The FUXI logo is 20% smaller, carries a small “Alpha” tag close beside it, and returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
 
 ### Approved homepage words
 
@@ -34,17 +34,21 @@ The background particle network responds to both mouse movement and finger touch
 
 The existing public analytics follow the homepage at /, including its question and result screens. They stay off admin, batch-admin, and saved-result routes. Heatmap URLs use the main address; existing analytics event names are retained. Existing privacy filters and recording masks remain in place.
 
-## Homepage story extension — checked locally 14 October 2026
+## Homepage story — updated 14 October 2026
 
-An original landing story now follows the existing hero in this order: discovery shift → sourced outlook → visibility foundations. The navigation, hero words, website input, Get Started action and ParticleRing remain unchanged. The search-to-answer comparison is explicitly an illustrative journey, not live search or AI results. Short captions accompany mock search panels and an AI answer connected to illustrative source nodes. The foundation diagram uses static stacked glass layers. The foundations explain readable content, credible facts and buyer relevance; FUXI's scope remains sampled ChatGPT answers and cited evidence for a draft to review.
+The existing homepage headline, subheadline, website input and background particle animation are preserved. Below the introduction, three original visual sections appear in this final order:
 
-The outlook separates accurate vertical historical bars (17,076 and 107,100, with a 0/50k/100k grid) from a 2025-to-2028 forecast timeline. [Previsible research, published August 2025](https://searchengineland.com/ai-traffic-up-seo-rewritten-459954) reports AI-referred sessions across 19 website analytics properties: January–May 2024 had 17,076 sessions and January–May 2025 had 107,100 (+527%). This sample is not a forecast for a visitor's website. [Semrush's 2025 study](https://www.semrush.com/blog/ai-search-seo-traffic-study/) forecasts a possible crossover by early 2028 for digital marketing and SEO topics, including Google's AI search experiences; it is neither a measured outcome nor a financial-services prediction.
+1. **Discovery shift — “Your next customer may meet you in an AI answer.”** Mock search results face an illustrated AI answer connected to source nodes. “Search → Visit → Compare” and “Ask → Understand → Shortlist” share a baseline on desktop. The example is labelled as an illustrative journey, not live results. Supporting copy explains that FUXI shows brands and sources cited in sampled ChatGPT answers.
+2. **Traffic outlook — “AI discovery is growing. Start with your own baseline.”** A vertical chart shows the historical study figures, alongside a separate 2025-to-2028 forecast timeline. Source links and the scope of each claim remain visible.
+3. **Visibility foundations — “Give AI a clearer picture of your brand.”** The original static stacked glass format is restored, with Decision Layer at the top, Entity and Trust in the middle, and Machine Foundation as the supporting base. All descriptions and attribute chips are visible together. The top two layers have stronger indigo surfaces and contrasting lavender “FUXI helps here” badges with dark text. The line below states: “FUXI helps with Decision Layer & Entity and Trust.” FUXI supports useful buyer-focused drafts and content grounded in product facts and cited evidence; this does not promise AI recommendations or a technical website audit.
 
-The closing “Check my brand visibility” button returns to and focuses the existing website input. It uses the established website → prompts flow, with no second form or extra screen.
+[Previsible research, published August 2025](https://searchengineland.com/ai-traffic-up-seo-rewritten-459954) reports AI-referred sessions across 19 website analytics properties: January–May 2024 had 17,076 sessions and January–May 2025 had 107,100 (+527%). This historical sample is not expected growth for a visitor’s website. [Semrush’s 2025 study](https://www.semrush.com/blog/ai-search-seo-traffic-study/) forecasts a possible crossover by early 2028 for digital marketing and SEO topics, including Google’s AI search experiences; it is neither a measured outcome nor a financial-services prediction.
 
-Finish review disposition: **ship**. Fresh desktop and mobile screenshots passed review. The build and all 78 tests passed. This extension is checked locally and has not been deployed; publishing still requires `npm run deploy`.
+The closing “Check my brand visibility” button scrolls to and focuses the existing website input. Visitors use the same website → prompts → results flow, with no second form or extra screen.
 
-Section 3 has been restored to the original stacked format. “Decision Layer” and “Entity and Trust” are highlighted with “FUXI helps here” labels; Machine Foundation remains the supporting base. FUXI supports buyer-focused drafts and product-fact/citation-grounded content; this does not promise AI recommendations or a technical website audit.
+### Validation and publication
+
+Desktop and phone layouts were checked in the browser, including the restored foundation bands, badge contrast and tighter Alpha-tag spacing. The journey-caption alignment and closing-button focus were verified. Tata Capital’s nested website icon was confirmed to load on screen 2. The build passes, and all 78 existing tests passed after the foundation restoration. The later badge and Alpha-spacing changes also passed the build. Changes are saved locally; publication requires `npm run deploy`.
 
 ## 1. The job
 When [I am finalising my content strategy], I want to [know how many times LLMs are mentioning my brand. And for which prompts], so I can [draft the content which is driving LLM mentions and leading to traffic to my website].
