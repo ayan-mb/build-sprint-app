@@ -843,7 +843,7 @@ button:disabled { background: #293651; color: #bdc8df; }
 .foundation-layer-title p { margin: 10px 0 0; color: var(--text-secondary); font-size: 14px; line-height: 22px; }
 .foundation-layer ul { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin: 0; }
 .foundation-layer li { padding: 8px 12px; border-radius: 10px; background: rgba(165,180,252,.1); font-size: 14px; line-height: 22px; }
-.fuxi-layer-badge { position: absolute; top: 16px; right: 24px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; color: #c7d2fe; background: rgba(165,180,252,.13); font-size: 12px; line-height: 20px; }
+.fuxi-layer-badge { position: absolute; top: 16px; right: 24px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; color: #0b132b; background: #a5b4fc; font-size: 12px; line-height: 20px; font-weight: 600; }
 .fuxi-layer-badge svg { width: 14px; height: 14px; }
 .foundation-takeaway strong { display: block; color: #c7d2fe; font-weight: 600; }
 .foundation-takeaway > span { display: block; margin-top: 8px; max-width: 75ch; color: var(--text-secondary); font-size: 16px; line-height: 26px; font-weight: 400; }

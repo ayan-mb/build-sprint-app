@@ -364,8 +364,10 @@ Translucent navy panels allow the existing particle background to remain visible
 
 ### Components
 
-The comparison and foundation diagrams are original code-built graphics with less prose and more visual explanation. The foundation diagram shows all layer titles, explanations and attribute chips together; it has no tabs or selection controls. The top two layers carry textual FUXI badges, and the line beneath explicitly states FUXI helps with Decision Layer & Entity and Trust. Keep the illustrative-journey note visible and distinguish historical traffic bars from the dated forecast. Source links and scope caveats stay attached to their evidence. The closing “Check my brand visibility” button scrolls to and focuses the existing website input. The story fades with the existing departure transition; reduced motion removes its fade .
+The comparison and foundation diagrams are original code-built graphics with less prose and more visual explanation. The foundation diagram shows all layer titles, explanations and attribute chips together; it has no tabs or selection controls. The top two layers carry textual FUXI badges, and the line beneath explicitly states FUXI helps with Decision Layer & Entity and Trust. Keep the illustrative-journey note visible and distinguish historical traffic bars from the dated forecast. Source links and scope caveats stay attached to their evidence. The closing “Check my brand visibility” button scrolls to and focuses the existing website input. The story fades with the existing departure transition; reduced motion removes its fade.
 
 Finish review disposition: **ship**. Fresh desktop and mobile screenshots passed review. The restored static foundation layout was checked on desktop and phone with no mobile overflow; earlier verification covered closing-button focus and the website-to-prompts flow. The build and 78 tests passed. This addition is locally checked, not deployed; publication remains `npm run deploy`.
 
 Journey comparison alignment: when panels sit side by side, anchor both journey captions to the bottom with matching padding, so “Ask → Understand → Shortlist” and “Search → Visit → Compare” share a baseline.
+
+FUXI support badges use an opaque lavender fill (#A5B4FC), dark navy text (#0B132B) and semibold weight (600) to stand out against the indigo foundation bands.
