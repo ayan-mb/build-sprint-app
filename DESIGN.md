@@ -371,3 +371,5 @@ Finish review disposition: **ship**. Fresh desktop and mobile screenshots passed
 Journey comparison alignment: when panels sit side by side, anchor both journey captions to the bottom with matching padding, so “Ask → Understand → Shortlist” and “Search → Visit → Compare” share a baseline.
 
 FUXI support badges use an opaque lavender fill (#A5B4FC), dark navy text (#0B132B) and semibold weight (600) to stand out against the indigo foundation bands.
+
+Navigation logo: place a small “Alpha” pill beside FUXI, with a 10px gap, lavender-tinted fill, light lavender semibold text (11px), and 3px × 9px padding. Preserve the existing logo dimensions on desktop and phone.

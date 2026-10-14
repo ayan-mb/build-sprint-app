@@ -8,7 +8,7 @@ This section records the shipped experience. The product vision and future capab
 
 The public homepage is https://frugal-moose-32.convex.site/. Old /try links switch to the main address before the app starts, and Home links return to /. The admin page remains at https://frugal-moose-32.convex.site/admin with its existing sign-in. Moving the public address does not change admin access.
 
-Navigation sits inside a rounded rectangular glass box. The FUXI logo is 20% smaller and returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
+Navigation sits inside a rounded rectangular glass box. The FUXI logo is 20% smaller, carries a visible “Alpha” tag beside it, and returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
 
 ### Approved homepage words
 
