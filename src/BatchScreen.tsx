@@ -94,12 +94,16 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
   const [domainError,setDomainError] = useState("");
   const [domain,setDomain] = useState("");
   const [questionText,setQuestionText] = useState("");
-  const [singleQuestion,setSingleQuestion] = useState("");
-  const [mode,setMode] = useState<"single" | "multiple">("multiple");
+  const [leavingHome,setLeavingHome] = useState(false);
+  const transitionTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
+  const promptInput = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => { if (takeover) promptInput.current?.focus({preventScroll:true}); }, [takeover]);
+  const [brandDomain,setBrandDomain] = useState("");
+  const [brandLogoAttempt,setBrandLogoAttempt] = useState(0);
   const [runMode,setRunMode] = useState<"single" | "multiple">(() => {
     try { return sessionStorage.getItem("prospect-run-mode") === "single" ? "single" : "multiple"; } catch { return "multiple"; }
   });
-  const single = mode === "single";
   const [error,setError] = useState("");
   const [starting,setStarting] = useState(false);
   const beginAdmin = useMutation(api.batches.begin);
@@ -113,7 +117,9 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
     if (!prospect || !batch) return;
     if (batch.status !== "running") tryAnalytics.batchFinished(batch._id,batch.questions.length,batch.rows.filter(row => row.answer?.status === "ready" || row.answer?.status === "no_citations").length);
   }, [prospect,batch,starting]);
-  const questions = single ? (singleQuestion.trim() ? [singleQuestion.trim()] : []) : questionText.split(/\r?\n/).map(q => q.trim()).filter(Boolean);
+  const questions = questionText.split(/\r?\n/).map(q => q.trim()).filter(Boolean);
+  const single = questions.length === 1;
+  const mode = single ? "single" : "multiple";
   const running = starting || batch?.status === "running";
   async function submit(event: FormEvent) {
     event.preventDefault(); setError("");
@@ -136,38 +142,39 @@ export default function BatchScreen({ prospect = false, adminToken }: { prospect
   }
   function start(event: FormEvent) {
     event.preventDefault();
-    try { batchInput(domain, ["Domain validation question"]); setDomainError(""); setTakeover(true); }
+    try {
+      const validated = batchInput(domain, ["Domain validation question"]);
+      setBrandDomain(validated.domain); setBrandLogoAttempt(0); setDomainError("");
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setTakeover(true); return; }
+      setLeavingHome(true);
+      transitionTimer.current = window.setTimeout(() => { setTakeover(true); setLeavingHome(false); }, 220);
+    }
     catch { setDomainError("Enter a valid website domain."); }
   }
   const validQuestions = questions.length > 0 && questions.length <= 20 && questions.every(q => q.length >= 10 && q.length <= 600);
-  return <><ParticleRing /><FuxiNavigation onHome={() => {setShowResults(false); setTakeover(false);}} /><main className="batch-screen">
-    {!showResults && !takeover && <section className="home-hero">
+  return <><ParticleRing /><FuxiNavigation onHome={() => {window.clearTimeout(transitionTimer.current); setLeavingHome(false); setShowResults(false); setTakeover(false);}} /><main className="batch-screen">
+    {!showResults && !takeover && <section className={`home-hero${leavingHome ? " home-hero-leaving" : ""}`}>
       <h1>Win BFSI Recommendations in ChatGPT with Ready-to-Publish Content.</h1>
       <p>Benchmark brand visibility, map cited competitors, and instantly generate pre-written content engineered to earn citations.</p>
       <form onSubmit={start} className="domain-form" noValidate>
         <DomainEntry>
           <input id="batch-domain" value={domain} onChange={e => {setDomain(e.target.value); setDomainError("");}} placeholder="Your Website URL" aria-label="Website URL" required disabled={running} autoCapitalize="none" autoCorrect="off" aria-invalid={!!domainError} aria-describedby={domainError ? "domain-status" : undefined} />
-          <button className="conversion-button" type="submit" disabled={running || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
+          <button className="conversion-button" type="submit" disabled={running || leavingHome || !domain.trim()}>{running ? "Starting…" : "Get Started"}</button>
         </DomainEntry>
         {domainError && <p id="domain-status" role="alert">{domainError}</p>}
       </form>
     </section>}
     {!showResults && takeover && <section className="question-takeover" aria-label="Buyer questions">
-      <h1>Buyer questions, one per line</h1>
-      <p>{domain}</p>
-      <form onSubmit={submit} className="batch-form">
-        <fieldset disabled={running}><legend>Select Single Question or Multiple Question</legend>
-          <label className="checkbox"><input type="radio" name="question-mode" checked={single} onChange={() => setMode("single")} />Single Question</label>
-          <label className="checkbox"><input type="radio" name="question-mode" checked={!single} onChange={() => setMode("multiple")} />Multiple Question</label>
-        </fieldset>
-        <label htmlFor="batch-questions">Buyer questions, one per line</label>
-        <textarea id="batch-questions" value={single ? singleQuestion : questionText} onChange={e => single ? setSingleQuestion(e.target.value) : setQuestionText(e.target.value)} rows={single ? 3 : 8} required disabled={running} aria-describedby="question-helper batch-count" />
+      <p className="prompt-domain"><span>Domain :</span><span className="prompt-brand-mark">{brandLogoAttempt < 3 ? <img src={`https://${brandDomain}/${["favicon.ico", "favicon.png", "apple-touch-icon.png"][brandLogoAttempt]}`} alt={`${brandDomain} logo`} onError={() => setBrandLogoAttempt(attempt => attempt + 1)} /> : <span aria-label="Brand logo unavailable">{brandDomain.charAt(0).toUpperCase()}</span>}</span><strong>{brandDomain}</strong></p>
+      <form onSubmit={submit} className="batch-form prompt-form">
+        <label htmlFor="batch-questions">Enter the prompts</label>
+        <div className="prompt-glass">
+          <textarea ref={promptInput} id="batch-questions" value={questionText} onChange={e => setQuestionText(e.target.value)} rows={8} required disabled={running} aria-describedby="question-helper prompt-limits" />
+        </div>
         <p id="question-helper">Use questions relevant to your products, audience and market.</p>
-        <p id="batch-count" role="status">{questions.length} prompts added.</p>
-        {!questions.length && <p>Add at least one prompt</p>}
-        <p className="subtle">{single ? "One question" : "Up to 20 questions"}, 10 to 600 characters per question. ChatGPT · gpt-6.1-sol.</p>
+        <p id="prompt-limits" className="subtle">Up to 20 prompts, one per line. 10 to 600 characters per prompt.</p>
         {error && <p className="warning" role="alert">{error}</p>}
-        <button type="submit" disabled={running || !validQuestions || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Starting…" : "Check Results"}</button>
+        <button className="check-results-button" type="submit" disabled={running || !validQuestions || prospect && (allowance === undefined || allowance.remaining === 0)}>{running ? "Starting…" : "Check Results"}</button>
       </form>
     </section>}
     {prospect && allowance?.remaining === 0 && <p className="warning" role="alert">{DAILY_CAP_MESSAGE}</p>}

@@ -266,17 +266,17 @@ module.exports = {
 * **Focus States:** Keep visible keyboard focus on links and buttons. The Home website input is an explicit exception: no bright outline, focus shadow, or brighter container border on click or focus. Keep the ordinary subtle border, a faint surface tint, and the typing caret; pause and hide the moving shine while the field is active.
 
 4. Screens
-Flow: Fill website domain → “Get Started” → Select Single Question or Multiple Question → Enter buyer question(s) → “Check Results”
+Flow: Fill website domain → “Get Started” → Enter prompts (one per line; mode inferred from count) → “Check Results”
 
 [Home Page]
 For: [This is the first screen the user sees when clicking on the domain]
 Top to bottom: [FUXI/Contact us navigation, circular particle hero with the approved headline and subhead, combined website input and “Get Started”, sampling note at the bottom of the screen]
-Main action: [Get Started] → [Gives an option to select the prompt approach and then to the results page on clicking the next CTA “Check Results”
+Main action: [Get Started] → [Opens the prompt screen smoothly, then opens the appropriate results on clicking “Check Results”
 - Empty: show only the placeholder “Your Website URL”; no separate website-domain helper text.
 - Loading: “Starting…”
 - Error: “We couldn’t start this. Your inputs are still here. Try again.” Field errors: “Enter a valid website domain.” 
-- Select “Single Question” or “Multiple Question”
-- Empty: “Add at least one prompt”
+- Infer single or multiple result mode from nonempty prompt lines.
+- Empty: “Check Results” is disabled until a valid prompt is entered.
 
 Flow: Write Draft → Draft Ready → Download
 
@@ -300,11 +300,11 @@ Subhead: Benchmark brand visibility, map cited competitors, and instantly genera
 
 Domain field: no visible label. Accessible name: “Website URL”. Placeholder: “Your Website URL”.
 
-Field label: “Buyer questions, one per line”
+Field label: “Enter the prompts”
 
 Helper: “Use questions relevant to your products, audience and market.”
 
-Counter: “{count} prompts added.”
+Counter: keep the prompt count in memory; do not show it.
 
 Button: “Check Results”
 
@@ -334,3 +334,15 @@ Keep the form visible at first arrival. Do not add invented customer logos, test
 - Keep the combined website field usable on phones. Do not add a visible “Your brand’s website domain” label or an “Add your website domain.” helper beneath it. Preserve the invalid-domain error.
 - The sampling note must never create horizontal scrolling; comparative results tables retain their existing independent scrolling on narrow screens.
 - These changes are saved locally. Deployment remains the user’s action via `npm run deploy`.
+
+## Navigation and prompt refinements — 14 October 2026
+
+- Navigation: rounded rectangular frosted surface with a subtle border; desktop margin 16px 24px, radius 20px. Mobile margin 12px 16px, radius 16px. FUXI logo dimensions are reduced 20%: 96×64px on desktop and 76.8×51.2px on mobile.
+- Website entry: retain the combined field and indigo Get Started button. Raise the box 3px with layered, downward soft shadows and an inset top highlight.
+- Screen transition: fade and lift Home out over 220ms, then reveal the prompt form over 460ms with a gentle upward movement and clearing blur. Reduced motion removes these effects. The prompt field receives focus on arrival.
+- Prompt screen: omit the buyer-question heading and mode selector. Show “Domain :”, the site icon and normalized domain. Try the site's favicon.ico, favicon.png and apple-touch-icon.png; use an initial if all fail.
+- Prompt input: “Enter the prompts” label, transparent navy glass with 18px backdrop blur, 20px corners, layered depth shadows and a subtle 12-second edge shine. Keep visible keyboard focus. Reduced motion keeps the edge static.
+- Supporting copy: retain product relevance guidance and limits (20 prompts, one per line, 10–600 characters each). Do not show the prompt count or ChatGPT/model label on the entry screen.
+- Check Results: 24px rounded corners, translucent indigo glass, top highlight, downward shadow, visible hover and muted disabled states. Full width on mobile.
+- Keep the established Inter and Plus Jakarta Sans fonts; the mechanical detector's font warnings are intentional exceptions to preserve the existing identity.
+- Verified locally; deployment remains `npm run deploy`.

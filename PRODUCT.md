@@ -1,6 +1,6 @@
 # PRODUCT.md - FUXI
 
-## Current published website — updated 14 October 2026
+## Current website experience — updated 14 October 2026
 
 This section records the shipped experience. The product vision and future capabilities below remain separate from what is available today.
 
@@ -8,7 +8,7 @@ This section records the shipped experience. The product vision and future capab
 
 The public homepage is https://frugal-moose-32.convex.site/. Old /try links switch to the main address before the app starts, and Home links return to /. The admin page remains at https://frugal-moose-32.convex.site/admin with its existing sign-in. Moving the public address does not change admin access.
 
-The FUXI logo returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
+Navigation sits inside a rounded rectangular glass box. The FUXI logo is 20% smaller and returns to Home. “Contact us” appears as a transparent, rounded frosted-glass button and opens an email to getfuxi@fuxi.in.
 
 ### Approved homepage words
 
@@ -22,7 +22,9 @@ Primary button: Get Started
 
 ### First interaction
 
-Visitors enter their website into the shared input-and-button box. “Get Started” uses the primary indigo colour with white text; it stays muted and disabled until a website is entered. Clicking it validates the website and opens the buyer-question screen, where visitors select Single Question or Multiple Question and use “Check Results” to start a check. The existing limit is 20 questions per batch.
+Visitors enter their website into the raised, shared input-and-button box, with soft shadows creating a floating depth effect. “Get Started” uses the primary indigo colour with white text; it stays muted and disabled until a website is entered. Clicking it validates the website, fades the homepage out, and smoothly brings in the prompt screen. Reduced motion skips the transition. The prompt screen shows “Domain :”, the website’s logo when available, and the normalized entered domain. If no website icon is available at the standard favicon or touch-icon paths, a brand initial appears. The only input label is “Enter the prompts”. A frosted-glass input has a subtle animated edge and soft depth shadow. Visitors enter one prompt per line; one nonempty line automatically uses the single-question result flow, and multiple nonempty lines use batch results. “Check Results” has a rounded glass finish. The prompt count stays in memory; no counter, question-mode selector, buyer-question heading or model label appears on this screen. The existing limit is 20 questions per batch, with 10–600 characters per prompt. Inputs remain available when returning Home.
+
+These refinements are checked locally; they are not published until `npm run deploy` is run.
 
 A slow, subtle shine travels around the website box to draw attention to the primary action. It pauses and disappears while the visitor types, pauses when offscreen or the tab is hidden, and stays static when reduced motion is requested. Clicking the input adds no bright border or outline; a faint background tint and the caret show it is active.
 
