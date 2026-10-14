@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type IconName = "search" | "page" | "spark" | "shield" | "target" | "arrow" | "check";
 function StoryIcon({ name }: { name: IconName }) {
   const paths: Record<IconName, React.ReactNode> = {
@@ -14,13 +12,12 @@ function StoryIcon({ name }: { name: IconName }) {
   return <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
 }
 const layers = [
-  { title: "Buyer relevance", icon: "target" as const, description: "Help the buyer decide.", items: ["Relevant answers", "Clear differences", "A practical next step"] },
-  { title: "Brand trust", icon: "shield" as const, description: "Make your facts easy to verify.", items: ["Consistent brand facts", "Supported claims", "Clear sources"] },
-  { title: "Readable content", icon: "page" as const, description: "Start with information AI can read.", items: ["Accessible pages", "Clear structure", "Explicit product details"] },
+  { title: "Decision Layer", icon: "target" as const, description: "Draft useful answers for the prompts your buyers ask.", items: ["Useful answers", "Clear differences", "Practical next steps"], supported: true },
+  { title: "Entity and Trust", icon: "shield" as const, description: "Ground your content in product facts and cited evidence.", items: ["Recognisable brand", "Consistent facts", "Supported claims", "Credible sources"], supported: true },
+  { title: "Machine Foundation", icon: "page" as const, description: "Make your website accessible and readable by AI.", items: ["Accessible pages", "Clear structure", "Explicit product details"], supported: false },
 ];
 
 export default function LandingStory({ leaving, onStart }: { leaving: boolean; onStart: () => void }) {
-  const [activeLayer, setActiveLayer] = useState(2);
   return <div className={`landing-story${leaving ? " landing-story-leaving" : ""}`}>
     <section className="discovery-story" aria-labelledby="discovery-title">
       <div className="story-intro"><h2 id="discovery-title">Your next customer<br />may meet you in an AI answer.</h2><p>A shortlist can take shape before a customer visits your website.</p></div>
@@ -76,26 +73,14 @@ export default function LandingStory({ leaving, onStart }: { leaving: boolean; o
 
     <section className="foundation-story" aria-labelledby="foundation-title">
       <div className="story-intro"><h2 id="foundation-title">Give AI a clearer picture<br />of your brand.</h2><p>Readable content. Credible facts. Answers that help a buyer decide.</p></div>
-      <div className="foundation-explorer">
-        <div className="foundation-tower" role="tablist" aria-label="Explore the foundations of AI visibility" aria-orientation="vertical">
-          <div className="tower-axis" aria-hidden="true" />
-          {layers.map((layer, index) => <button key={layer.title} type="button" role="tab" id={`foundation-tab-${index}`} aria-controls="foundation-detail" aria-selected={activeLayer === index} tabIndex={activeLayer === index ? 0 : -1} className={`tower-layer tower-layer-${index}${activeLayer === index ? " tower-layer-active" : ""}`} onClick={() => setActiveLayer(index)} onKeyDown={event => {
-            if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
-              event.preventDefault();
-              const next = event.key === "Home" ? 0 : event.key === "End" ? 2 : (index + (event.key === "ArrowDown" ? 1 : 2)) % 3;
-              setActiveLayer(next); document.getElementById(`foundation-tab-${next}`)?.focus();
-            }
-          }}><span className="tower-layer-content"><span className="tower-icon"><StoryIcon name={layer.icon} /></span><strong>{layer.title}</strong><span className="tower-selector" aria-hidden="true" /></span><span className="tower-circuit" aria-hidden="true" /></button>)}
-          <span className="tower-ground" aria-hidden="true" />
-        </div>
-        <div className="foundation-detail" role="tabpanel" id="foundation-detail" aria-labelledby={`foundation-tab-${activeLayer}`} tabIndex={0}>
-          <span className="foundation-detail-icon"><StoryIcon name={layers[activeLayer].icon} /></span>
-          <h3>{layers[activeLayer].description}</h3>
-          <ul>{layers[activeLayer].items.map(item => <li key={item}><StoryIcon name="check" />{item}</li>)}</ul>
-          <p className="story-footnote">Select a layer to explore.</p>
-        </div>
+      <div className="visibility-foundation" aria-label="Three layers of AI visibility">
+        {layers.map((layer, index) => <section className={`foundation-layer foundation-layer-${index}${layer.supported ? " foundation-supported" : ""}`} key={layer.title}>
+          <div className="foundation-layer-title"><h3><StoryIcon name={layer.icon} />{layer.title}</h3><p>{layer.description}</p></div>
+          <ul>{layer.items.map(item => <li key={item}>{item}</li>)}</ul>
+          {layer.supported && <span className="fuxi-layer-badge"><StoryIcon name="check" />FUXI helps here</span>}
+        </section>)}
       </div>
-      <p className="story-takeaway">Turn cited evidence into a draft grounded in your product facts.</p>
+      <p className="story-takeaway foundation-takeaway"><strong>FUXI helps with Decision Layer &amp; Entity and Trust.</strong><span>Use sampled ChatGPT answers, cited sources and your product facts to shape content buyers can understand and verify.</span></p>
     </section>
 
     <section className="story-final" aria-labelledby="story-final-title"><div><h2 id="story-final-title">Where does your brand<br />stand in the answer?</h2><p>Enter your website. Add your buyer prompts. See your sampled ChatGPT visibility.</p></div><button type="button" className="story-start" onClick={onStart}>Check my brand visibility<StoryIcon name="arrow" /></button></section>
