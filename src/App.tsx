@@ -142,7 +142,7 @@ export function Finding({ gap }: { gap: Gap }) {
     </article>
   );
 }
-export default function App() {
+export default function App({ adminToken }: { adminToken: string }) {
   const [token] = useState(makeToken);
   const current = useQuery(api.diagnostics.current, { token });
   const begin = useMutation(api.diagnostics.begin);
@@ -173,7 +173,7 @@ export default function App() {
     setError("");
     setStarting(true);
     try {
-      await begin({ question, website, token });
+      await begin({ question, website, token, adminToken });
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "The run could not start. Try again.",

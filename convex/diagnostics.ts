@@ -6,10 +6,12 @@ import { vResultValidator } from "@convex-dev/workpool";
 import { publicRun, report, page, type Report } from "./validators";
 import { publicUrl } from "./evidence";
 import type { Id } from "./_generated/dataModel";
+import { requireAdmin } from "./admin";
 export const begin = mutation({
-  args: { question: v.string(), website: v.string(), token: v.string() },
+  args: { question: v.string(), website: v.string(), token: v.string(), adminToken: v.optional(v.string()) },
   returns: v.id("diagnostics"),
   handler: async (ctx, args): Promise<Id<"diagnostics">> => {
+    await requireAdmin(ctx, args.adminToken || "");
     const question = args.question.trim();
     if (question.length < 10 || question.length > 600)
       throw new Error(
