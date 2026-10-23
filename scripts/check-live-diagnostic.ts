@@ -14,8 +14,11 @@ assert.deepEqual(
   { openai: false },
   "This no-key smoke test must not spend API credits.",
 );
+const adminToken = process.env.TEST_ADMIN_TOKEN;
+if (!adminToken) throw new Error("TEST_ADMIN_TOKEN must contain a valid admin session token.");
 const token = crypto.randomUUID();
 const id = await client.mutation(api.diagnostics.begin, {
+  adminToken,
   question:
     "Which NBFCs offer personal loans for a CIBIL score under 700, and what are their processing fees?",
   website: "https://www.tatacapital.com/personal-loan.html",
@@ -67,6 +70,7 @@ assert.equal(
 console.log("PASS: another session cannot read this run.");
 await assert.rejects(() =>
   client.mutation(api.diagnostics.begin, {
+    adminToken,
     question: "Which lender has personal loans?",
     website: "http://127.0.0.1",
     token: crypto.randomUUID(),
@@ -75,6 +79,7 @@ await assert.rejects(() =>
 console.log("PASS: private website URL rejected.");
 await assert.rejects(() =>
   client.mutation(api.diagnostics.begin, {
+    adminToken,
     question: "Which lender has personal loans?",
     website: "https://www.tatacapital.com/personal-loan.html",
     token,
